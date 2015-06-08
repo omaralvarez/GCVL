@@ -1,6 +1,6 @@
 /*
  *
- * Point Cloud Manager (GCVL)
+ * GPGPU Computer Vision Library (GCVL)
  *
  * Copyright (c) Luis Omar Alvarez Mures 2015 <omar.alvarez@udc.es> 
  * Copyright (c) Emilio Padron Gonzalez 2015 <emilioj@gmail.com> 
