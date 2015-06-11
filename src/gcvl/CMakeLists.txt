@@ -1,11 +1,11 @@
 project(gcvl-lib)
 
 SET(SOURCE
-	class.cpp
+	oclalgorithm.cpp
 )
 
 SET(HEADERS
-	class.h
+	oclalgorithm.h
 	export.h
 )
 include_directories (${CMAKE_SOURCE_DIR}) 
