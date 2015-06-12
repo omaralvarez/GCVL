@@ -22,13 +22,30 @@
  *
  */
 
-#include <gcvl/oclblockmatching.h>
+#include "oclblockmatching.h"
+#include <iostream>
 
-int main() {
+using namespace gcvl::opencl;
 
-	gcvl::opencl::BlockMatching bm;
-
-	bm.launch();
-
-	return 0;
+BlockMatching::BlockMatching() { 
+	std::cout << " **** Initializing OpenCL BlockMatching ****" << std::endl;
 }
+	
+BlockMatching::~BlockMatching() { 
+	std::cout << " **** Destroying OpenCL BlockMatching ****" << std::endl;
+}
+
+void BlockMatching::prepare() {
+	std::cout << " **** prepare OpenCL BlockMatching ****" << std::endl;
+}
+void BlockMatching::setArgs() {
+	std::cout << " **** setArgs OpenCL BlockMatching ****" << std::endl;
+}
+void BlockMatching::launch() {
+	std::cout << " **** launch OpenCL BlockMatching ****" << std::endl;
+}
+void BlockMatching::postpare() {
+	std::cout << " **** postpare OpenCL BlockMatching ****" << std::endl;
+}
+
+

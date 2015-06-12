@@ -2,10 +2,12 @@ project(gcvl-lib)
 
 SET(SOURCE
 	oclalgorithm.cpp
+	oclblockmatching.cpp
 )
 
 SET(HEADERS
 	oclalgorithm.h
+	oclblockmatching.h
 	export.h
 )
 include_directories (${CMAKE_SOURCE_DIR}) 

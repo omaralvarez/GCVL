@@ -24,20 +24,27 @@
 
 #pragma once
 
+#include "export.h"
+
+#include <string>
+#include <vector>
+
+template class GCVL_EXPORT std::vector<int>;
+
 namespace gcvl { namespace opencl {
 
     class GCVL_EXPORT Algorithm {
 
     public:
-        virtual Algorithm();
+        Algorithm();
         virtual ~Algorithm();
-		virtual prepare() = 0;
-		virtual setArgs() = 0;
-		virtual launch() = 0;
-		virtual postpare() = 0;
+		virtual void prepare() = 0;
+		virtual void setArgs() = 0;
+		virtual void launch() = 0;
+		virtual void postpare() = 0;
 
-    private:
-        std::string kernel;
+    protected:
+        std::vector<int> kernel;
 		//Etc.
 
     };

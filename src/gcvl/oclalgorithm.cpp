@@ -23,15 +23,16 @@
  */
 
 #include "oclalgorithm.h"
+#include <iostream>
 
-namespace gcvl { namespace opencl {
+using namespace gcvl::opencl;
 
-    Algorithm::Algorithm() { 
-		std::cout << " **** Initializing OpenCL Algorithm ****" << std::endl;
-	}
+Algorithm::Algorithm() { 
+	std::cout << " **** Initializing OpenCL Algorithm ****" << std::endl;
+}
 	
-	Algorithm::~Algorithm() { 
-		std::cout << " **** Destroying OpenCL Algorithm ****" << std::endl;
-	}
+Algorithm::~Algorithm() { 
+	std::cout << " **** Destroying OpenCL Algorithm ****" << std::endl;
+}
 
-} }
+

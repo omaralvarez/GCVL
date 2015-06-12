@@ -22,13 +22,25 @@
  *
  */
 
-#include <gcvl/oclblockmatching.h>
+#pragma once
 
-int main() {
+#include "export.h"
+#include "oclalgorithm.h"
 
-	gcvl::opencl::BlockMatching bm;
+#include <string>
+#include <vector>
 
-	bm.launch();
+namespace gcvl { namespace opencl {
 
-	return 0;
-}
+    class GCVL_EXPORT BlockMatching : public Algorithm {
+
+    public:
+        BlockMatching();
+        ~BlockMatching();
+		void prepare();
+		void setArgs();
+		void launch();
+		void postpare();
+    };
+
+} }
