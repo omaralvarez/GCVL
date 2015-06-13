@@ -26,18 +26,27 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
-#include <sys/file.h>
+//#include <sys/file.h>
 
 #include <cerrno>       // errno, EWOULDBLOCK
 #include <cstring>      // strlen()
 #include <cmath>
 #include <algorithm>    // std::ostringstream
 #include <sstream>
-#include <unistd.h>     // getpid()
-
+#include <stdint.h>
+#ifdef _MSC_VER
+#include <Windows.h>
+#include <time.h>
+#include <io.h>
+#include <process.h>
+#else
+#include <unistd.h> // getpid()
 #include <sys/time.h> // timeval
+#endif    
 
-#include "OclUtils.hpp"
+
+
+#include "oclutils.h"
 
 
 // *****************************************************************************
@@ -166,20 +175,21 @@ std::string Get_Lock_Filename(const int device_id, const int platform_id_offset,
 }
 
 // *****************************************************************************
+#ifndef _MSC_VER
 int Lock_File(const char *path, const bool quiet)
 /**
  * Attempt to lock file, and check lock status on lock file
  * @return      file handle if locked, or -1 if failed
  */
 {
-    if (not quiet)
+    if (!quiet)
         std_cout << "OpenCL: Attempt to acquire lock on file " << path << "..." << std::flush;
 
     // Open file
     int f = open(path, O_CREAT | O_TRUNC, 0666);
     if (f == -1)
     {
-        if (not quiet)
+        if (!quiet)
             std_cout << "Could not open lock file!\n" << std::flush;
         return -1; // Open failed
     }
@@ -190,11 +200,13 @@ int Lock_File(const char *path, const bool quiet)
     //          fail if the file is owned by another process. So just try
     //          to do it, but don't test it. Anyway, what is important
     //          is the locking with flock().
-    fchmod(f, 0666);
+    //fchmod(f, 0666); //TODO Windows compliant: http://stackoverflow.com/questions/592448/c-how-to-set-file-permissions-cross-platform
 
     // Aquire the lock. Since the locking might fail (because another process is checking the lock too)
     // we try a maximum of 5 times, with a random delay  between 1 and 10 seconds between tries.
+
     pid_t pid = getpid();
+
     const int max_retry = 5;
     srand(pid * (unsigned int)time(NULL));
     int err;
@@ -256,19 +268,34 @@ void Unlock_File(int f, const bool quiet)
     close(f); // Close file automatically unlocks file
 }
 
+#endif
+
 // *****************************************************************************
 void Wait(const double duration_sec)
 {
+
+#ifdef _MSC_VER
+	double delay = 0.0;
+    time_t initial, now;
+    time(&initial);
+    while (delay <= duration_sec) {
+        time(&now);
+        // Transform time into double delay
+        delay = difftime(now, initial);
+        //printf("Delay = %.6f   max = %.6f\n", delay, duration_sec);
+    }
+#else
     double delay = 0.0;
     timeval initial, now;
     gettimeofday(&initial, NULL);
-    while (delay <= duration_sec)
-    {
+    while (delay <= duration_sec) {
         gettimeofday(&now, NULL);
         // Transform time into double delay
         delay = double(now.tv_sec - initial.tv_sec) + 1.0e-6*double(now.tv_usec - initial.tv_usec);
         //printf("Delay = %.6f   max = %.6f\n", delay, duration_sec);
     }
+#endif
+    
 }
 
 // *****************************************************************************
@@ -469,7 +496,7 @@ void OpenCL_platforms_list::Initialize(const std::string &_preferred_platform, c
         std::string key;
         if      (platform_vendor.find("nvidia") != std::string::npos)
             key = OPENCL_PLATFORMS_NVIDIA;
-        else if (platform_vendor.find("advanced micro devices") != std::string::npos or platform_vendor.find("amd") != std::string::npos)
+        else if (platform_vendor.find("advanced micro devices") != std::string::npos || platform_vendor.find("amd") != std::string::npos)
             key = OPENCL_PLATFORMS_AMD;
         else if (platform_vendor.find("intel") != std::string::npos)
             key = OPENCL_PLATFORMS_INTEL;
@@ -503,7 +530,7 @@ void OpenCL_platforms_list::Initialize(const std::string &_preferred_platform, c
     */
 
     // If the preferred platform is not specified, set it to the first one.
-    if (preferred_platform == "-1" or preferred_platform == "")
+    if (preferred_platform == "-1" || preferred_platform == "")
     {
         preferred_platform = platforms.begin()->first;
     }
@@ -545,7 +572,7 @@ OpenCL_platform & OpenCL_platforms_list::operator[](const std::string key)
 {
     std::map<std::string,OpenCL_platform>::iterator it;
 
-    if (key == "-1" or key == "")
+    if (key == "-1" || key == "")
     {
         if (platforms.size() == 0)
         {
@@ -766,7 +793,11 @@ void OpenCL_device::Set_Information(const int _id, cl_device_id _device,
 cl_int OpenCL_device::Set_Context()
 {
     cl_int err = CL_SUCCESS+1;
+#ifdef _MSC_VER
+	int pid = _getpid();
+#else
     pid_t pid = getpid();
+#endif
     const int max_retry = 5;
     srand(pid * (unsigned int)time(NULL));
     for (int i = 0 ; i < max_retry ; i++)
@@ -892,12 +923,14 @@ void OpenCL_device::Print() const
 // *****************************************************************************
 void OpenCL_device::Lock()
 {
+#ifndef _MSC_VER //TODO Windows
     lock_file = Lock_File(Get_Lock_Filename(device_id, parent_platform->Id_Offset(), parent_platform->Name(), name).c_str());
     if (lock_file == -1)
     {
         std_cout << "An error occurred locking the file!\n" << std::flush;
         abort();
     }
+#endif
     file_locked = true; // File is now locked
 }
 
@@ -906,7 +939,9 @@ void OpenCL_device::Unlock()
 {
     if (file_locked == true)
     {
+#ifndef _MSC_VER
         Unlock_File(lock_file);
+#endif
         file_locked = false;
     }
 }
@@ -949,7 +984,7 @@ OpenCL_devices_list::OpenCL_devices_list()
 // *****************************************************************************
 OpenCL_devices_list::~OpenCL_devices_list()
 {
-    if (not is_initialized)
+    if (!is_initialized)
         return;
 }
 

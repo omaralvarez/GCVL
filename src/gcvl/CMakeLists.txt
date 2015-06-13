@@ -1,11 +1,13 @@
 project(gcvl-lib)
 
 SET(SOURCE
+	oclutils.cpp
 	oclalgorithm.cpp
 	oclblockmatching.cpp
 )
 
 SET(HEADERS
+	oclutils.h
 	oclalgorithm.h
 	oclblockmatching.h
 	gcvlconfig.h
@@ -14,7 +16,7 @@ SET(HEADERS
 include_directories (${CMAKE_SOURCE_DIR}) 
 
 add_library(gcvl SHARED ${SOURCE} ${HEADERS})
-target_link_libraries(gcvl)
+target_link_libraries(gcvl ${OPENCL_LIBRARIES})
 
 IF (MSVC)
   set_target_properties (gcvl PROPERTIES LINK_FLAGS "/FORCE:MULTIPLE")
