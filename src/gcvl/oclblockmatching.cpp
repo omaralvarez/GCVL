@@ -38,12 +38,15 @@ BlockMatching::~BlockMatching() {
 void BlockMatching::prepare() {
 	std::cout << " **** prepare OpenCL BlockMatching ****" << std::endl;
 }
+
 void BlockMatching::setArgs() {
 	std::cout << " **** setArgs OpenCL BlockMatching ****" << std::endl;
 }
+
 void BlockMatching::launch() {
 	std::cout << " **** launch OpenCL BlockMatching ****" << std::endl;
 }
+
 void BlockMatching::postpare() {
 	std::cout << " **** postpare OpenCL BlockMatching ****" << std::endl;
 }

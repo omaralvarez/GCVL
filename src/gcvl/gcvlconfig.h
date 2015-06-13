@@ -24,24 +24,16 @@
 
 #pragma once
 
-#include "export.h"
-#include "gcvlconfig.h"
-#include "oclalgorithm.h"
+#ifdef _MSC_VER
+#pragma warning(disable : 4251)
+#endif
 
-#include <string>
-#include <vector>
 
-namespace gcvl { namespace opencl {
+class GCVLConfig {
 
-    class GCVL_EXPORT BlockMatching : public Algorithm {
+public:
+	GCVLConfig() {
+		
+	}
 
-    public:
-        BlockMatching();
-        ~BlockMatching();
-		void prepare();
-		void setArgs();
-		void launch();
-		void postpare();
-    };
-
-} }
+};

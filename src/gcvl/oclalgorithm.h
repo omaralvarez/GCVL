@@ -25,11 +25,10 @@
 #pragma once
 
 #include "export.h"
+#include "gcvlconfig.h"
 
 #include <string>
 #include <vector>
-
-template class GCVL_EXPORT std::vector<int>;
 
 namespace gcvl { namespace opencl {
 

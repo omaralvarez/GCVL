@@ -8,6 +8,7 @@ SET(SOURCE
 SET(HEADERS
 	oclalgorithm.h
 	oclblockmatching.h
+	gcvlconfig.h
 	export.h
 )
 include_directories (${CMAKE_SOURCE_DIR}) 
