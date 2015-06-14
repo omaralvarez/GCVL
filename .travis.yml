@@ -16,7 +16,8 @@ before_install:
   #- if [ $TRAVIS_OS_NAME == osx ]; then travis_retry ./configure; fi
 
 script:
-  - cmake --build
+  - cmake -G "Unix Makefiles" .
+  - make
   - ./bin/test_gcvl
 
 #after_success:
