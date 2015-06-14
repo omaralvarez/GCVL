@@ -3,8 +3,8 @@
  * GPGPU Computer Vision Library (GCVL)
  *
  * Copyright (c) Nicolas Bigaouette 2011 <nbigaouette@gmail.com>
- * Copyright (c) Luis Omar Alvarez Mures 2015 <omar.alvarez@udc.es> 
- * Copyright (c) Emilio Padron Gonzalez 2015 <emilioj@gmail.com> 
+ * Copyright (c) Luis Omar Alvarez Mures 2015 <omar.alvarez@udc.es>
+ * Copyright (c) Emilio Padron Gonzalez 2015 <emilioj@gmail.com>
  *
  * All rights reserved.
  *
@@ -42,7 +42,7 @@
 #else
 #include <unistd.h> // getpid()
 #include <sys/time.h> // timeval
-#endif    
+#endif
 
 
 
@@ -295,7 +295,7 @@ void Wait(const double duration_sec)
         //printf("Delay = %.6f   max = %.6f\n", delay, duration_sec);
     }
 #endif
-    
+
 }
 
 // *****************************************************************************
@@ -947,7 +947,7 @@ void OpenCL_device::Unlock()
 }
 
 // *****************************************************************************
-bool OpenCL_device::operator<(const OpenCL_device &other)
+bool OpenCL_device::operator<(const OpenCL_device &other) const
 {
     // Start by checking if ones not in use. When this is the case give it priority.
     // Then compare the maximum number of compute unit

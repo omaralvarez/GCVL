@@ -3,8 +3,8 @@
  * GPGPU Computer Vision Library (GCVL)
  *
  * Copyright (c) Nicolas Bigaouette 2011 <nbigaouette@gmail.com>
- * Copyright (c) Luis Omar Alvarez Mures 2015 <omar.alvarez@udc.es> 
- * Copyright (c) Emilio Padron Gonzalez 2015 <emilioj@gmail.com> 
+ * Copyright (c) Luis Omar Alvarez Mures 2015 <omar.alvarez@udc.es>
+ * Copyright (c) Emilio Padron Gonzalez 2015 <emilioj@gmail.com>
  *
  * All rights reserved.
  *
@@ -31,7 +31,11 @@
 #include <map>
 #include <climits>
 
-#include <CL/cl.h>
+#ifdef __APPLE__
+#include "OpenCL/opencl.h"
+#else
+#include "CL/cl.h"
+#endif
 
 #ifndef std_cout
 #define std_cout std::cout
@@ -314,7 +318,7 @@ class OpenCL_device
         void                            Print() const;
         void                            Lock();
         void                            Unlock();
-        bool                            operator<(const OpenCL_device &b);
+        bool                            operator<(const OpenCL_device &b) const;
 };
 
 // *****************************************************************************

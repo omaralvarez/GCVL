@@ -31,3 +31,5 @@ bin
 lib
 VS2010
 VS2012
+.DS_Store
+xcode
