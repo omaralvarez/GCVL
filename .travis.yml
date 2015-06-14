@@ -8,19 +8,11 @@ before_install:
   - echo $LANG
   - echo $LC_ALL
   - sudo apt-get update && sudo apt-get install -y fglrx opencl-headers
-  #- if [ $TRAVIS_OS_NAME == osx ]; then brew update && brew install llvm35 && brew link --force llvm35; fi
-
-#before_script:
-  #- travis_retry bundle
-  #- if [ $TRAVIS_OS_NAME == linux ]; then travis_retry ./configure --llvm-config llvm-config-3.4; fi
-  #- if [ $TRAVIS_OS_NAME == osx ]; then travis_retry ./configure; fi
 
 script:
   - cmake -G "Unix Makefiles" .
   - make
   - ./bin/test_gcvl
-
-#after_success:
 
 branches:
   only:
@@ -28,12 +20,6 @@ branches:
 
 notifications:
   email: false
-  #webhooks:
-  #  urls:
-  #    - https://webhooks.gitter.im/e/9502afd22ca6c8e85fb3
-  #  on_success: change
-  #  on_failure: always
-  #  on_start: always
 
 os:
   - linux
