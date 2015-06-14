@@ -51,9 +51,9 @@ IF(CMAKE_COMPILER_IS_GNUCXX)
 ENDIF()
 
 #OpenCL
-#set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
-#find_package(OpenCL REQUIRED)
-#include_directories(${OPENCL_INCLUDE_DIRS})
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
+find_package(OpenCL REQUIRED)
+include_directories(${OPENCL_INCLUDE_DIRS})
 
 #Boost
 #IF (MSVC)
