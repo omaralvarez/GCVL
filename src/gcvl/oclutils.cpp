@@ -26,7 +26,6 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
-//#include <sys/file.h>
 
 #include <cerrno>       // errno, EWOULDBLOCK
 #include <cstring>      // strlen()
@@ -42,6 +41,7 @@
 #else
 #include <unistd.h> // getpid()
 #include <sys/time.h> // timeval
+#include <sys/file.h>
 #endif
 
 
