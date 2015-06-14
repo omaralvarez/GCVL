@@ -7,7 +7,7 @@ compiler:
 before_install:
   - echo $LANG
   - echo $LC_ALL
-  - if [ $TRAVIS_OS_NAME == linux ]; then sudo apt-get update && sudo apt-get install -y opencl-headers; fi
+  - sudo apt-get update && sudo apt-get install -y fglrx opencl-headers
   #- if [ $TRAVIS_OS_NAME == osx ]; then brew update && brew install llvm35 && brew link --force llvm35; fi
 
 #before_script:
