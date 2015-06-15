@@ -162,8 +162,12 @@ void Print_N_Times(const std::string x, const int N, const bool newline)
 std::string Get_Lock_Filename(const int device_id, const int platform_id_offset,
                               const std::string &platform_name, const std::string &device_name)
 {
-	boost::filesystem::path tempPath = boost::filesystem::temp_directory_path();
-	std::string f = complete(tempPath).string()+"OpenCL_"; // TODO Beginning of lock filename
+#ifdef _MSC_VER
+    boost::filesystem::path tempPath = boost::filesystem::temp_directory_path();
+	std::string f = complete(tempPath).string()+"OpenCL_"; 
+#else
+    std::string f = "/tmp/OpenCL_";
+#endif
 	
     char t[4096];
     sprintf(t, "Platform%d_Device%d__%s_%s", platform_id_offset, device_id, platform_name.c_str(), device_name.c_str()); //generate string filename
@@ -297,6 +301,7 @@ void Unlock_File(int f, const bool quiet)
 }
 
 // *****************************************************************************
+//TODO use boost for better multiplatform support
 void Wait(const double duration_sec)
 {
 
