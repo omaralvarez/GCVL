@@ -59,7 +59,7 @@ include_directories(${OPENCL_INCLUDE_DIRS})
 IF (MSVC)
 	set(Boost_USE_STATIC_LIBS ON)
 ENDIF ()
-find_package(Boost 1.48 COMPONENTS thread system iostreams filesystem date_time REQUIRED)
+find_package(Boost 1.46 COMPONENTS thread system iostreams filesystem date_time REQUIRED)
 include_directories(${Boost_INCLUDE_DIRS})
 
 #OpenMP
