@@ -7,7 +7,7 @@ compiler:
 before_install:
   - echo $LANG
   - echo $LC_ALL
-  - sudo apt-get update && sudo apt-get install -y fglrx opencl-headers
+  - sudo apt-get update && sudo apt-get install -y fglrx opencl-headers libboost-thread-dev libboost-system-dev libboost-iostreams-dev  libboost-filesystem-dev libboost-date_time-dev 
 
 script:
   - cmake -G "Unix Makefiles" .

@@ -23,13 +23,13 @@
  *
  */
 
-#ifndef INC_OCLUTILS_hpp
-#define INC_OCLUTILS_hpp
+#pragma once
 
 #include <string>
 #include <list>
 #include <map>
 #include <climits>
+#include <stdint.h>
 
 #ifdef __APPLE__
 #include "OpenCL/opencl.h"
@@ -549,7 +549,5 @@ namespace OpenCL_SHA512
 
     void Validation();
 }
-
-#endif // INC_OCLUTILS_hpp
 
 // ********** End of file ***************************************

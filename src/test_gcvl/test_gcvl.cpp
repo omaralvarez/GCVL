@@ -23,39 +23,12 @@
  */
 
 #include <gcvl/oclblockmatching.h>
-#include <gcvl/oclutils.h>
 
 int main() {
 
 	gcvl::opencl::BlockMatching bm;
 
-	bm.launch();
-    
-    OpenCL_platforms_list platforms_list;
-    platforms_list.Initialize("-1");
-    
-    // By passing "-1", to Initialize(), the first platform in the list
-    // is chosen. Get that platform's string for later reference.
-    const std::string platform = platforms_list.Get_Running_Platform();
-    
-    // Lock the best device available on the platform. Devices are
-    // ordered by number of max compute units (CL_DEVICE_MAX_COMPUTE_UNITS).
-    // GPUs normally have at least a couple dozen compute units. On
-    // CPUs, CL_DEVICE_MAX_COMPUTE_UNITS is the number of cores.
-    // The locking is done by creating the file /tmp/gpu_usage.txt
-    // where the platform and device is saved.
-    platforms_list[platform].Lock_Best_Device();
-    
-    // Print All information possible on the platforms and their devices.
-    platforms_list.Print();
-    
-    // Create a command queue on "platform"'s preferred device.
-    cl_int err;
-    cl_command_queue command_queue = clCreateCommandQueue(
-                                                          platforms_list[platform].Preferred_OpenCL_Device_Context(),  // OpenCL context
-                                                          platforms_list[platform].Preferred_OpenCL_Device(),          // OpenCL device id
-                                                          0, &err);
-    
+	bm.launch(); 
 
 	return 0;
 }

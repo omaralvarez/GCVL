@@ -56,11 +56,11 @@ find_package(OpenCL REQUIRED)
 include_directories(${OPENCL_INCLUDE_DIRS})
 
 #Boost
-#IF (MSVC)
-#	set(Boost_USE_STATIC_LIBS ON)
-#ENDIF ()
-#find_package(Boost 1.48 COMPONENTS thread system iostreams filesystem REQUIRED)
-#include_directories(${Boost_INCLUDE_DIRS})
+IF (MSVC)
+	set(Boost_USE_STATIC_LIBS ON)
+ENDIF ()
+find_package(Boost 1.48 COMPONENTS thread system iostreams filesystem date_time REQUIRED)
+include_directories(${Boost_INCLUDE_DIRS})
 
 #OpenMP
 FIND_PACKAGE(OpenMP)

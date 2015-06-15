@@ -33,6 +33,9 @@
 #include <algorithm>    // std::ostringstream
 #include <sstream>
 #include <stdint.h>
+//Boost includes
+#include <boost/interprocess/sync/file_lock.hpp>
+#include <boost/filesystem.hpp>
 #ifdef _MSC_VER
 #include <Windows.h>
 #include <time.h>
@@ -58,6 +61,7 @@
 #define QUOTEME(x) _QUOTEME(x)
 #endif // #ifndef QUOTEME
 
+#ifndef _MSC_VER
 #define assert(x)                                       \
     if (!(x)) {                                         \
         std_cout                                        \
@@ -73,6 +77,7 @@
             << std::flush;                              \
         abort();                                        \
     }
+#endif
 
 // *****************************************************************************
 const double B_to_KiB   = 9.76562500000000e-04;
@@ -157,7 +162,14 @@ void Print_N_Times(const std::string x, const int N, const bool newline)
 std::string Get_Lock_Filename(const int device_id, const int platform_id_offset,
                               const std::string &platform_name, const std::string &device_name)
 {
-    std::string f = "/tmp/OpenCL_"; // Beginning of lock filename
+	//boost::filesystem::path tempPath = boost::filesystem::unique_path();
+	//std::string f = complete(tempPath).string()+"/OpenCL_"; // TODO Beginning of lock filename
+#ifdef _MSC_VER
+    std::string f = "OpenCL_";
+#else
+    std::string f = "/tmp/OpenCL_";
+#endif
+	
     char t[4096];
     sprintf(t, "Platform%d_Device%d__%s_%s", platform_id_offset, device_id, platform_name.c_str(), device_name.c_str()); //generate string filename
     unsigned int len = (unsigned int) strlen(t);
@@ -175,7 +187,6 @@ std::string Get_Lock_Filename(const int device_id, const int platform_id_offset,
 }
 
 // *****************************************************************************
-#ifndef _MSC_VER
 int Lock_File(const char *path, const bool quiet)
 /**
  * Attempt to lock file, and check lock status on lock file
@@ -186,7 +197,11 @@ int Lock_File(const char *path, const bool quiet)
         std_cout << "OpenCL: Attempt to acquire lock on file " << path << "..." << std::flush;
 
     // Open file
+#ifdef _MSC_VER
+    int f = _open(path, O_CREAT | O_TRUNC, 0666);
+#else
     int f = open(path, O_CREAT | O_TRUNC, 0666);
+#endif
     if (f == -1)
     {
         if (!quiet)
@@ -205,18 +220,24 @@ int Lock_File(const char *path, const bool quiet)
     // Aquire the lock. Since the locking might fail (because another process is checking the lock too)
     // we try a maximum of 5 times, with a random delay  between 1 and 10 seconds between tries.
 
-    pid_t pid = getpid();
+#ifdef _MSC_VER
+    int pid = _getpid();
+#else
+	fchmod(f, 0666);
+	pid_t pid = getpid();
+#endif
 
     const int max_retry = 5;
     srand(pid * (unsigned int)time(NULL));
-    int err;
+    bool err;
     for (int i = 0 ; i < max_retry ; i++)
     {
         // Try to acquire lock
-        err = flock(f, LOCK_EX | LOCK_NB);
-
+		boost::interprocess::file_lock flock(path);
+		err = !flock.try_lock();
+		
         // If it succeeds, exist the loop
-        if (err != -1)
+        if (!err)
             break;
 
         // If it it did not succeeds, sleep for a random
@@ -234,24 +255,32 @@ int Lock_File(const char *path, const bool quiet)
         std_cout << "\n";
     }
 
-    if (err == -1)
+    if (err)
     {
         if (errno == EWOULDBLOCK)
         {
-            close(f);
-            if (not quiet)
+#ifdef _MSC_VER
+			_close(f);
+#else
+			close(f);
+#endif
+            if (!quiet)
                 std_cout << "Lock file is already locked!\n";
             return -1; // File is locked
         }
         else
         {
             std_cout << "File lock operation failed!\n";
-            close(f);
+#ifdef _MSC_VER
+			_close(f);
+#else
+			close(f);
+#endif
             return -1; // Another error occurred
         }
     }
 
-    if (not quiet)
+    if (!quiet)
         std_cout << "Success!\n" << std::flush;
 
     return f;
@@ -263,12 +292,14 @@ void Unlock_File(int f, const bool quiet)
  * Unlock file
  */
 {
-    if (not quiet)
+    if (!quiet)
         std_cout << "Closing lock file.\n";
-    close(f); // Close file automatically unlocks file
+#ifdef _MSC_VER
+		_close(f);
+#else
+		close(f);
+#endif // Close file automatically unlocks file
 }
-
-#endif
 
 // *****************************************************************************
 void Wait(const double duration_sec)
