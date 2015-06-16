@@ -2,12 +2,14 @@ project(gcvl-lib)
 
 SET(SOURCE
 	oclutils.cpp
+	oclcore.cpp
 	oclalgorithm.cpp
 	oclblockmatching.cpp
 )
 
 SET(HEADERS
 	oclutils.h
+	oclcore.h
 	oclalgorithm.h
 	oclblockmatching.h
 	gcvlconfig.h

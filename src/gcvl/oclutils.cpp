@@ -954,14 +954,14 @@ void OpenCL_device::Print() const
 // *****************************************************************************
 void OpenCL_device::Lock()
 {
-#ifndef _MSC_VER //TODO Windows
+
     lock_file = Lock_File(Get_Lock_Filename(device_id, parent_platform->Id_Offset(), parent_platform->Name(), name).c_str());
     if (lock_file == -1)
     {
         std_cout << "An error occurred locking the file!\n" << std::flush;
         abort();
     }
-#endif
+
     file_locked = true; // File is now locked
 }
 
@@ -970,9 +970,9 @@ void OpenCL_device::Unlock()
 {
     if (file_locked == true)
     {
-#ifndef _MSC_VER
+
         Unlock_File(lock_file);
-#endif
+
         file_locked = false;
     }
 }

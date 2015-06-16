@@ -22,15 +22,32 @@
  *
  */
 
-#include <gcvl/oclcore.h>
-#include <gcvl/oclblockmatching.h>
+#pragma once
 
-int main() {
+#include "export.h"
+#include "gcvlconfig.h"
+#include "oclutils.h"
 
-	gcvl::opencl::Core core;
-	gcvl::opencl::BlockMatching bm;
+namespace gcvl { namespace opencl {
 
-	bm.launch(); 
+    class GCVL_EXPORT Core {
 
-	return 0;
-}
+    public:
+        Core();
+		Core(std::string p, bool locking);
+        ~Core();
+		inline cl_context getContext() { return context; }
+		inline cl_device_id getDevice() { return device; }
+		inline cl_command_queue getQueue() { return queue; } 
+
+    private:
+        OpenCL_platforms_list platforms;
+		std::string platform;
+		cl_context context;
+		cl_device_id device;
+		cl_command_queue queue;
+		//Etc.
+
+    };
+
+} }
