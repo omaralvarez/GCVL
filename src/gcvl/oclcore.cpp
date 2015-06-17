@@ -74,15 +74,8 @@ Core::Core(std::string p, bool locking) {
 
 	device = platforms_list[platform].Preferred_OpenCL_Device();
     
-    // Lock the best device available on the platform. Devices are
-    // ordered by number of max compute units (CL_DEVICE_MAX_COMPUTE_UNITS).
-    // GPUs normally have at least a couple dozen compute units. On
-    // CPUs, CL_DEVICE_MAX_COMPUTE_UNITS is the number of cores.
-    // The locking is done by creating the file /tmp/gpu_usage.txt
-    // where the platform and device is saved.
     platforms_list[platform].Lock_Best_Device();
-    
-    // Create a command queue on "platform"'s preferred device.
+
     cl_int err;
 	queue = clCreateCommandQueue(	context,  // OpenCL context
 									device,          // OpenCL device id
