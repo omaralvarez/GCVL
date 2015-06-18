@@ -11,7 +11,7 @@ before_install:
   - rm opencv.zip
   - mkdir opencv-build
   - cd opencv-build/
-  - cmake ../opencv-2.4.6.1/
+  - cmake ../opencv-2.4.11/
   - sudo make install
   - cd ..
   - sudo ln /dev/null /dev/raw1394
