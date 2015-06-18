@@ -34,13 +34,6 @@ int main() {
 	cv::Mat image;
     image = cv::imread( "C:/Users/Omar/GCVL/data/tsukuba_r.png" );
 
-    if ( !image.data )
-    {
-        printf("No image data \n");
-    }
-    cv::namedWindow("Display Image", cv::WINDOW_AUTOSIZE );
-    imshow("Display Image", image);
-
 	bm.launch(); 
 
 	return 0;
