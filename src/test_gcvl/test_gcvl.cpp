@@ -37,7 +37,6 @@ int main() {
     if ( !image.data )
     {
         printf("No image data \n");
-        return -1;
     }
     cv::namedWindow("Display Image", cv::WINDOW_AUTOSIZE );
     imshow("Display Image", image);
