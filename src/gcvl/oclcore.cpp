@@ -28,20 +28,19 @@
 
 using namespace gcvl::opencl;
 
-Core::Core() { 
-	std::cout << " **** Initializing OpenCL Core ****" << std::endl;
-	OpenCL_platforms_list platforms_list;
-    platforms_list.Initialize("-1");
+Core::Core() {
     
-	platforms = platforms_list;
+	std::cout << " **** Initializing OpenCL Core ****" << std::endl;
+
+    platforms.Initialize("-1");
 
     // By passing "-1", to Initialize(), the first platform in the list
     // is chosen. Get that platform's string for later reference.
-    platform = platforms_list.Get_Running_Platform();
+    platform = platforms.Get_Running_Platform();
 
-	context = platforms_list[platform].Preferred_OpenCL_Device_Context(); 
+	context = platforms[platform].Preferred_OpenCL_Device_Context();
 
-	device = platforms_list[platform].Preferred_OpenCL_Device();
+	device = platforms[platform].Preferred_OpenCL_Device();
     
     // Lock the best device available on the platform. Devices are
     // ordered by number of max compute units (CL_DEVICE_MAX_COMPUTE_UNITS).
@@ -49,37 +48,38 @@ Core::Core() {
     // CPUs, CL_DEVICE_MAX_COMPUTE_UNITS is the number of cores.
     // The locking is done by creating the file /tmp/gpu_usage.txt
     // where the platform and device is saved.
-    platforms_list[platform].Lock_Best_Device();
+    platforms[platform].Lock_Best_Device();
     
     // Print All information possible on the platforms and their devices.
-    platforms_list.Print();
+    platforms.Print();
     
     // Create a command queue on "platform"'s preferred device.
     cl_int err;
 	queue = clCreateCommandQueue(	context,  // OpenCL context
 									device,          // OpenCL device id
 									0, &err);
+    
 }
 
-Core::Core(std::string p, bool locking) { 
-	std::cout << " **** Initializing OpenCL Core ****" << std::endl;
-	OpenCL_platforms_list platforms_list;
-    platforms_list.Initialize(p, locking);
+Core::Core(std::string p, bool locking) {
     
-	platforms = platforms_list;
+	std::cout << " **** Initializing OpenCL Core ****" << std::endl;
+
+    platforms.Initialize(p, locking);
 
     platform = p;
 
-	context = platforms_list[platform].Preferred_OpenCL_Device_Context(); 
+	context = platforms[platform].Preferred_OpenCL_Device_Context();
 
-	device = platforms_list[platform].Preferred_OpenCL_Device();
+	device = platforms[platform].Preferred_OpenCL_Device();
     
-    platforms_list[platform].Lock_Best_Device();
+    platforms[platform].Lock_Best_Device();
 
     cl_int err;
 	queue = clCreateCommandQueue(	context,  // OpenCL context
 									device,          // OpenCL device id
 									0, &err);
+    
 }
 	
 Core::~Core() { 

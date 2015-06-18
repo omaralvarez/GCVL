@@ -5,11 +5,17 @@ compiler:
   - clang
 
 before_install:
-  - echo $LANG
-  - echo $LC_ALL
-  - sudo apt-get update && sudo apt-get install -y fglrx opencl-headers libboost-thread-dev libboost-system-dev libboost-iostreams-dev  libboost-filesystem-dev libboost-date-time-dev libopencv-dev
+  - sudo apt-get update && sudo apt-get install -y fglrx opencl-headers libboost-thread-dev libboost-system-dev libboost-iostreams-dev  libboost-filesystem-dev libboost-date-time-dev  build-essential #libopencv-dev
+  - curl -sL https://github.com/Itseez/opencv/archive/2.4.11.zip > opencv.zip
+  - unzip opencv.zip
+  - rm opencv.zip
+  - mkdir opencv-build
+  - cd opencv-build/
+  - cmake ../opencv-2.4.6.1/
+  - sudo make install
+  - cd ..
   - sudo ln /dev/null /dev/raw1394
-  
+
 script:
   - cmake -G "Unix Makefiles" .
   - make

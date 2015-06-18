@@ -38,7 +38,8 @@ namespace gcvl { namespace opencl {
         ~Core();
 		inline cl_context getContext() { return context; }
 		inline cl_device_id getDevice() { return device; }
-		inline cl_command_queue getQueue() { return queue; } 
+		inline cl_command_queue getQueue() { return queue; }
+        void init();
 
     private:
         OpenCL_platforms_list platforms;

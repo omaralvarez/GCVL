@@ -34,7 +34,7 @@ int main() {
 	cv::Mat image;
     image = cv::imread( "C:/Users/Omar/GCVL/data/tsukuba_r.png" );
 
-	bm.launch(); 
+	bm.launch();
 
 	return 0;
 }
