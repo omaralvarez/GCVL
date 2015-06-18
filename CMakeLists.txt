@@ -56,8 +56,12 @@ find_package(OpenCL REQUIRED)
 include_directories(${OPENCL_INCLUDE_DIRS})
 
 #OpenCV
-#find_package(OpenCV REQUIRED)
-#include_directories(${OpenCV_INCLUDE_DIRS})
+IF (MSVC)
+	set(OpenCV_DIR $ENV{OpenCV_DIR})
+	set(OpenCV_STATIC OFF)
+ENDIF()
+find_package(OpenCV REQUIRED)
+include_directories(${OpenCV_INCLUDE_DIRS})
 
 #Boost
 IF (MSVC)
