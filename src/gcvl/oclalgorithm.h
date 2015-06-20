@@ -26,6 +26,8 @@
 
 #include "export.h"
 #include "gcvlconfig.h"
+#include "oclutils.h"
+#include "oclcore.h"
 
 #include <string>
 #include <vector>
@@ -43,7 +45,9 @@ namespace gcvl { namespace opencl {
 		virtual void postpare() = 0;
 
     protected:
-        std::vector<int> kernel;
+        OpenCL_Kernel kernel;
+        Core core;
+        
 		//Etc.
 
     };

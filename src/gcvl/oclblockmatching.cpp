@@ -30,6 +30,7 @@ using namespace gcvl::opencl;
 
 BlockMatching::BlockMatching() { 
 	std::cout << " **** Initializing OpenCL BlockMatching ****" << std::endl;
+    //kernel.Initialize("file", context, device)
 }
 	
 BlockMatching::~BlockMatching() { 
