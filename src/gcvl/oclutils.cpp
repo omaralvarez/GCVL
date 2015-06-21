@@ -1643,13 +1643,13 @@ void OpenCL_Array<T>::Initialize(int _N, const size_t _sizeof_element,
     }
 
     // Transfer data from host to device (cpu to gpu)
-    Host_to_Device();
+    //Host_to_Device();
 
     if (_checksum_array)
         Validate_Data();
 
-    err = clFinish(command_queue);
-    OpenCL_Test_Success(err, "clFinish");
+    //err = clFinish(command_queue);
+    //OpenCL_Test_Success(err, "clFinish");
 }
 
 // *****************************************************************************

@@ -37,16 +37,15 @@ namespace gcvl { namespace opencl {
     class GCVL_EXPORT Algorithm {
 
     public:
-        Algorithm();
-        virtual ~Algorithm();
+        void compute();
 		virtual void prepare() = 0;
 		virtual void setArgs() = 0;
 		virtual void launch() = 0;
 		virtual void postpare() = 0;
 
     protected:
-        OpenCL_Kernel kernel;
-        Core core;
+        OpenCL_Kernel _kernel;
+        Core * _core;
         
 		//Etc.
 

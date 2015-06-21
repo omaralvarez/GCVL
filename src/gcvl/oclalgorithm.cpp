@@ -27,12 +27,13 @@
 
 using namespace gcvl::opencl;
 
-Algorithm::Algorithm() { 
-	std::cout << " **** Initializing OpenCL Algorithm ****" << std::endl;
-}
-	
-Algorithm::~Algorithm() { 
-	std::cout << " **** Destroying OpenCL Algorithm ****" << std::endl;
+void Algorithm::compute() {
+    
+    prepare();
+    setArgs();
+    launch();
+    postpare();
+    
 }
 
 

@@ -36,12 +36,20 @@ namespace gcvl { namespace opencl {
     class GCVL_EXPORT BlockMatching : public Algorithm {
 
     public:
-        BlockMatching();
+        BlockMatching(Core * core, unsigned int n, float * input, float * output);
         ~BlockMatching();
 		void prepare();
 		void setArgs();
 		void launch();
 		void postpare();
+        
+    private:
+        unsigned int _n;
+        float * _input;
+        OpenCL_Array<float> _clInput;
+        float * _output;
+        OpenCL_Array<float> _clOutput;
+        
     };
 
 } }

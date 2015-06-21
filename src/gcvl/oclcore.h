@@ -34,19 +34,20 @@ namespace gcvl { namespace opencl {
 
     public:
         Core();
-		Core(std::string p, bool locking);
+		Core(std::string platform, bool locking);
         ~Core();
-		inline cl_context getContext() { return context; }
-		inline cl_device_id getDevice() { return device; }
-		inline cl_command_queue getQueue() { return queue; }
+        inline const std::string getPlatform() { return _platform; }
+		inline const cl_context getContext() { return _context; }
+        inline const cl_device_id getDevice() { return _device; }
+		inline const cl_command_queue getQueue() { return _queue; }
         void init();
 
     private:
-        OpenCL_platforms_list platforms;
-		std::string platform;
-		cl_context context;
-		cl_device_id device;
-		cl_command_queue queue;
+        OpenCL_platforms_list _platforms;
+		std::string _platform;
+		cl_context _context;
+		cl_device_id _device;
+		cl_command_queue _queue;
 		//Etc.
 
     };

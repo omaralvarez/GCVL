@@ -28,9 +28,22 @@
 
 using namespace gcvl::opencl;
 
-BlockMatching::BlockMatching() { 
+BlockMatching::BlockMatching(Core * core, unsigned int n, float * input, float * output) {
+    
 	std::cout << " **** Initializing OpenCL BlockMatching ****" << std::endl;
-    //kernel.Initialize("file", context, device)
+    
+    _core = core;
+    _kernel.Initialize("../../src/gcvl/kernels/test.cl", _core->getContext(), _core->getDevice());
+    _n = n;
+    _input = input;
+    _output = output;
+    cl_context context = _core->getContext();
+    cl_command_queue queue = _core->getQueue();
+    cl_device_id device = _core->getDevice();
+    _clInput.Initialize(_n, sizeof(float), _input, context, CL_MEM_READ_ONLY, _core->getPlatform(), queue, device, false);
+    _clInput.Host_to_Device();
+    _clOutput.Initialize(_n, sizeof(float), _output, context, CL_MEM_WRITE_ONLY, _core->getPlatform(), queue, device, false);
+    
 }
 	
 BlockMatching::~BlockMatching() { 
@@ -38,19 +51,39 @@ BlockMatching::~BlockMatching() {
 }
 
 void BlockMatching::prepare() {
+    
 	std::cout << " **** prepare OpenCL BlockMatching ****" << std::endl;
+    
+    _kernel.Build("add");
+    _kernel.Compute_Work_Size(_n, 1, 32, 1);
+    
 }
 
 void BlockMatching::setArgs() {
+    
 	std::cout << " **** setArgs OpenCL BlockMatching ****" << std::endl;
+    
+    cl_kernel kernel = _kernel.Get_Kernel();
+    _clInput.Set_as_Kernel_Argument(kernel, 0);
+    _clOutput.Set_as_Kernel_Argument(kernel, 1);
+    
+    
 }
 
 void BlockMatching::launch() {
+    
 	std::cout << " **** launch OpenCL BlockMatching ****" << std::endl;
+    
+    _kernel.Launch(_core->getQueue());
+    
 }
 
 void BlockMatching::postpare() {
+    
 	std::cout << " **** postpare OpenCL BlockMatching ****" << std::endl;
+    
+    _clOutput.Device_to_Host();
+    
 }
 
 

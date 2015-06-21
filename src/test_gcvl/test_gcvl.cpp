@@ -24,17 +24,34 @@
 
 #include <gcvl/oclcore.h>
 #include <gcvl/oclblockmatching.h>
-#include <opencv2/opencv.hpp>
+//#include <opencv2/opencv.hpp>
 
 int main() {
 
+    unsigned int n = 64;
+    float * input = new float[n];
+    float * output = new float[n];
+    
+    for(unsigned int i = 0; i < n; ++i) {
+        input[i] = output[i] = 0.f;
+    }
+    
 	gcvl::opencl::Core core;
-	gcvl::opencl::BlockMatching bm;
-
-	cv::Mat image;
-    image = cv::imread( "C:/Users/Omar/GCVL/data/tsukuba_r.png" );
-
-	bm.launch();
+	gcvl::opencl::BlockMatching bm(&core, n, input, output);
+    
+    bm.compute();
+    
+    for(unsigned int i = 0; i < n; ++i) {
+        std::cout << input[i] << " ";
+    }
+    std::cout << std::endl;
+    for(unsigned int i = 0; i < n; ++i) {
+        std::cout << output[i] << " ";
+    }
+    std::cout << std::endl;
+    
+	//cv::Mat image;
+    //image = cv::imread( "C:/Users/Omar/GCVL/data/tsukuba_r.png" );
 
 	return 0;
 }
