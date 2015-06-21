@@ -1553,10 +1553,10 @@ OpenCL_Array<T>::OpenCL_Array()
 template <class T>
 void OpenCL_Array<T>::Initialize(int _N, const size_t _sizeof_element,
                                  T *&_host_array,
-                                 cl_context &_context, cl_mem_flags flags,
+                                 const cl_context &_context, cl_mem_flags flags,
                                  std::string _platform,
-                                 cl_command_queue &_command_queue,
-                                 cl_device_id &_device,
+                                 const cl_command_queue &_command_queue,
+                                 const cl_device_id &_device,
                                  const bool _checksum_array)
 {
     assert(_host_array != NULL);

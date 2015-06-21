@@ -33,16 +33,13 @@ BlockMatching::BlockMatching(Core * core, unsigned int n, float * input, float *
 	std::cout << " **** Initializing OpenCL BlockMatching ****" << std::endl;
     
     _core = core;
-    _kernel.Initialize("../../src/gcvl/kernels/test.cl", _core->getContext(), _core->getDevice());
+    _kernel.Initialize("../src/gcvl/kernels/block_matching.cl", _core->getContext(), _core->getDevice());
     _n = n;
     _input = input;
     _output = output;
-    cl_context context = _core->getContext();
-    cl_command_queue queue = _core->getQueue();
-    cl_device_id device = _core->getDevice();
-    _clInput.Initialize(_n, sizeof(float), _input, context, CL_MEM_READ_ONLY, _core->getPlatform(), queue, device, false);
+    _clInput.Initialize(_n, sizeof(float), _input, _core->getContext(), CL_MEM_READ_ONLY, _core->getPlatform(), _core->getQueue(), _core->getDevice(), false);
     _clInput.Host_to_Device();
-    _clOutput.Initialize(_n, sizeof(float), _output, context, CL_MEM_WRITE_ONLY, _core->getPlatform(), queue, device, false);
+    _clOutput.Initialize(_n, sizeof(float), _output, _core->getContext(), CL_MEM_WRITE_ONLY, _core->getPlatform(), _core->getQueue(), _core->getDevice(), false);
     
 }
 	

@@ -493,10 +493,10 @@ public:
     OpenCL_Array();
     void Initialize(int _N, const size_t _sizeof_element,
                     T *&host_array,
-                    cl_context &_context, cl_mem_flags flags,
+                    const cl_context &_context, cl_mem_flags flags,
                     std::string _platform,
-                    cl_command_queue &_command_queue,
-                    cl_device_id &_device,
+                    const cl_command_queue &_command_queue,
+                    const cl_device_id &_device,
                     const bool _checksum_array);
     void Release_Memory();
     void Host_to_Device();
