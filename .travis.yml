@@ -11,7 +11,7 @@ before_install:
 script:
   - cmake -G "Unix Makefiles" .
   - make
-  - cd /bin
+  - cd bin
   - ./test_gcvl
 
 branches:
