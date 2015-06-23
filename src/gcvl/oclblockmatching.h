@@ -38,10 +38,10 @@ namespace gcvl { namespace opencl {
     public:
         BlockMatching(Core * core, unsigned int n, float * input, float * output);
         ~BlockMatching();
-		void prepare() override;
-		void setArgs() override;
-		void launch() override;
-		void postpare() override;
+		void prepare();
+		void setArgs();
+		void launch();
+		void postpare();
         
     private:
         unsigned int _n;
