@@ -28,12 +28,16 @@
 
 using namespace gcvl::opencl;
 
+#define str(s) #s
+char* kernel = 
+#include "kernels/block_matching.cl"
+
 BlockMatching::BlockMatching(Core * core, unsigned int n, float * input, float * output) {
     
 	std::cout << " **** Initializing OpenCL BlockMatching ****" << std::endl;
     
     _core = core;
-    _kernel.Initialize("../src/gcvl/kernels/block_matching.cl", _core->getContext(), _core->getDevice());
+    _kernel.Initialize(kernel, _core->getContext(), _core->getDevice());
     _n = n;
     _input = input;
     _output = output;
