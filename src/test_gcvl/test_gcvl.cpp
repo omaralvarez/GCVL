@@ -47,10 +47,13 @@ int main() {
     gcvl::opencl::BlockMatching bm(&core, image.rows, image.cols, image.data, output);
     bm.compute();
     
-    cv::Mat out(image.rows, image.cols, CV_8UC3, output);
-    cv::namedWindow( "Display window", cv::WINDOW_AUTOSIZE );// Create a window for display.
-    cv::imshow( "Display window", out );
-    //cv::waitKey(0);
+    /*cv::Mat out(image.rows, image.cols, CV_8UC3, output);
+    
+    cv::namedWindow( "Source Image", cv::WINDOW_AUTOSIZE );// Create a window for display.
+    cv::imshow( "Source Image", image );
+    cv::namedWindow( "Disparity Map", cv::WINDOW_AUTOSIZE );// Create a window for display.
+    cv::imshow( "Disparity Map", out );
+    cv::waitKey(0);*/
     
     /*for(unsigned int i = 0; i < n; ++i) {
         std::cout << input[i] << " ";
