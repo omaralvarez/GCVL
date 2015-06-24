@@ -39,15 +39,18 @@ int main() {
     cv::Mat image;
     image = cv::imread( "../data/tsukuba_r.png" );
     
-    unsigned char * input = new unsigned char[image.rows*image.cols*3];
+    //unsigned char * input = new unsigned char[image.rows*image.cols*3];
     unsigned char * output = new unsigned char[image.rows*image.cols*3];
     
 	gcvl::opencl::Core core;
 	//gcvl::opencl::BlockMatching bm(&core, n, input, output);
-    gcvl::opencl::BlockMatching bm(&core, image.rows, image.cols, input, output);
+    gcvl::opencl::BlockMatching bm(&core, image.rows, image.cols, image.data, output);
     bm.compute();
     
     cv::Mat out(image.rows, image.cols, CV_8UC3, output);
+    cv::namedWindow( "Display window", cv::WINDOW_AUTOSIZE );// Create a window for display.
+    cv::imshow( "Display window", out );
+    //cv::waitKey(0);
     
     /*for(unsigned int i = 0; i < n; ++i) {
         std::cout << input[i] << " ";
