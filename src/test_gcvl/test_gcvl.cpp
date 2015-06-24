@@ -24,34 +24,39 @@
 
 #include <gcvl/oclcore.h>
 #include <gcvl/oclblockmatching.h>
-//#include <opencv2/opencv.hpp>
+#include <opencv2/opencv.hpp>
 
 int main() {
 
-    unsigned int n = 64;
+    /*unsigned int n = 64;
     float * input = new float[n];
     float * output = new float[n];
     
     for(unsigned int i = 0; i < n; ++i) {
         input[i] = output[i] = 0.f;
-    }
+    }*/
+    
+    cv::Mat image;
+    image = cv::imread( "../data/tsukuba_r.png" );
+    
+    unsigned char * input = new unsigned char[image.rows*image.cols*3];
+    unsigned char * output = new unsigned char[image.rows*image.cols*3];
     
 	gcvl::opencl::Core core;
-	gcvl::opencl::BlockMatching bm(&core, n, input, output);
-    
+	//gcvl::opencl::BlockMatching bm(&core, n, input, output);
+    gcvl::opencl::BlockMatching bm(&core, image.rows, image.cols, input, output);
     bm.compute();
     
-    for(unsigned int i = 0; i < n; ++i) {
+    cv::Mat out(image.rows, image.cols, CV_8UC3, output);
+    
+    /*for(unsigned int i = 0; i < n; ++i) {
         std::cout << input[i] << " ";
     }
     std::cout << std::endl;
     for(unsigned int i = 0; i < n; ++i) {
         std::cout << output[i] << " ";
     }
-    std::cout << std::endl;
-    
-	//cv::Mat image;
-    //image = cv::imread( "C:/Users/Omar/GCVL/data/tsukuba_r.png" );
+    std::cout << std::endl;*/
 
 	return 0;
 }

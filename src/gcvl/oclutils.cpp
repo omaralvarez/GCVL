@@ -2137,10 +2137,13 @@ namespace OpenCL_SHA512
     }
 }
 
+//TODO Add more types?
 template class OpenCL_Array<float>;
 template class OpenCL_Array<double>;
 template class OpenCL_Array<int>;
+template class OpenCL_Array<unsigned int>;
 template class OpenCL_Array<char>;
+template class OpenCL_Array<unsigned char>;
 
 
 // ********** End of file ******************************************************
