@@ -29,7 +29,7 @@
 using namespace gcvl::opencl;
 
 #define str(s) #s
-char* kernel = 
+const char * kernel =
 #include "kernels/image_man.cl"
 
 BlockMatching::BlockMatching(Core * core, unsigned int width, unsigned int height, unsigned char * input, unsigned char * output) {
