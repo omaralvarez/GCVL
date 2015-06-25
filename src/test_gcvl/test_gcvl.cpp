@@ -26,7 +26,7 @@
 #include <gcvl/oclblockmatching.h>
 #include <opencv2/opencv.hpp>
 
-int main() {
+int main(int argc, char *argv[]) {
 
     /*unsigned int n = 64;
     float * input = new float[n];
@@ -36,8 +36,12 @@ int main() {
         input[i] = output[i] = 0.f;
     }*/
     
+    if (argc != 2) {
+        std::cout << "Usage: test_gcvl path/to/image" << std::endl;
+    }
+    
     cv::Mat image;
-    image = cv::imread( "../data/tsukuba_r.png" );
+    image = cv::imread(argv[1]);
     
     //unsigned char * input = new unsigned char[image.rows*image.cols*3];
     unsigned char * output = new unsigned char[image.rows*image.cols*3];
