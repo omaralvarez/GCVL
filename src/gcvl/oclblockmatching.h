@@ -45,6 +45,7 @@ namespace gcvl { namespace opencl {
         
     private:
         unsigned int _width;
+        OpenCL_Data<unsigned int> _clWidth;
         unsigned int _height;
         unsigned char * _input;
         OpenCL_Array<unsigned char> _clInput;

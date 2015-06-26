@@ -32,7 +32,7 @@ using namespace gcvl::opencl;
 const char * kernel =
 #include "kernels/image_man.cl"
 
-BlockMatching::BlockMatching(Core * core, unsigned int width, unsigned int height, unsigned char * input, unsigned char * output) {
+BlockMatching::BlockMatching(Core * core, unsigned int width, unsigned int height, unsigned char * input, unsigned char * output) : _clWidth(width) {
     
 	std::cout << " **** Initializing OpenCL BlockMatching ****" << std::endl;
     
@@ -42,14 +42,17 @@ BlockMatching::BlockMatching(Core * core, unsigned int width, unsigned int heigh
     _height = height;
     _input = input;
     _output = output;
-    _clInput.Initialize(_width*_height*3, sizeof(unsigned char), _input, _core->getContext(), CL_MEM_READ_ONLY, _core->getPlatform(), _core->getQueue(), _core->getDevice(), false);
+    _clInput.Initialize(_width*_height, sizeof(unsigned char), _input, _core->getContext(), CL_MEM_READ_ONLY, _core->getPlatform(), _core->getQueue(), _core->getDevice(), false);
     _clInput.Host_to_Device();
-    _clOutput.Initialize(_width*_height*3, sizeof(unsigned char), _output, _core->getContext(), CL_MEM_WRITE_ONLY, _core->getPlatform(), _core->getQueue(), _core->getDevice(), false);
+    _clOutput.Initialize(_width*_height, sizeof(unsigned char), _output, _core->getContext(), CL_MEM_WRITE_ONLY, _core->getPlatform(), _core->getQueue(), _core->getDevice(), false);
     
 }
 	
 BlockMatching::~BlockMatching() { 
 	std::cout << " **** Destroying OpenCL BlockMatching ****" << std::endl;
+    
+    _clInput.Release_Memory();
+    _clOutput.Release_Memory();
 }
 
 void BlockMatching::prepare() {
@@ -68,9 +71,7 @@ void BlockMatching::setArgs() {
     cl_kernel kernel = _kernel.Get_Kernel();
     _clInput.Set_as_Kernel_Argument(kernel, 0);
     _clOutput.Set_as_Kernel_Argument(kernel, 1);
-    cl_int err = clSetKernelArg(kernel, 2, sizeof(unsigned int), &_width);
-    OpenCL_Test_Success(err, "clSetKernelArg()");
-    
+    _clWidth.Set_as_Kernel_Argument(kernel, 2);
     
 }
 

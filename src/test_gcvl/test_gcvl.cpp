@@ -41,23 +41,27 @@ int main(int argc, char *argv[]) {
     }
     
     cv::Mat image;
-    image = cv::imread(argv[1]);
+    image = cv::imread(argv[1], CV_LOAD_IMAGE_GRAYSCALE);
+    
+    std::cout << "File: " << argv[1] << " Image size: " << image.rows << "x" << image.cols << std::endl;
     
     //unsigned char * input = new unsigned char[image.rows*image.cols*3];
-    unsigned char * output = new unsigned char[image.rows*image.cols*3];
+    unsigned char * output = new unsigned char[image.cols*image.rows];
     
 	gcvl::opencl::Core core;
 	//gcvl::opencl::BlockMatching bm(&core, n, input, output);
-    gcvl::opencl::BlockMatching bm(&core, image.rows, image.cols, image.data, output);
+    gcvl::opencl::BlockMatching bm(&core, image.cols, image.rows, image.data, output);
     bm.compute();
     
-    /*cv::Mat out(image.rows, image.cols, CV_8UC3, output);
+    cv::Mat out(image.rows, image.cols, CV_8UC1, output);
     
     cv::namedWindow( "Source Image", cv::WINDOW_AUTOSIZE );// Create a window for display.
     cv::imshow( "Source Image", image );
     cv::namedWindow( "Disparity Map", cv::WINDOW_AUTOSIZE );// Create a window for display.
     cv::imshow( "Disparity Map", out );
-    cv::waitKey(0);*/
+    cv::waitKey(0);
+    
+    delete [] output;
     
     /*for(unsigned int i = 0; i < n; ++i) {
         std::cout << input[i] << " ";

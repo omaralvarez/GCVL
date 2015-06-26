@@ -1308,7 +1308,7 @@ void OpenCL_Kernel::Compute_Work_Size(size_t _global_x, size_t _global_y, size_t
 }
 
 // *****************************************************************************
-cl_kernel OpenCL_Kernel::Get_Kernel() const
+const cl_kernel& OpenCL_Kernel::Get_Kernel() const
 {
     return kernel;
 }
@@ -2137,6 +2137,16 @@ namespace OpenCL_SHA512
     }
 }
 
+template <class T>
+OpenCL_Data<T>::OpenCL_Data(T _data) : data(_data) {}
+
+template <class T>
+void OpenCL_Data<T>::Set_as_Kernel_Argument(cl_kernel &kernel, const int order)
+{
+    err = clSetKernelArg(kernel, order, sizeof(T), &data);
+    OpenCL_Test_Success(err, "clSetKernelArg()");
+}
+
 //TODO Add more types?
 template class OpenCL_Array<float>;
 template class OpenCL_Array<double>;
@@ -2145,5 +2155,11 @@ template class OpenCL_Array<unsigned int>;
 template class OpenCL_Array<char>;
 template class OpenCL_Array<unsigned char>;
 
+template class OpenCL_Data<float>;
+template class OpenCL_Data<double>;
+template class OpenCL_Data<int>;
+template class OpenCL_Data<unsigned int>;
+template class OpenCL_Data<char>;
+template class OpenCL_Data<unsigned char>;
 
 // ********** End of file ******************************************************

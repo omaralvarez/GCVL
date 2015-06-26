@@ -418,7 +418,7 @@ class OpenCL_Kernel
         // By default global_y is one, local_x is MAX_WORK_SIZE and local_y is one.
         void Compute_Work_Size(size_t _global_x, size_t _global_y, size_t _local_x, size_t _local_y);
 
-        cl_kernel Get_Kernel() const;
+        const cl_kernel& Get_Kernel() const;
 
         size_t *Get_Global_Work_Size() const;
         size_t *Get_Local_Work_Size() const;
@@ -549,5 +549,17 @@ namespace OpenCL_SHA512
 
     void Validation();
 }
+
+// *****************************************************************************
+template <class T>
+class OpenCL_Data
+{
+private:
+    T data;
+    cl_int err;
+public:
+    OpenCL_Data(T _data);
+    void Set_as_Kernel_Argument(cl_kernel &kernel, const int order);
+};
 
 // ********** End of file ***************************************
