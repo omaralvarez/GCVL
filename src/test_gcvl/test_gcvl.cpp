@@ -53,22 +53,23 @@ int main(int argc, char *argv[]) {
     gcvl::opencl::BlockMatching bm(&core, image.cols, image.rows, image.data, output);
     bm.compute();
     
+    /*std::cout << "Brk 1" << std::endl;
+    
     cv::Mat out(image.rows, image.cols, CV_8UC1, output);
     
-    cv::namedWindow( "Source Image", cv::WINDOW_AUTOSIZE );// Create a window for display.
-    cv::imshow( "Source Image", image );
-    cv::namedWindow( "Disparity Map", cv::WINDOW_AUTOSIZE );// Create a window for display.
-    cv::imshow( "Disparity Map", out );
-    cv::waitKey(0);
+    std::cout << "Brk 2" << std::endl;
+    
+    //cv::namedWindow( "Source Image", cv::WINDOW_AUTOSIZE );// Create a window for display.
+    //cv::imshow( "Source Image", image );
+    //cv::namedWindow( "Disparity Map", cv::WINDOW_AUTOSIZE );// Create a window for display.
+    //cv::imshow( "Disparity Map", out );
+    std::cout << "Brk 3" << std::endl;
+    //cv::waitKey(0);*/
     
     delete [] output;
     
     /*for(unsigned int i = 0; i < n; ++i) {
         std::cout << input[i] << " ";
-    }
-    std::cout << std::endl;
-    for(unsigned int i = 0; i < n; ++i) {
-        std::cout << output[i] << " ";
     }
     std::cout << std::endl;*/
 

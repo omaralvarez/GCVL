@@ -89,6 +89,8 @@ void BlockMatching::postpare() {
     
     _clOutput.Device_to_Host();
     
+    std::cout << " **** End ****" << std::endl;
+    
 }
 
 
