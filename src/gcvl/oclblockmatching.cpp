@@ -48,11 +48,13 @@ BlockMatching::BlockMatching(Core * core, unsigned int width, unsigned int heigh
     
 }
 	
-BlockMatching::~BlockMatching() { 
+BlockMatching::~BlockMatching() {
+    
 	std::cout << " **** Destroying OpenCL BlockMatching ****" << std::endl;
     
     _clInput.Release_Memory();
     _clOutput.Release_Memory();
+    
 }
 
 void BlockMatching::prepare() {
@@ -60,7 +62,7 @@ void BlockMatching::prepare() {
 	std::cout << " **** prepare OpenCL BlockMatching ****" << std::endl;
     
     _kernel.Build("test");
-    _kernel.Compute_Work_Size(_width, _height, 1, 1);
+    _kernel.Compute_Work_Size(_height, _width, 1, 1);
     
 }
 
@@ -88,8 +90,6 @@ void BlockMatching::postpare() {
 	std::cout << " **** postpare OpenCL BlockMatching ****" << std::endl;
     
     _clOutput.Device_to_Host();
-    
-    std::cout << " **** End ****" << std::endl;
     
 }
 

@@ -29,10 +29,14 @@ using namespace gcvl::opencl;
 
 void Algorithm::compute() {
     
+    std::cout << " **** Starting! ****" << std::endl;
+    
     prepare();
     setArgs();
     launch();
     postpare();
+    
+    std::cout << " **** Finished! ****" << std::endl;
     
 }
 
