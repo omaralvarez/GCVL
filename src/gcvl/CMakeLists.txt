@@ -14,7 +14,6 @@ SET(HEADERS
 	oclblockmatching.h
 	gcvlconfig.h
 	export.h
-	kernels/block_matching.cl
 )
 include_directories (${CMAKE_SOURCE_DIR}) 
 
