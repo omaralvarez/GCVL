@@ -1,6 +1,5 @@
-# GCVL [![Build Status](https://travis-ci.org/omaralvarez/GCVL.svg?branch=master)](https://travis-ci.org/omaralvarez/GCVL)
-###GPGPU Computer Vision Library
-Multiplatform (Windows, Unix and MacOS) C++/OpenCL/CUDA library with several Computer Vision Algorithms.
+# GPGPU Computer Vision Library [![Build Status](https://travis-ci.org/omaralvarez/GCVL.svg?branch=master)](https://travis-ci.org/omaralvarez/GCVL)
+Multi-platform (Windows, Unix and Mac OS) C++/OpenCL/CUDA library with several Computer Vision algorithms.
 ###Building:
 ```bash
 cmake -G "Unix Makefiles" .
