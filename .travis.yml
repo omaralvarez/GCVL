@@ -11,7 +11,7 @@ before_install:
 script:
   - cmake -G "Unix Makefiles" .
   - make
-  - ./bin/test_gcvl data/tsukuba_r.png
+  - ./bin/test_gcvl data/tsukuba_l.png data/tsukuba_r.png
 
 branches:
   only:

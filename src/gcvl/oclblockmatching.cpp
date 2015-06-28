@@ -32,7 +32,7 @@ using namespace gcvl::opencl;
 const char * kernel =
 #include "kernels/image_man.cl"
 
-BlockMatching::BlockMatching(Core * core, unsigned int width, unsigned int height, unsigned char * input, unsigned char * output) : _clWidth(width) {
+BlockMatching::BlockMatching(Core * core, unsigned int width, unsigned int height, unsigned char * inputLeft, unsigned char * inputRight, unsigned char * output) : _clWidth(width) {
     
 	std::cout << " **** Initializing OpenCL BlockMatching ****" << std::endl;
     
@@ -40,10 +40,13 @@ BlockMatching::BlockMatching(Core * core, unsigned int width, unsigned int heigh
     _kernel.Initialize(kernel, _core->getContext(), _core->getDevice());
     _width = width;
     _height = height;
-    _input = input;
+    _inputLeft = inputLeft;
+    _inputRight = inputRight;
     _output = output;
-    _clInput.Initialize(_width*_height, sizeof(unsigned char), _input, _core->getContext(), CL_MEM_READ_ONLY, _core->getPlatform(), _core->getQueue(), _core->getDevice(), false);
-    _clInput.Host_to_Device();
+    _clInputLeft.Initialize(_width*_height, sizeof(unsigned char), _inputLeft, _core->getContext(), CL_MEM_READ_ONLY, _core->getPlatform(), _core->getQueue(), _core->getDevice(), false);
+    _clInputLeft.Host_to_Device();
+    _clInputRight.Initialize(_width*_height, sizeof(unsigned char), _inputRight, _core->getContext(), CL_MEM_READ_ONLY, _core->getPlatform(), _core->getQueue(), _core->getDevice(), false);
+    _clInputRight.Host_to_Device();
     _clOutput.Initialize(_width*_height, sizeof(unsigned char), _output, _core->getContext(), CL_MEM_WRITE_ONLY, _core->getPlatform(), _core->getQueue(), _core->getDevice(), false);
     
 }
@@ -52,7 +55,8 @@ BlockMatching::~BlockMatching() {
     
 	std::cout << " **** Destroying OpenCL BlockMatching ****" << std::endl;
     
-    _clInput.Release_Memory();
+    _clInputLeft.Release_Memory();
+    _clInputRight.Release_Memory();
     _clOutput.Release_Memory();
     
 }
@@ -71,7 +75,7 @@ void BlockMatching::setArgs() {
 	std::cout << " **** setArgs OpenCL BlockMatching ****" << std::endl;
     
     cl_kernel kernel = _kernel.Get_Kernel();
-    _clInput.Set_as_Kernel_Argument(kernel, 0);
+    _clInputLeft.Set_as_Kernel_Argument(kernel, 0);
     _clOutput.Set_as_Kernel_Argument(kernel, 1);
     _clWidth.Set_as_Kernel_Argument(kernel, 2);
     

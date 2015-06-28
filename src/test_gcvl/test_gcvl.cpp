@@ -36,21 +36,23 @@ int main(int argc, char *argv[]) {
         input[i] = output[i] = 0.f;
     }*/
     
-    if (argc != 2) {
-        std::cout << "Usage: test_gcvl path/to/image" << std::endl;
+    if (argc != 3) {
+        std::cout << "Usage: test_gcvl path/to/image_left path/to/image_right" << std::endl;
         return 0;
     }
     
-    cv::Mat image;
-    image = cv::imread(argv[1], CV_LOAD_IMAGE_GRAYSCALE);
+    cv::Mat image_left;
+    image_left = cv::imread(argv[1], CV_LOAD_IMAGE_GRAYSCALE);
+    cv::Mat image_right;
+    image_right = cv::imread(argv[2], CV_LOAD_IMAGE_GRAYSCALE);
     
-    std::cout << "File: " << argv[1] << " Image size: " << image.rows << "x" << image.cols << std::endl;
+    std::cout << "File: " << argv[1] << " Image size: " << image_left.rows << "x" << image_left.cols << std::endl;
     
     //unsigned char * input = new unsigned char[image.rows*image.cols];
-    unsigned char * output = new unsigned char[image.cols*image.rows];
+    unsigned char * output = new unsigned char[image_left.cols*image_left.rows];
     
 	gcvl::opencl::Core core;
-    gcvl::opencl::BlockMatching bm(&core, image.cols, image.rows, image.data, output);
+    gcvl::opencl::BlockMatching bm(&core, image_left.cols, image_left.rows, image_left.data, image_right.data, output);
     bm.compute();
     
     /*cv::Mat out(image.rows, image.cols, CV_8UC1, output);

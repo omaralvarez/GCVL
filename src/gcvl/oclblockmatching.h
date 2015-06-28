@@ -36,7 +36,7 @@ namespace gcvl { namespace opencl {
     class GCVL_EXPORT BlockMatching : public Algorithm {
 
     public:
-        BlockMatching(Core * core, unsigned int width, unsigned int height, unsigned char * input, unsigned char * output);
+        BlockMatching(Core * core, unsigned int width, unsigned int height, unsigned char * inputLeft, unsigned char * inputRight, unsigned char * output);
         ~BlockMatching();
 		void prepare();
 		void setArgs();
@@ -47,8 +47,10 @@ namespace gcvl { namespace opencl {
         unsigned int _width;
         OpenCL_Data<unsigned int> _clWidth;
         unsigned int _height;
-        unsigned char * _input;
-        OpenCL_Array<unsigned char> _clInput;
+        unsigned char * _inputLeft;
+        OpenCL_Array<unsigned char> _clInputLeft;
+        unsigned char * _inputRight;
+        OpenCL_Array<unsigned char> _clInputRight;
         unsigned char * _output;
         OpenCL_Array<unsigned char> _clOutput;
         
