@@ -38,12 +38,20 @@ namespace gcvl { namespace opencl {
     public:
         BlockMatching(Core * core, unsigned int width, unsigned int height, unsigned char * inputLeft, unsigned char * inputRight, unsigned char * output);
         ~BlockMatching();
+        inline void setAggDim(const int val) { val % 2 == 0 ? _dim = val + 1 : _dim = val; _radius = _dim / 2; }
+        inline void setMaxDisp(const int val) { val > 255 ? _maxDisp = 255 : _maxDisp = val; }
 		void prepare();
 		void setArgs();
 		void launch();
 		void postpare();
         
     private:
+        //Aggregation dimension (odd value)
+        int _dim;
+        //Aggregation dimension / 2
+        int _radius;
+        //Maximum disparity
+        int _maxDisp;
         unsigned int _width;
         OpenCL_Data<unsigned int> _clWidth;
         unsigned int _height;

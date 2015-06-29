@@ -38,6 +38,9 @@ BlockMatching::BlockMatching(Core * core, unsigned int width, unsigned int heigh
     
     _core = core;
     _kernel.Initialize(kernel, _core->getContext(), _core->getDevice());
+    _dim = 9;
+    _radius = 4;
+    _maxDisp = 255;
     _width = width;
     _height = height;
     _inputLeft = inputLeft;

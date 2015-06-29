@@ -53,6 +53,8 @@ int main(int argc, char *argv[]) {
     
 	gcvl::opencl::Core core;
     gcvl::opencl::BlockMatching bm(&core, image_left.cols, image_left.rows, image_left.data, image_right.data, output);
+    bm.setAggDim(9);
+    bm.setMaxDisp(255);
     bm.compute();
     
     /*cv::Mat out(image.rows, image.cols, CV_8UC1, output);
