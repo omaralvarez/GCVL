@@ -41,26 +41,19 @@ int main(int argc, char *argv[]) {
         return 0;
     }
     
-    cv::Mat image_left;
-    image_left = cv::imread(argv[1], CV_LOAD_IMAGE_GRAYSCALE);
-    cv::Mat image_right;
-    image_right = cv::imread(argv[2], CV_LOAD_IMAGE_GRAYSCALE);
-    
-    std::cout << "File: " << argv[1] << " Image size: " << image_left.rows << "x" << image_left.cols << std::endl;
-    
     //unsigned char * input = new unsigned char[image.rows*image.cols];
-    unsigned char * output = new unsigned char[image_left.cols*image_left.rows];
+    unsigned char * output = NULL;
     
 	gcvl::opencl::Core core;
-    gcvl::opencl::BlockMatching bm(&core, image_left.cols, image_left.rows, image_left.data, image_right.data, output);
+    gcvl::opencl::BlockMatching bm(&core, argv[1], argv[2], output);
     bm.setAggDim(9);
     bm.setMaxDisp(255);
     bm.compute();
     
-    /*cv::Mat out(image.rows, image.cols, CV_8UC1, output);
+    /*cv::Mat out(bm.getHeight(), bm.getWidth(), CV_8UC1, output);
     
-    cv::namedWindow( "Source Image", cv::WINDOW_AUTOSIZE );// Create a window for display.
-    cv::imshow( "Source Image", image );
+    //cv::namedWindow( "Source Image", cv::WINDOW_AUTOSIZE );// Create a window for display.
+    //cv::imshow( "Source Image", image );
     cv::namedWindow( "Disparity Map", cv::WINDOW_AUTOSIZE );// Create a window for display.
     cv::imshow( "Disparity Map", out );
     cv::waitKey(0);*/

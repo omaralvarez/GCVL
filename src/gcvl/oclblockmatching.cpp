@@ -32,7 +32,7 @@ using namespace gcvl::opencl;
 const char * kernel =
 #include "kernels/image_man.cl"
 
-BlockMatching::BlockMatching(Core * core, unsigned int width, unsigned int height, unsigned char * inputLeft, unsigned char * inputRight, unsigned char * output) : _clWidth(width) {
+BlockMatching::BlockMatching(Core * core, std::string inputLeft, std::string inputRight, unsigned char * output) {
     
 	std::cout << " **** Initializing OpenCL BlockMatching ****" << std::endl;
     
@@ -41,14 +41,19 @@ BlockMatching::BlockMatching(Core * core, unsigned int width, unsigned int heigh
     _dim = 9;
     _radius = 4;
     _maxDisp = 255;
-    _width = width;
-    _height = height;
-    _inputLeft = inputLeft;
-    _inputRight = inputRight;
-    _output = output;
-    _clInputLeft.Initialize(_width*_height, sizeof(unsigned char), _inputLeft, _core->getContext(), CL_MEM_READ_ONLY, _core->getPlatform(), _core->getQueue(), _core->getDevice(), false);
+    _inputLeft = cv::imread(inputLeft, CV_LOAD_IMAGE_GRAYSCALE);
+    _inputRight = cv::imread(inputRight, CV_LOAD_IMAGE_GRAYSCALE);
+    
+    std::cout << "File: " << inputLeft << " Image size: " << _inputLeft.rows << "x" << _inputLeft.cols << std::endl;
+    
+    _width = _inputLeft.cols;
+    _clWidth.Inititalize(_inputLeft.cols);
+    _height = _inputLeft.rows;
+    _output = new unsigned char[_width*_height];
+    output = _output;
+    _clInputLeft.Initialize(_width*_height, sizeof(unsigned char), _inputLeft.data, _core->getContext(), CL_MEM_READ_ONLY, _core->getPlatform(), _core->getQueue(), _core->getDevice(), false);
     _clInputLeft.Host_to_Device();
-    _clInputRight.Initialize(_width*_height, sizeof(unsigned char), _inputRight, _core->getContext(), CL_MEM_READ_ONLY, _core->getPlatform(), _core->getQueue(), _core->getDevice(), false);
+    _clInputRight.Initialize(_width*_height, sizeof(unsigned char), _inputRight.data, _core->getContext(), CL_MEM_READ_ONLY, _core->getPlatform(), _core->getQueue(), _core->getDevice(), false);
     _clInputRight.Host_to_Device();
     _clOutput.Initialize(_width*_height, sizeof(unsigned char), _output, _core->getContext(), CL_MEM_WRITE_ONLY, _core->getPlatform(), _core->getQueue(), _core->getDevice(), false);
     

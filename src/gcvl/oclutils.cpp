@@ -2138,7 +2138,13 @@ namespace OpenCL_SHA512
 }
 
 template <class T>
-OpenCL_Data<T>::OpenCL_Data(T _data) : data(_data) {}
+OpenCL_Data<T>::OpenCL_Data() {}
+
+template <class T>
+void OpenCL_Data<T>::Inititalize(T _data)
+{
+    data = _data;
+}
 
 template <class T>
 void OpenCL_Data<T>::Set_as_Kernel_Argument(cl_kernel &kernel, const int order)

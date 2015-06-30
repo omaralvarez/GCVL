@@ -30,16 +30,19 @@
 
 #include <string>
 #include <vector>
+#include <opencv2/opencv.hpp>
 
 namespace gcvl { namespace opencl {
 
     class GCVL_EXPORT BlockMatching : public Algorithm {
 
     public:
-        BlockMatching(Core * core, unsigned int width, unsigned int height, unsigned char * inputLeft, unsigned char * inputRight, unsigned char * output);
+        BlockMatching(Core * core, std::string inputLeft, std::string inputRight, unsigned char * output);
         ~BlockMatching();
         inline void setAggDim(const int val) { val % 2 == 0 ? _dim = val + 1 : _dim = val; _radius = _dim / 2; }
         inline void setMaxDisp(const int val) { val > 255 ? _maxDisp = 255 : _maxDisp = val; }
+        inline unsigned int getWidth() { return _width; }
+        inline unsigned int getHeight() { return _height; }
 		void prepare();
 		void setArgs();
 		void launch();
@@ -55,9 +58,9 @@ namespace gcvl { namespace opencl {
         unsigned int _width;
         OpenCL_Data<unsigned int> _clWidth;
         unsigned int _height;
-        unsigned char * _inputLeft;
+        cv::Mat _inputLeft;
         OpenCL_Array<unsigned char> _clInputLeft;
-        unsigned char * _inputRight;
+        cv::Mat _inputRight;
         OpenCL_Array<unsigned char> _clInputRight;
         unsigned char * _output;
         OpenCL_Array<unsigned char> _clOutput;

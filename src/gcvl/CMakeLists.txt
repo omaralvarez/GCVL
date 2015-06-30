@@ -18,7 +18,11 @@ SET(HEADERS
 include_directories (${CMAKE_SOURCE_DIR}) 
 
 add_library(gcvl SHARED ${SOURCE} ${HEADERS})
-target_link_libraries(gcvl ${OPENCL_LIBRARIES} ${Boost_LIBRARIES})
+IF (MSVC OR APPLE)
+target_link_libraries(gcvl ${OPENCL_LIBRARIES} ${Boost_LIBRARIES} ${OpenCV_LIBRARIES})
+ELSE (MSVC OR APPLE)
+target_link_libraries(gcvl ${OPENCL_LIBRARIES} ${Boost_LIBRARIES} ${OpenCV_LIBS})
+ENDIF ()
 
 IF (MSVC)
   set_target_properties (gcvl PROPERTIES LINK_FLAGS "/FORCE:MULTIPLE")
