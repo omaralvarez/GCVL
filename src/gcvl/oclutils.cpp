@@ -27,8 +27,8 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 
-//#include <cerrno>
-#include <errno.h>       // errno, EWOULDBLOCK
+#include <cerrno> //This is what should be, but Travis no liky with Clang
+//#include <errno.h>       // errno, EWOULDBLOCK
 #include <cstring>      // strlen()
 #include <cmath>
 #include <algorithm>    // std::ostringstream

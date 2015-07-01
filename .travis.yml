@@ -5,7 +5,7 @@ compiler:
   - clang
 
 before_install:
-  - sudo apt-get update && sudo apt-get install -y fglrx opencl-headers libboost-thread-dev libboost-system-dev libboost-iostreams-dev  libboost-filesystem-dev libboost-date-time-dev libopencv-dev
+  - sudo apt-get update && sudo apt-get install -y libc++-dev fglrx opencl-headers libboost-thread-dev libboost-system-dev libboost-iostreams-dev  libboost-filesystem-dev libboost-date-time-dev libopencv-dev
   - sudo ln /dev/null /dev/raw1394
 
 script:
