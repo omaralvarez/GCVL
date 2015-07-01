@@ -6,7 +6,7 @@ compiler:
 
 before_install:
   - sudo apt-get update && sudo apt-get install -y fglrx opencl-headers libboost-thread-dev libboost-system-dev libboost-iostreams-dev  libboost-filesystem-dev libboost-date-time-dev libopencv-dev
-  - sudo apt-get install libc++1 multiarch-support libc6 libc++-dev
+  #- sudo apt-get install libc++1 multiarch-support libc6 libc++-dev
   - sudo ln /dev/null /dev/raw1394
 
 script:

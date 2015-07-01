@@ -45,7 +45,7 @@ IF (MSVC)
 ENDIF ()
 
 if (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
-  set(CMAKE_CXX_FLAGS "-std=c++11 -stdlib=libc++")
+  set(CMAKE_CXX_FLAGS "-std=c++11")
 endif()
 
 IF(CMAKE_COMPILER_IS_GNUCXX)
