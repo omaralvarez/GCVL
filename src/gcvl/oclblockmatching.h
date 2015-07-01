@@ -37,7 +37,7 @@ namespace gcvl { namespace opencl {
     class GCVL_EXPORT BlockMatching : public Algorithm {
 
     public:
-        BlockMatching(Core * core, std::string inputLeft, std::string inputRight, unsigned char * output);
+        BlockMatching(Core * core, std::string inputLeft, std::string inputRight, unsigned char * &output);
         ~BlockMatching();
         inline void setAggDim(const int val) { val % 2 == 0 ? _dim = val + 1 : _dim = val; _radius = _dim / 2; }
         inline void setMaxDisp(const int val) { val > 255 ? _maxDisp = 255 : _maxDisp = val; }

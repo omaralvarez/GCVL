@@ -50,11 +50,11 @@ int main(int argc, char *argv[]) {
     bm.setMaxDisp(255);
     bm.compute();
     
-    /*cv::Mat out(bm.getHeight(), bm.getWidth(), CV_8UC1, output);
+    cv::Mat out(bm.getHeight(), bm.getWidth(), CV_8UC1, output);
     
     //cv::namedWindow( "Source Image", cv::WINDOW_AUTOSIZE );// Create a window for display.
     //cv::imshow( "Source Image", image );
-    cv::namedWindow( "Disparity Map", cv::WINDOW_AUTOSIZE );// Create a window for display.
+    /*cv::namedWindow( "Disparity Map", cv::WINDOW_AUTOSIZE );// Create a window for display.
     cv::imshow( "Disparity Map", out );
     cv::waitKey(0);*/
     
