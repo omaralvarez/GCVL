@@ -32,7 +32,7 @@ using namespace gcvl::opencl;
 const char * kernel =
 #include "kernels/image_man.cl"
 
-BlockMatching::BlockMatching(Core * core, std::string inputLeft, std::string inputRight, unsigned char * &output) {
+BlockMatching::BlockMatching(Core * core, std::string inputLeft, std::string inputRight, std::unique_ptr<unsigned char[]> &output) {
     
 	std::cout << " **** Initializing OpenCL BlockMatching ****" << std::endl;
     
@@ -49,8 +49,9 @@ BlockMatching::BlockMatching(Core * core, std::string inputLeft, std::string inp
     _width = _inputLeft.cols;
     _clWidth.Inititalize(_inputLeft.cols);
     _height = _inputLeft.rows;
-    output = new unsigned char[_width*_height];
-    _output = output;
+    //output = new unsigned char[_width*_height];
+	output.reset(new unsigned char[_width*_height]);
+    _output = output.get();
     _clInputLeft.Initialize(_width*_height, sizeof(unsigned char), _inputLeft.data, _core->getContext(), CL_MEM_READ_ONLY, _core->getPlatform(), _core->getQueue(), _core->getDevice(), false);
     _clInputLeft.Host_to_Device();
     _clInputRight.Initialize(_width*_height, sizeof(unsigned char), _inputRight.data, _core->getContext(), CL_MEM_READ_ONLY, _core->getPlatform(), _core->getQueue(), _core->getDevice(), false);

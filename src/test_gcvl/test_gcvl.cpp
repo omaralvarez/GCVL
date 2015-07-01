@@ -41,8 +41,7 @@ int main(int argc, char *argv[]) {
         return 0;
     }
     
-    //unsigned char * input = new unsigned char[image.rows*image.cols];
-    unsigned char * output = NULL;
+	std::unique_ptr<unsigned char[]> output;
     
 	gcvl::opencl::Core core;
     gcvl::opencl::BlockMatching bm(&core, argv[1], argv[2], output);
@@ -50,20 +49,13 @@ int main(int argc, char *argv[]) {
     bm.setMaxDisp(255);
     bm.compute();
     
-    cv::Mat out(bm.getHeight(), bm.getWidth(), CV_8UC1, output);
+    /*cv::Mat out(bm.getHeight(), bm.getWidth(), CV_8UC1, output.get());
     
     //cv::namedWindow( "Source Image", cv::WINDOW_AUTOSIZE );// Create a window for display.
     //cv::imshow( "Source Image", image );
-    /*cv::namedWindow( "Disparity Map", cv::WINDOW_AUTOSIZE );// Create a window for display.
+    cv::namedWindow( "Disparity Map", cv::WINDOW_AUTOSIZE );// Create a window for display.
     cv::imshow( "Disparity Map", out );
     cv::waitKey(0);*/
-    
-    /*for(unsigned int i = 0; i < n; ++i) {
-     std::cout << input[i] << " ";
-     }
-     std::cout << std::endl;*/
-    
-    delete [] output;
 
 	return 0;
 }
