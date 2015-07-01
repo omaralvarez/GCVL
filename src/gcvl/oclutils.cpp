@@ -27,7 +27,8 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 
-#include <cerrno>       // errno, EWOULDBLOCK
+//#include <cerrno>
+#include <errno.h>       // errno, EWOULDBLOCK
 #include <cstring>      // strlen()
 #include <cmath>
 #include <algorithm>    // std::ostringstream
