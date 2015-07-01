@@ -12,8 +12,15 @@ make
 
 int main(int argc, char *argv[]) {
 
+  std::unique_ptr<unsigned char[]> output;
+  
+  //argv[1] -> path to left image argv[2] -> path to right image
   gcvl::opencl::Core core;
-  gcvl::opencl::BlockMatching bm(&core, image_left.cols, image_left.rows, image_left.data, image_right.data, output);
+  gcvl::opencl::BlockMatching bm(&core, argv[1], argv[2], output);
+  
+  bm.setAggDim(9);
+  bm.setMaxDisp(255);
+  
   bm.compute();
   
   return 0;
