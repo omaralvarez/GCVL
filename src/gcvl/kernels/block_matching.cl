@@ -1,5 +1,5 @@
 str(
-__kernel void calculateDisparity_no_def(const __global uchar * inputLeft,
+__kernel void calculateDisparity(const __global uchar * inputLeft,
                                  const __global uchar * inputRight,
                                  __global uchar * output,
                                  const int width,
@@ -17,11 +17,11 @@ __kernel void calculateDisparity_no_def(const __global uchar * inputLeft,
         unsigned int sum = 0;
         unsigned int bestSum = -1;
         unsigned int bestd = 0;
-        
+
         for(int d = 0; d < maxDisp; ++d) {
             for(int i = offsety; i < dim + offsety; ++i) {
                 for(int j = offsetx; j < dim + offsetx; ++j) {
-                    sum += abs((int)inputLeft[i * width + j] - (int)inputRight[i * width + j - d]);
+                    sum += abs((int)inputLeft[i * width + j] - (int)inputRight[i * width + j + d]);
                 }
             }
             if(sum < bestSum) {

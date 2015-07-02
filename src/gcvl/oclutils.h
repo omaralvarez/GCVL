@@ -559,7 +559,7 @@ private:
     cl_int err;
 public:
     OpenCL_Data();
-    void Inititalize(T _data);
+    void Initialize(T _data);
     void Set_as_Kernel_Argument(cl_kernel &kernel, const int order);
 };
 

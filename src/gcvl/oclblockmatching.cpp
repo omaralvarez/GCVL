@@ -30,7 +30,7 @@ using namespace gcvl::opencl;
 
 #define str(s) #s
 const char * kernel =
-#include "kernels/image_man.cl"
+#include "kernels/block_matching.cl"
 
 BlockMatching::BlockMatching(Core * core, std::string inputLeft, std::string inputRight, std::unique_ptr<unsigned char[]> &output) {
     
@@ -39,15 +39,18 @@ BlockMatching::BlockMatching(Core * core, std::string inputLeft, std::string inp
     _core = core;
     _kernel.Initialize(kernel, _core->getContext(), _core->getDevice());
     _dim = 9;
+    _clDim.Initialize(_dim);
     _radius = 4;
+    _clRadius.Initialize(_radius);
     _maxDisp = 255;
+    _clMaxDisp.Initialize(_maxDisp);
     _inputLeft = cv::imread(inputLeft, CV_LOAD_IMAGE_GRAYSCALE);
     _inputRight = cv::imread(inputRight, CV_LOAD_IMAGE_GRAYSCALE);
     
     std::cout << "File: " << inputLeft << " Image size: " << _inputLeft.rows << "x" << _inputLeft.cols << std::endl;
     
     _width = _inputLeft.cols;
-    _clWidth.Inititalize(_inputLeft.cols);
+    _clWidth.Initialize(_inputLeft.cols);
     _height = _inputLeft.rows;
     //output = new unsigned char[_width*_height];
 	output.reset(new unsigned char[_width*_height]);
@@ -74,8 +77,8 @@ void BlockMatching::prepare() {
     
 	std::cout << " **** prepare OpenCL BlockMatching ****" << std::endl;
     
-    _kernel.Build("test");
-    _kernel.Compute_Work_Size(_height, _width, 1, 1);
+    _kernel.Build("calculateDisparity");
+    _kernel.Compute_Work_Size(_width, _height, 1, 1);
     
 }
 
@@ -85,8 +88,12 @@ void BlockMatching::setArgs() {
     
     cl_kernel kernel = _kernel.Get_Kernel();
     _clInputLeft.Set_as_Kernel_Argument(kernel, 0);
-    _clOutput.Set_as_Kernel_Argument(kernel, 1);
-    _clWidth.Set_as_Kernel_Argument(kernel, 2);
+    _clInputRight.Set_as_Kernel_Argument(kernel, 1);
+    _clOutput.Set_as_Kernel_Argument(kernel, 2);
+    _clWidth.Set_as_Kernel_Argument(kernel, 3);
+    _clDim.Set_as_Kernel_Argument(kernel, 4);
+    _clRadius.Set_as_Kernel_Argument(kernel, 5);
+    _clMaxDisp.Set_as_Kernel_Argument(kernel, 6);
     
 }
 
@@ -103,6 +110,7 @@ void BlockMatching::postpare() {
 	std::cout << " **** postpare OpenCL BlockMatching ****" << std::endl;
     
     _clOutput.Device_to_Host();
+    clFinish(_core->getQueue());
     
 }
 

@@ -2142,7 +2142,7 @@ template <class T>
 OpenCL_Data<T>::OpenCL_Data() {}
 
 template <class T>
-void OpenCL_Data<T>::Inititalize(T _data)
+void OpenCL_Data<T>::Initialize(T _data)
 {
     data = _data;
 }
