@@ -52,6 +52,7 @@ BlockMatching::BlockMatching(Core * core, std::string inputLeft, std::string inp
     _width = _inputLeft.cols;
     _clWidth.Initialize(_inputLeft.cols);
     _height = _inputLeft.rows;
+	_clHeight.Initialize(_inputLeft.rows);
     //output = new unsigned char[_width*_height];
 	output.reset(new unsigned char[_width*_height]);
     _output = output.get();
@@ -91,9 +92,10 @@ void BlockMatching::setArgs() {
     _clInputRight.Set_as_Kernel_Argument(kernel, 1);
     _clOutput.Set_as_Kernel_Argument(kernel, 2);
     _clWidth.Set_as_Kernel_Argument(kernel, 3);
-    _clDim.Set_as_Kernel_Argument(kernel, 4);
-    _clRadius.Set_as_Kernel_Argument(kernel, 5);
-    _clMaxDisp.Set_as_Kernel_Argument(kernel, 6);
+	_clHeight.Set_as_Kernel_Argument(kernel, 4);
+    _clDim.Set_as_Kernel_Argument(kernel, 5);
+    _clRadius.Set_as_Kernel_Argument(kernel, 6);
+    _clMaxDisp.Set_as_Kernel_Argument(kernel, 7);
     
 }
 

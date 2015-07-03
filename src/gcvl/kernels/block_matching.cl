@@ -3,6 +3,7 @@ __kernel void calculateDisparity(const __global uchar * inputLeft,
                                  const __global uchar * inputRight,
                                  __global uchar * output,
                                  const int width,
+								 const int height,
                                  const int dim,
                                  const int radius,
                                  const int maxDisp) {
@@ -12,7 +13,7 @@ __kernel void calculateDisparity(const __global uchar * inputLeft,
     const int offsetx = x - radius;
     const int offsety = y - radius;
 
-    if(offsetx >= 0 && offsetx + dim < width) {
+    if(offsetx >= 0 && offsetx + dim < width && offsety >= 0 && offsety + dim < height) {
 
         unsigned int sum = 0;
         unsigned int bestSum = -1;
@@ -21,7 +22,10 @@ __kernel void calculateDisparity(const __global uchar * inputLeft,
         for(int d = 0; d < maxDisp; ++d) {
             for(int i = offsety; i < dim + offsety; ++i) {
                 for(int j = offsetx; j < dim + offsetx; ++j) {
-                    sum += abs((int)inputLeft[i * width + j] - (int)inputRight[i * width + j + d]);
+					if(j - d >= 0)
+                    sum += abs((int)inputLeft[i * width + j] - (int)inputRight[i * width + j - d]);
+					else
+					sum += abs((int)inputLeft[i * width + j]);
                 }
             }
             if(sum < bestSum) {
@@ -33,7 +37,7 @@ __kernel void calculateDisparity(const __global uchar * inputLeft,
 
         output[y * width + x] = bestd;
 
-    }
+    } 
 
 }
 );

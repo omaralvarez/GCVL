@@ -62,6 +62,7 @@ namespace gcvl { namespace opencl {
         unsigned int _width;
         OpenCL_Data<unsigned int> _clWidth;
         unsigned int _height;
+		OpenCL_Data<unsigned int> _clHeight;
         cv::Mat _inputLeft;
         OpenCL_Array<unsigned char> _clInputLeft;
         cv::Mat _inputRight;

@@ -45,8 +45,8 @@ int main(int argc, char *argv[]) {
     
 	gcvl::opencl::Core core;
     gcvl::opencl::BlockMatching bm(&core, argv[1], argv[2], output);
-    bm.setAggDim(9);
-    bm.setMaxDisp(255);
+    bm.setAggDim(5);
+    bm.setMaxDisp(16);
     bm.compute();
     
     /*cv::Mat out(bm.getHeight(), bm.getWidth(), CV_8UC1, output.get());
