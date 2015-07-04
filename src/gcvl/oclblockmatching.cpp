@@ -32,17 +32,23 @@ using namespace gcvl::opencl;
 const char * kernel =
 #include "kernels/block_matching.cl"
 
+#define str(s) #s
+const char * normalization =
+#include "kernels/normalization.cl"
+
 BlockMatching::BlockMatching(Core * core, std::string inputLeft, std::string inputRight, std::unique_ptr<unsigned char[]> &output) {
     
 	std::cout << " **** Initializing OpenCL BlockMatching ****" << std::endl;
     
     _core = core;
     _kernel.Initialize(kernel, _core->getContext(), _core->getDevice());
+    _normalization.Initialize(normalization, _core->getContext(), _core->getDevice());
     _dim = 9;
     _clDim.Initialize(_dim);
     _radius = 4;
     _clRadius.Initialize(_radius);
     _maxDisp = 255;
+    _normalize = false;
     _clMaxDisp.Initialize(_maxDisp);
     _inputLeft = cv::imread(inputLeft, CV_LOAD_IMAGE_GRAYSCALE);
     _inputRight = cv::imread(inputRight, CV_LOAD_IMAGE_GRAYSCALE);
@@ -81,6 +87,11 @@ void BlockMatching::prepare() {
     _kernel.Build("calculateDisparity");
     _kernel.Compute_Work_Size(_width, _height, 1, 1);
     
+    if(_normalize) {
+        _normalization.Build("normalizeMap");
+        _normalization.Compute_Work_Size(_width, _height, 1, 1);
+    }
+    
 }
 
 void BlockMatching::setArgs() {
@@ -97,6 +108,14 @@ void BlockMatching::setArgs() {
     _clRadius.Set_as_Kernel_Argument(kernel, 6);
     _clMaxDisp.Set_as_Kernel_Argument(kernel, 7);
     
+    if (_normalize) {
+        cl_kernel normalization = _normalization.Get_Kernel();
+        _clOutput.Set_as_Kernel_Argument(normalization, 0);
+        _clOutput.Set_as_Kernel_Argument(normalization, 1);
+        _clWidth.Set_as_Kernel_Argument(normalization, 2);
+        _clMaxDisp.Set_as_Kernel_Argument(normalization, 3);
+    }
+    
 }
 
 void BlockMatching::launch() {
@@ -105,6 +124,10 @@ void BlockMatching::launch() {
     
     _kernel.Launch(_core->getQueue());
     
+    if (_normalize) {
+        _normalization.Launch(_core->getQueue());
+    }
+    
 }
 
 void BlockMatching::postpare() {
@@ -112,8 +135,7 @@ void BlockMatching::postpare() {
 	std::cout << " **** postpare OpenCL BlockMatching ****" << std::endl;
     
     _clOutput.Device_to_Host();
-    clFinish(_core->getQueue());
-    
+    _core->waitForQueue();
 }
 
 

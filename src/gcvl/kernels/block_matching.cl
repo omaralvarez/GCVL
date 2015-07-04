@@ -37,7 +37,7 @@ __kernel void calculateDisparity(const __global uchar * inputLeft,
 
         output[y * width + x] = bestd;
 
-    } 
+    }
 
 }
 );

@@ -42,6 +42,7 @@ namespace gcvl { namespace opencl {
         ~BlockMatching();
         inline void setAggDim(const int val) { val % 2 == 0 ? _dim = val + 1 : _dim = val; _radius = _dim / 2; _clDim.Initialize(_dim); _clRadius.Initialize(_radius); }
         inline void setMaxDisp(const int val) { val > 255 ? _maxDisp = 255 : _maxDisp = val; _clMaxDisp.Initialize(_maxDisp); }
+        inline void setNormalize(const bool val) { _normalize = val; }
         inline unsigned int getWidth() { return _width; }
         inline unsigned int getHeight() { return _height; }
 		void prepare();
@@ -58,6 +59,7 @@ namespace gcvl { namespace opencl {
         OpenCL_Data<unsigned int> _clRadius;
         //Maximum disparity
         int _maxDisp;
+        bool _normalize;
         OpenCL_Data<unsigned int> _clMaxDisp;
         unsigned int _width;
         OpenCL_Data<unsigned int> _clWidth;
@@ -69,6 +71,7 @@ namespace gcvl { namespace opencl {
         OpenCL_Array<unsigned char> _clInputRight;
         unsigned char * _output;
         OpenCL_Array<unsigned char> _clOutput;
+        OpenCL_Kernel _normalization;
         
     };
 

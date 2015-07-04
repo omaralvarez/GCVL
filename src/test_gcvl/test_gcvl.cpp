@@ -27,14 +27,6 @@
 #include <opencv2/opencv.hpp>
 
 int main(int argc, char *argv[]) {
-
-    /*unsigned int n = 64;
-    float * input = new float[n];
-    float * output = new float[n];
-    
-    for(unsigned int i = 0; i < n; ++i) {
-        input[i] = output[i] = 0.f;
-    }*/
     
     if (argc != 3) {
         std::cout << "Usage: test_gcvl path/to/image_left path/to/image_right" << std::endl;
@@ -45,8 +37,9 @@ int main(int argc, char *argv[]) {
     
 	gcvl::opencl::Core core;
     gcvl::opencl::BlockMatching bm(&core, argv[1], argv[2], output);
-    bm.setAggDim(5);
-    bm.setMaxDisp(16);
+    bm.setAggDim(9);
+    bm.setMaxDisp(150);
+    bm.setNormalize(true);
     bm.compute();
     
     /*cv::Mat out(bm.getHeight(), bm.getWidth(), CV_8UC1, output.get());

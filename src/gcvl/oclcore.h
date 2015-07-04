@@ -40,6 +40,7 @@ namespace gcvl { namespace opencl {
 		inline const cl_context& getContext() { return _context; }
         inline const cl_device_id& getDevice() { return _device; }
 		inline const cl_command_queue& getQueue() { return _queue; }
+        inline const void waitForQueue() { clFinish(_queue); }
         void init();
 
     private:
