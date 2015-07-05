@@ -22,35 +22,23 @@
  *
  */
 
-#pragma once
+#include "algorithm.h"
 
-#include "export.h"
-#include "gcvlconfig.h"
-#include "oclutils.h"
+#include <iostream>
 
-namespace gcvl { namespace opencl {
+using namespace gcvl;
 
-    class GCVL_EXPORT Core {
+void Algorithm::compute() {
+    
+    std::cout << " **** Starting! ****" << std::endl;
+    
+    prepare();
+    setArgs();
+    launch();
+    postpare();
+    
+    std::cout << " **** Finished! ****" << std::endl;
+    
+}
 
-    public:
-        Core();
-		Core(std::string platform, bool locking);
-        ~Core();
-        inline const std::string& getPlatform() { return _platform; }
-		inline const cl_context& getContext() { return _context; }
-        inline const cl_device_id& getDevice() { return _device; }
-		inline const cl_command_queue& getQueue() { return _queue; }
-        inline const void waitForQueue() { clFinish(_queue); }
-        void init();
 
-    private:
-        OpenCL_platforms_list _platforms;
-		std::string _platform;
-		cl_context _context;
-		cl_device_id _device;
-		cl_command_queue _queue;
-		//Etc.
-
-    };
-
-} }

@@ -22,8 +22,8 @@
  *
  */
 
-#include <gcvl/oclcore.h>
-#include <gcvl/oclblockmatching.h>
+#include <gcvl/opencl/oclcore.h>
+#include <gcvl/opencl/oclblockmatching.h>
 #include <opencv2/opencv.hpp>
 
 int main(int argc, char *argv[]) {
@@ -37,18 +37,18 @@ int main(int argc, char *argv[]) {
     
 	gcvl::opencl::Core core;
     gcvl::opencl::BlockMatching bm(&core, argv[1], argv[2], output);
-    bm.setAggDim(9);
-    bm.setMaxDisp(150);
+    bm.setAggDim(5);
+    bm.setMaxDisp(16);
     bm.setNormalize(true);
     bm.compute();
     
-    /*cv::Mat out(bm.getHeight(), bm.getWidth(), CV_8UC1, output.get());
+    cv::Mat out(bm.getHeight(), bm.getWidth(), CV_8UC1, output.get());
     
     //cv::namedWindow( "Source Image", cv::WINDOW_AUTOSIZE );// Create a window for display.
     //cv::imshow( "Source Image", image );
     cv::namedWindow( "Disparity Map", cv::WINDOW_AUTOSIZE );// Create a window for display.
     cv::imshow( "Disparity Map", out );
-    cv::waitKey(0);*/
+    cv::waitKey(0);
 
 	return 0;
 }

@@ -1,21 +1,36 @@
 project(gcvl-lib)
 
 SET(SOURCE
-	oclutils.cpp
-	oclcore.cpp
-	oclalgorithm.cpp
-	oclblockmatching.cpp
+	algorithm.cpp
 )
 
 SET(HEADERS
-	oclutils.h
-	oclcore.h
-	oclalgorithm.h
-	oclblockmatching.h
 	gcvlconfig.h
 	export.h
+	algorithm.h
 )
-include_directories (${CMAKE_SOURCE_DIR}) 
+
+include_directories (${CMAKE_SOURCE_DIR})
+
+if(BUILD_OPENCL)
+
+	list(APPEND SOURCE
+		opencl/oclutils.cpp
+		opencl/oclcore.cpp
+		opencl/oclalgorithm.cpp
+		opencl/oclblockmatching.cpp
+	)
+
+	list(APPEND HEADERS
+		opencl/oclutils.h
+		opencl/oclcore.h
+		opencl/oclalgorithm.h
+		opencl/oclblockmatching.h
+	)
+
+	#include_directories (${CMAKE_SOURCE_DIR}/opencl)
+
+endif(BUILD_OPENCL)
 
 add_library(gcvl SHARED ${SOURCE} ${HEADERS})
 IF (MSVC OR APPLE)
@@ -27,6 +42,7 @@ ENDIF ()
 IF (MSVC)
   set_target_properties (gcvl PROPERTIES LINK_FLAGS "/FORCE:MULTIPLE")
 ENDIF ()
+
 IF(CMAKE_COMPILER_IS_GNUCXX)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++0x")
 ENDIF()

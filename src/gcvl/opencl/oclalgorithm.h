@@ -24,8 +24,8 @@
 
 #pragma once
 
-#include "export.h"
-#include "gcvlconfig.h"
+#include "../export.h"
+#include "../gcvlconfig.h"
 #include "oclutils.h"
 #include "oclcore.h"
 

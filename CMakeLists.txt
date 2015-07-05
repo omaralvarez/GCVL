@@ -1,6 +1,10 @@
 cmake_minimum_required(VERSION 2.6.3)
 project(GCVL)
 
+option(BUILD_OPENCL "Build OpenCL module" ON)
+option(BUILD_CUDA "Build CUDA module" OFF)
+option(BUILD_TESTS "Build tests" ON)
+
 # Set a default build type for single-configuration
 # CMake generators if no build type is set.
 if(NOT CMAKE_CONFIGURATION_TYPES AND NOT CMAKE_BUILD_TYPE)
@@ -92,9 +96,11 @@ ENDIF()
 
 set(CMAKE_SOURCE_DIR ${CMAKE_SOURCE_DIR}/src)
 add_subdirectory(src/gcvl)
-add_subdirectory(src/test_gcvl)
+if(BUILD_TESTS)
+  add_subdirectory(src/test_gcvl)
+endif(BUILD_TESTS)
 
 message(STATUS "*${CMAKE_BUILD_TYPE}* build being prepared")
 
-# Create the PCMConfig.cmake file for the build tree
+# Create the GCVLConfig.cmake file for the build tree
 configure_file(GCVLConfig.cmake.in "${PROJECT_SOURCE_DIR}/bin/GCVLConfig.cmake" @ONLY)

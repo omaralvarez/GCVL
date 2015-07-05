@@ -11,7 +11,7 @@ before_install:
 
 
 script:
-  - cmake -G "Unix Makefiles" .
+  - cmake -G "Unix Makefiles" -DBUILD_OPENCL=ON -DBUILD_CUDA=OFF -DBUILD_TESTS=ON .
   - make
   - ./bin/test_gcvl data/tsukuba_l.png data/tsukuba_r.png
 
