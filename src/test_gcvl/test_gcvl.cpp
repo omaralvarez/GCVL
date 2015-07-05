@@ -24,6 +24,7 @@
 
 #include <gcvl/opencl/oclcore.h>
 #include <gcvl/opencl/oclblockmatching.h>
+#include <gcvl/blockmatching.h>
 #include <opencv2/opencv.hpp>
 
 int main(int argc, char *argv[]) {
@@ -35,14 +36,20 @@ int main(int argc, char *argv[]) {
     
 	std::unique_ptr<unsigned char[]> output;
     
-	gcvl::opencl::Core core;
-    gcvl::opencl::BlockMatching bm(&core, argv[1], argv[2], output);
-    bm.setAggDim(5);
-    bm.setMaxDisp(16);
-    bm.setNormalize(true);
-    bm.compute();
+    gcvl::BlockMatching bmCPU(argv[1], argv[2], output);
+    bmCPU.setAggDim(5);
+    bmCPU.setMaxDisp(16);
+    bmCPU.setNormalize(true);
+    bmCPU.compute();
     
-    cv::Mat out(bm.getHeight(), bm.getWidth(), CV_8UC1, output.get());
+	gcvl::opencl::Core core;
+    gcvl::opencl::BlockMatching bmOCL(&core, argv[1], argv[2], output);
+    bmOCL.setAggDim(5);
+    bmOCL.setMaxDisp(16);
+    bmOCL.setNormalize(true);
+    bmOCL.compute();
+    
+    cv::Mat out(bmCPU.getHeight(), bmCPU.getWidth(), CV_8UC1, output.get());
     
     //cv::namedWindow( "Source Image", cv::WINDOW_AUTOSIZE );// Create a window for display.
     //cv::imshow( "Source Image", image );

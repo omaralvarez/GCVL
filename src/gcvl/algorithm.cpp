@@ -24,6 +24,7 @@
 
 #include "algorithm.h"
 
+#include <boost/timer/timer.hpp>
 #include <iostream>
 
 using namespace gcvl;
@@ -32,12 +33,17 @@ void Algorithm::compute() {
     
     std::cout << " **** Starting! ****" << std::endl;
     
+    boost::timer::cpu_timer timer;
+    
     prepare();
     setArgs();
     launch();
     postpare();
     
-    std::cout << " **** Finished! ****" << std::endl;
+    auto nanoseconds = boost::chrono::nanoseconds(timer.elapsed().user + timer.elapsed().system);
+    auto microseconds = boost::chrono::duration_cast<boost::chrono::microseconds>(nanoseconds);
+    
+    std::cout << " **** Finished in " << microseconds.count()/1000000. << " s.! ****" << std::endl;
     
 }
 

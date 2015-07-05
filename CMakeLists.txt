@@ -76,7 +76,7 @@ include_directories(${OpenCV_INCLUDE_DIRS})
 IF (MSVC)
 	set(Boost_USE_STATIC_LIBS ON)
 ENDIF ()
-find_package(Boost 1.46 COMPONENTS thread system iostreams filesystem date_time REQUIRED)
+find_package(Boost 1.46 COMPONENTS thread system iostreams filesystem date_time timer REQUIRED)
 include_directories(${Boost_INCLUDE_DIRS})
 
 #OpenMP

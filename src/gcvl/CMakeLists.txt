@@ -2,12 +2,14 @@ project(gcvl-lib)
 
 SET(SOURCE
 	algorithm.cpp
+	blockmatching.cpp
 )
 
 SET(HEADERS
 	gcvlconfig.h
 	export.h
 	algorithm.h
+	blockmatching.h
 )
 
 include_directories (${CMAKE_SOURCE_DIR})
