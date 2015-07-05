@@ -11,7 +11,7 @@ make
 #include <gcvl/opencl/oclcore.h>
 #include <gcvl/opencl/oclblockmatching.h>
 
-//argv[1] -> path to left   image argv[2] -> path to right image
+//argv[1] -> path to left image   argv[2] -> path to right image
 int main(int argc, char *argv[]) {
 
   int dim = 5, maxDisp = 16;
