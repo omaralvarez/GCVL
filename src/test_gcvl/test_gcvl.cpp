@@ -49,13 +49,13 @@ int main(int argc, char *argv[]) {
     bmOCL.setNormalize(true);
     bmOCL.compute();
     
-    cv::Mat out(bmCPU.getHeight(), bmCPU.getWidth(), CV_8UC1, output.get());
+    /*cv::Mat out(bmCPU.getHeight(), bmCPU.getWidth(), CV_8UC1, output.get());
     
     //cv::namedWindow( "Source Image", cv::WINDOW_AUTOSIZE );// Create a window for display.
     //cv::imshow( "Source Image", image );
     cv::namedWindow( "Disparity Map", cv::WINDOW_AUTOSIZE );// Create a window for display.
     cv::imshow( "Disparity Map", out );
-    cv::waitKey(0);
+    cv::waitKey(0);*/
 
 	return 0;
 }
