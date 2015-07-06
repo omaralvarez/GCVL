@@ -33,10 +33,9 @@ void Algorithm::compute() {
     
     std::cout << " **** Starting! ****" << std::endl;
     
-    boost::timer::cpu_timer timer;
-    
     prepare();
     setArgs();
+	boost::timer::cpu_timer timer;
     launch();
     postpare();
     

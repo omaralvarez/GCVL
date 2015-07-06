@@ -59,10 +59,13 @@ IF(CMAKE_COMPILER_IS_GNUCXX)
 	set(CMAKE_CXX_FLAGS_DEBUG  "-O0 -g")
 ENDIF()
 
-#OpenCL
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
-find_package(OpenCL REQUIRED)
-include_directories(${OPENCL_INCLUDE_DIRS})
+
+#OpenCL
+if(BUILD_OPENCL)
+	find_package(OpenCL REQUIRED)
+	include_directories(${OPENCL_INCLUDE_DIRS})
+endif(BUILD_OPENCL)
 
 #OpenCV
 IF (MSVC)
@@ -76,7 +79,7 @@ include_directories(${OpenCV_INCLUDE_DIRS})
 IF (MSVC)
 	set(Boost_USE_STATIC_LIBS ON)
 ENDIF ()
-find_package(Boost 1.46 COMPONENTS thread system iostreams filesystem date_time timer REQUIRED)
+find_package(Boost 1.46 COMPONENTS thread system iostreams filesystem date_time timer chrono REQUIRED)
 include_directories(${Boost_INCLUDE_DIRS})
 
 #OpenMP

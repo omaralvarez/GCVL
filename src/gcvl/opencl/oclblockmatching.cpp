@@ -136,6 +136,7 @@ void BlockMatching::postpare() {
     
     _clOutput.Device_to_Host();
     _core->waitForQueue();
+
 }
 
 

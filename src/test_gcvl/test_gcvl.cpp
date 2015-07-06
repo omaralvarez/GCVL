@@ -34,19 +34,21 @@ int main(int argc, char *argv[]) {
         return 0;
     }
     
+	int dim = 5, maxDisp = 16;
+	bool norm = true;
 	std::unique_ptr<unsigned char[]> output;
     
     gcvl::BlockMatching bmCPU(argv[1], argv[2], output);
-    bmCPU.setAggDim(5);
-    bmCPU.setMaxDisp(16);
-    bmCPU.setNormalize(true);
+    bmCPU.setAggDim(dim);
+	bmCPU.setMaxDisp(maxDisp);
+	bmCPU.setNormalize(norm);
     bmCPU.compute();
     
 	gcvl::opencl::Core core;
     gcvl::opencl::BlockMatching bmOCL(&core, argv[1], argv[2], output);
-    bmOCL.setAggDim(5);
-    bmOCL.setMaxDisp(16);
-    bmOCL.setNormalize(true);
+    bmOCL.setAggDim(dim);
+	bmOCL.setMaxDisp(maxDisp);
+	bmOCL.setNormalize(norm);
     bmOCL.compute();
     
     /*cv::Mat out(bmCPU.getHeight(), bmCPU.getWidth(), CV_8UC1, output.get());

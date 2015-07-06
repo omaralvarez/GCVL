@@ -29,7 +29,7 @@ using namespace gcvl;
 
 BlockMatching::BlockMatching(std::string inputLeft, std::string inputRight, std::unique_ptr<unsigned char[]> &output) {
     
-	std::cout << " **** Initializing OpenCL BlockMatching ****" << std::endl;
+	std::cout << " **** Initializing BlockMatching ****" << std::endl;
     
     _dim = 9;
     _radius = 4;
@@ -49,25 +49,25 @@ BlockMatching::BlockMatching(std::string inputLeft, std::string inputRight, std:
 	
 BlockMatching::~BlockMatching() {
     
-	std::cout << " **** Destroying OpenCL BlockMatching ****" << std::endl;
+	std::cout << " **** Destroying BlockMatching ****" << std::endl;
     
 }
 
 void BlockMatching::prepare() {
     
-	std::cout << " **** prepare OpenCL BlockMatching ****" << std::endl;
+	std::cout << " **** prepare BlockMatching ****" << std::endl;
     
 }
 
 void BlockMatching::setArgs() {
     
-	std::cout << " **** setArgs OpenCL BlockMatching ****" << std::endl;
+	std::cout << " **** setArgs BlockMatching ****" << std::endl;
     
 }
 
 void BlockMatching::launch() {
     
-	std::cout << " **** launch OpenCL BlockMatching ****" << std::endl;
+	std::cout << " **** launch BlockMatching ****" << std::endl;
     
     for (unsigned int x = 0; x < _width; ++x) {
         for (unsigned int y = 0; y < _height; ++y) {
@@ -108,7 +108,7 @@ void BlockMatching::launch() {
 
 void BlockMatching::postpare() {
     
-	std::cout << " **** postpare OpenCL BlockMatching ****" << std::endl;
+	std::cout << " **** postpare BlockMatching ****" << std::endl;
     
     if(_normalize)
         for (unsigned int x = 0; x < _width; ++x)
