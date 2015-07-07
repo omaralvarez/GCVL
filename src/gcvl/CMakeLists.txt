@@ -30,16 +30,36 @@ if(BUILD_OPENCL)
 		opencl/oclblockmatching.h
 	)
 
-	#include_directories (${CMAKE_SOURCE_DIR}/opencl)
-
 endif(BUILD_OPENCL)
 
+if(BUILD_CUDA)
+
+	list(APPEND SOURCE
+		cuda/cudacore.cpp
+	)
+
+	list(APPEND HEADERS
+		cuda/cudacore.h
+	)
+
+endif(BUILD_CUDA)
+
 add_library(gcvl SHARED ${SOURCE} ${HEADERS})
+
+IF(BUILD_OPENCL)
+	target_link_libraries(gcvl ${OPENCL_LIBRARIES})
+ENDIF(BUILD_OPENCL)
+
+IF(BUILD_CUDA)
+	target_link_libraries(gcvl ${CUDA_LIBRARIES})
+ENDIF(BUILD_CUDA)
+
 IF (MSVC OR APPLE)
-target_link_libraries(gcvl ${OPENCL_LIBRARIES} ${Boost_LIBRARIES} ${OpenCV_LIBRARIES})
+target_link_libraries(gcvl ${Boost_LIBRARIES} ${OpenCV_LIBRARIES})
 ELSE (MSVC OR APPLE)
-target_link_libraries(gcvl ${OPENCL_LIBRARIES} ${Boost_LIBRARIES} ${OpenCV_LIBS})
+target_link_libraries(gcvl ${Boost_LIBRARIES} ${OpenCV_LIBS})
 ENDIF ()
+
 
 IF (MSVC)
   set_target_properties (gcvl PROPERTIES LINK_FLAGS "/FORCE:MULTIPLE")

@@ -67,6 +67,12 @@ if(BUILD_OPENCL)
 	include_directories(${OPENCL_INCLUDE_DIRS})
 endif(BUILD_OPENCL)
 
+#CUDA
+if(BUILD_CUDA)
+	find_package(CUDA REQUIRED)
+	include_directories(${CUDA_INCLUDE_DIRS})
+endif(BUILD_CUDA)
+
 #OpenCV
 IF (MSVC)
 	set(OpenCV_DIR $ENV{OpenCV_DIR})
