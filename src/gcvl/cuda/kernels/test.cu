@@ -1,12 +1,7 @@
 // CUDA-C includes
-#include <cuda.h>
-#include <cuda_runtime.h>
-#include <stdio.h>
+#include "test.h"
 
-extern "C"
-//Adds two arrays
-void runCudaPart();
-
+#include <cstdio>
 
 __global__ void addAry( int * ary1, int * ary2 )
 {

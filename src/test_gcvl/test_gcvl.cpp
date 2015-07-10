@@ -27,6 +27,8 @@
 #include <gcvl/blockmatching.h>
 #include <opencv2/opencv.hpp>
 
+#include <gcvl/cuda/cudacore.h>
+
 int main(int argc, char *argv[]) {
     
     if (argc != 3) {
@@ -38,7 +40,7 @@ int main(int argc, char *argv[]) {
 	bool norm = true;
 	std::unique_ptr<unsigned char[]> output;
     
-    gcvl::BlockMatching bmCPU(argv[1], argv[2], output);
+    /*gcvl::BlockMatching bmCPU(argv[1], argv[2], output);
     bmCPU.setAggDim(dim);
 	bmCPU.setMaxDisp(maxDisp);
 	bmCPU.setNormalize(norm);
@@ -49,7 +51,9 @@ int main(int argc, char *argv[]) {
     bmOCL.setAggDim(dim);
 	bmOCL.setMaxDisp(maxDisp);
 	bmOCL.setNormalize(norm);
-    bmOCL.compute();
+    bmOCL.compute();*/
+
+	gcvl::cuda::Core core;
     
     /*cv::Mat out(bmCPU.getHeight(), bmCPU.getWidth(), CV_8UC1, output.get());
     

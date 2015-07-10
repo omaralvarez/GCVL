@@ -34,13 +34,23 @@ endif(BUILD_OPENCL)
 
 if(BUILD_CUDA)
 
+	# Target older architectures for those who haven't upgraded their graphics card to the latest models.
+	#set(CUDA_NVCC_FLAGS "-gencode arch=compute_11,code=sm_11 -gencode arch=compute_20,code=sm_20 -gencode arch=compute_30,code=sm_30 -gencode arch=compute_35,code=sm_35 -gencode arch=compute_37,code=sm_37 -gencode arch=compute_50,code=sm_50 -gencode arch=compute_50,code=compute_50 ")
+
 	list(APPEND SOURCE
 		cuda/cudacore.cpp
 	)
 
 	list(APPEND HEADERS
 		cuda/cudacore.h
+		cuda/kernels/test.h
 	)
+	
+	SET(CUDA_KERNELS
+		cuda/kernels/test.cu
+	)
+	
+	cuda_add_library(gcvl_kernels ${CUDA_KERNELS})
 
 endif(BUILD_CUDA)
 
@@ -51,7 +61,7 @@ IF(BUILD_OPENCL)
 ENDIF(BUILD_OPENCL)
 
 IF(BUILD_CUDA)
-	target_link_libraries(gcvl ${CUDA_LIBRARIES})
+	target_link_libraries(gcvl gcvl_kernels ${CUDA_LIBRARIES})
 ENDIF(BUILD_CUDA)
 
 IF (MSVC OR APPLE)

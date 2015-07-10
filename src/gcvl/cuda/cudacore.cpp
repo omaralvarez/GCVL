@@ -29,6 +29,7 @@
 #include <assert.h> 
 #include <cuda_runtime.h> 
 //#include "helper_cuda.h"
+#include "kernels/test.h"
 
 using namespace gcvl::cuda;
 
@@ -94,6 +95,9 @@ Core::Core() {
 	               deviceProp.deviceOverlap ? "Yes" : "No");
 	    #endif
     }
+
+		runCudaPart();
+
 	    printf("\nTest PASSED\n");
     
 }
