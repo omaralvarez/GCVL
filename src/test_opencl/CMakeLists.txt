@@ -1,12 +1,12 @@
-project(test_gcvl)
+project(test_opencl)
 
 include_directories(${CMAKE_SOURCE_DIR})
 
-add_executable(test_gcvl test_gcvl.cpp)
+add_executable(test_opencl test_opencl.cpp)
 IF (MSVC OR APPLE)
-	target_link_libraries(test_gcvl gcvl ${OpenCV_LIBRARIES})
+	target_link_libraries(test_opencl gcvl ${OpenCV_LIBRARIES})
 ELSE (MSVC OR APPLE)
-	target_link_libraries(test_gcvl gcvl ${OpenCV_LIBS})
+	target_link_libraries(test_opencl gcvl ${OpenCV_LIBS})
 ENDIF ()
 
 
