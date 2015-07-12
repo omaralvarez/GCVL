@@ -24,6 +24,7 @@
 
 #include <gcvl/cuda/cudacore.h>
 #include <opencv2/opencv.hpp>
+#include <memory>
 
 int main(int argc, char *argv[]) {
 

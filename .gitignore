@@ -31,5 +31,7 @@ bin
 lib
 VS2010
 VS2012
+VS2013
 .DS_Store
+Thumbs.db
 xcode
