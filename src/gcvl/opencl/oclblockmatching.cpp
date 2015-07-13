@@ -36,11 +36,11 @@ const char * kernel =
 const char * normalization =
 #include "kernels/normalization.cl"
 
-BlockMatching::BlockMatching(Core * core, std::string inputLeft, std::string inputRight, std::unique_ptr<unsigned char[]> &output) {
+BlockMatching::BlockMatching(Core & core, std::string inputLeft, std::string inputRight, std::unique_ptr<unsigned char[]> &output) {
     
 	std::cout << " **** Initializing OpenCL BlockMatching ****" << std::endl;
     
-    _core = core;
+    _core = &core;
     _kernel.Initialize(kernel, _core->getContext(), _core->getDevice());
     _normalization.Initialize(normalization, _core->getContext(), _core->getDevice());
     _dim = 9;
