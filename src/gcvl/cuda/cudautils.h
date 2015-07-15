@@ -24,14 +24,18 @@
 
 #pragma once
 
+#include <cuda_runtime.h>
+
 template <class T>
 class CUDA_Array
 {
 private:
     int N;                              // Number of elements in array
     size_t sizeof_element;              // Size of each array elements
-    uint64_t new_array_size_bytes;      // Size (bytes) of new padded array
-    T     *host_array;                  // Pointer to start of host array, INCLUDIǸG padding
+    size_t new_array_size_bytes;      // Size (bytes) of new padded array
+    T * host_array;                  // Pointer to start of host array
+	T * device_array;				// Pointer to device array
+	cudaError_t err; 
     //std::string platform;               // OpenCL platform
     //cl_context context;                 // OpenCL context
     //cl_command_queue command_queue;     // OpenCL command queue
@@ -45,8 +49,7 @@ private:
 
 public:
     CUDA_Array();
-    void Initialize(int _N, const size_t _sizeof_element,
-                    T *&host_array);
+    void Initialize(int _N, T *&host_array);
     void Release_Memory();
     void Host_to_Device();
     void Device_to_Host();

@@ -39,10 +39,12 @@ if(BUILD_CUDA)
 
 	list(APPEND SOURCE
 		cuda/cudacore.cpp
+		cuda/cudautils.cpp
 	)
 
 	list(APPEND HEADERS
 		cuda/cudacore.h
+		cuda/cudautils.h
 		cuda/kernels/test.h
 	)
 	
