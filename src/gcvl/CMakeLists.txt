@@ -6,6 +6,7 @@ SET(SOURCE
 )
 
 SET(HEADERS
+	gcvlutils.h
 	gcvlconfig.h
 	export.h
 	algorithm.h

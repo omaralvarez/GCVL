@@ -48,9 +48,8 @@
 #include <sys/file.h>
 #endif
 
-
-
 #include "oclutils.h"
+#include "../gcvlutils.h"
 
 
 // *****************************************************************************
@@ -96,7 +95,6 @@ const double GiB_to_MiB = 1024.0;
 
 // *****************************************************************************
 // **************** Local functions prototypes *********************************
-void Print_N_Times(const std::string x, const int N, const bool newline = true);
 std::string Get_Lock_Filename(const int device_id, const int platform_id_offset,
                               const std::string &platform_name, const std::string &device_name);
 int Lock_File(const char *path, const bool quiet = false);
@@ -145,18 +143,6 @@ inline std::string Bytes_in_String(const uint64_t bytes)
             << B_to_GiB * bytes << " GiB)"
         << std::flush;
     return (MyStream.str());
-}
-
-// *****************************************************************************
-void Print_N_Times(const std::string x, const int N, const bool newline)
-{
-    for (int i = 0 ; i < N ; i++)
-    {
-        std_cout << x;
-    }
-
-    if (newline)
-        std_cout << "\n";
 }
 
 // *****************************************************************************

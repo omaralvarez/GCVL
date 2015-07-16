@@ -23,6 +23,7 @@
  */
 
 #include "cudacore.h"
+#include "cudautils.h"
 
 #include <iostream>
 #include <stdio.h> 
@@ -36,8 +37,11 @@ using namespace gcvl::cuda;
 Core::Core() {
     
 	std::cout << " **** Initializing CUDA Core ****" << std::endl;
+
+	CUDA_devices_list list;
+	list.Print();
 	
-	int deviceCount;
+	/*int deviceCount;
 	    cudaGetDeviceCount(&deviceCount);
 	    if (deviceCount == 0)
 	        printf("There is no device supporting CUDA\n");
@@ -94,7 +98,7 @@ Core::Core() {
 	        printf("  Concurrent copy and execution:                 %s\n",
 	               deviceProp.deviceOverlap ? "Yes" : "No");
 	    #endif
-    }
+    }*/
 
 		runCudaPart();
 
