@@ -46,6 +46,46 @@ static const std::string CUDA_Error_to_String(cudaError_t error);
 static const std::string CUDA_Error_to_String(CUresult error);
 #endif
 
+// Defines for GPU Architecture types (using the SM version to determine the # of cores per SM
+typedef struct
+{
+    int SM; // 0xMm (hexidecimal notation), M = SM Major version, and m = SM minor version
+    int cores;
+} sSMtoCores;
+
+sSMtoCores nGpuArchCoresPerSM[] =
+{
+    { 0x20, 32 }, // Fermi Generation (SM 2.0) GF100 class
+    { 0x21, 48 }, // Fermi Generation (SM 2.1) GF10x class
+    { 0x30, 192}, // Kepler Generation (SM 3.0) GK10x class
+    { 0x32, 192}, // Kepler Generation (SM 3.2) GK10x class
+    { 0x35, 192}, // Kepler Generation (SM 3.5) GK11x class
+    { 0x37, 192}, // Kepler Generation (SM 3.7) GK21x class
+    { 0x50, 128}, // Maxwell Generation (SM 5.0) GM10x class
+    { 0x52, 128}, // Maxwell Generation (SM 5.2) GM20x class
+    {   -1, -1 }
+};
+
+inline int SMVer2CU(int major, int minor) {
+
+	int index = 0;
+
+    while (nGpuArchCoresPerSM[index].SM != -1) {
+
+        if (nGpuArchCoresPerSM[index].SM == ((major << 4) + minor)) {
+            return nGpuArchCoresPerSM[index].cores;
+        }
+
+        index++;
+
+    }
+
+    // If we don't find the values, we default to using the previous one to run properly
+    printf("MapSMtoCores for SM %d.%d is undefined.  Default to use %d Cores/SM\n", major, minor, nGpuArchCoresPerSM[index-1].cores);
+    return nGpuArchCoresPerSM[index-1].cores;
+
+}
+
 class CUDA_device;
 class CUDA_devices_list;
 
@@ -53,63 +93,21 @@ class CUDA_device
 {
 private:
 	int id;
-	int asyncEngineCount;
-	int canMapHostMemory;
-	int clockRate;
-	int computeMode;
-	int concurrentKernels;
-	int deviceOverlap;
-	int ECCEnabled;
-	int integrated;
-	int kernelExecTimeoutEnabled;
-	int l2CacheSize;
-	int major;
-	int maxGridSize[3];
-	int maxSurface1D;
-	int maxSurface1DLayered[2];
-	int maxSurface2D [2];
-	int maxSurface2DLayered[3];
-	int maxSurface3D[3];
-	int maxSurfaceCubemap;
-	int maxSurfaceCubemapLayered[2];
-	int maxTexture1D;
-	int maxTexture1DLayered[2];
-	int maxTexture1DLinear;
-	int maxTexture2D[2];
-	int maxTexture2DGather[2];
-	int maxTexture2DLayered[3];
-	int maxTexture2DLinear[3];
-	int maxTexture3D[3];
-	int maxTextureCubemap;
-	int maxTextureCubemapLayered[2];
-	int maxThreadsDim[3];
-	int maxThreadsPerBlock;
-	int maxThreadsPerMultiProcessor;
-	int memoryBusWidth;
-	int memoryClockRate;
-	size_t memPitch;
-	int minor;
-	int multiProcessorCount;
-	std::string name;
-	int pciBusID;
-	int pciDeviceID;
-	int pciDomainID;
-	int regsPerBlock;
-	size_t sharedMemPerBlock;
-	size_t surfaceAlignment;
-	int tccDriver;
-	size_t textureAlignment;
-	size_t texturePitchAlignment;
-	size_t totalConstMem;
-	size_t totalGlobalMem;
-	int unifiedAddressing;
-	int warpSize;
+	cudaDeviceProp properties;
+	bool compute;
+	int sm_per_multiproc;
+	int compute_units;
+	unsigned long long compute_perf;
+	cudaError_t err;
 
 public:
-	CUDA_device(int id = 0);
+	CUDA_device(int id = -1);
 	//~CUDA_device();
-	void Set_Information(const int _id);
+	bool operator<(const CUDA_device &b) const;
+	void Set_Information(unsigned long long _compute_perf, int arch);
 	void Print() const;
+	inline std::string Get_Name() const { return properties.name; }
+	inline int Get_ID() const { return id; }
 };
 
 class CUDA_devices_list
@@ -117,10 +115,15 @@ class CUDA_devices_list
 private:
 	int count;
 	std::vector<CUDA_device> device_list;
-
+	bool is_initialized;
+	int preferred_device;
+	cudaError_t err;
 public:
 	CUDA_devices_list();
 	//~CUDA_devices_list();
+	void Initialize();
+	inline void Set_Preferred_CUDA(const int _preferred_device = -1) { preferred_device = _preferred_device; }
+	inline int Preferred_CUDA() { return preferred_device; }
 	void Print();
 };
 

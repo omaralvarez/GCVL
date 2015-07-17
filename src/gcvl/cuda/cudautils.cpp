@@ -26,7 +26,6 @@
 #include "../gcvlutils.h"
 
 #include <cassert>
-#include <numeric>
 #include <algorithm>
 
 #ifdef __DRIVER_TYPES_H__
@@ -470,67 +469,47 @@ static const std::string CUDA_Error_to_String(CUresult error)
 
 CUDA_device::CUDA_device(int _id) : id(_id) {
 
-	cudaDeviceProp deviceProp;
-	cudaGetDeviceProperties(&deviceProp, id);
+	//TODO Check errors
+	err = cudaGetDeviceProperties(&properties, id);
+	CUDA_Test_Success(err,"cudaGetDeviceProperties()");
 
-	asyncEngineCount = deviceProp.asyncEngineCount;
-	canMapHostMemory = deviceProp.canMapHostMemory;
-	clockRate = deviceProp.clockRate;
-	computeMode = deviceProp.computeMode;
-	concurrentKernels = deviceProp.concurrentKernels;
-	deviceOverlap = deviceProp.deviceOverlap;
-	ECCEnabled = deviceProp.ECCEnabled;
-	integrated = deviceProp.integrated;
-	kernelExecTimeoutEnabled = deviceProp.kernelExecTimeoutEnabled;
-	l2CacheSize = deviceProp.l2CacheSize;
-	major = deviceProp.major;
-	//maxGridSize = deviceProp.maxGridSize;
-	std::copy(std::begin(deviceProp.maxGridSize), std::end(deviceProp.maxGridSize), std::begin(maxGridSize));
-	maxSurface1D = deviceProp.maxSurface1D;
-	//maxSurface1DLayered[2] = deviceProp.;
-	std::copy(std::begin(deviceProp.maxSurface1DLayered), std::end(deviceProp.maxSurface1DLayered), std::begin(maxSurface1DLayered));
-	//maxSurface2D [2] = deviceProp.;
-	std::copy(std::begin(deviceProp.maxSurface2D), std::end(deviceProp.maxSurface2D), std::begin(maxSurface2D));
-	//maxSurface2DLayered[3] = deviceProp.;
-	std::copy(std::begin(deviceProp.maxSurface2DLayered), std::end(deviceProp.maxSurface2DLayered), std::begin(maxSurface2DLayered));
-	//maxSurface3D[3] = deviceProp.;
-	std::copy(std::begin(deviceProp.maxSurface3D), std::end(deviceProp.maxSurface3D), std::begin(maxSurface3D));
-	maxSurfaceCubemap = deviceProp.maxSurfaceCubemap;
-	//maxSurfaceCubemapLayered[2] = deviceProp.;
-	std::copy(std::begin(deviceProp.maxSurfaceCubemapLayered), std::end(deviceProp.maxSurfaceCubemapLayered), std::begin(maxSurfaceCubemapLayered));
-	maxTexture1D = deviceProp.maxTexture1D;
-	//maxTexture1DLayered[2] = deviceProp.;
-	std::copy(std::begin(deviceProp.maxTexture1DLayered), std::end(deviceProp.maxTexture1DLayered), std::begin(maxTexture1DLayered));
-	maxTexture1DLinear = deviceProp.maxTexture1DLinear;
-	maxTexture2D[2] = deviceProp.;
-	maxTexture2DGather[2] = deviceProp.;
-	maxTexture2DLayered[3] = deviceProp.;
-	maxTexture2DLinear[3] = deviceProp.;
-	maxTexture3D[3] = deviceProp.;
-	maxTextureCubemap = deviceProp.;
-	maxTextureCubemapLayered[2] = deviceProp.;
-	maxThreadsDim[3] = deviceProp.;
-	maxThreadsPerBlock = deviceProp.;
-	maxThreadsPerMultiProcessor = deviceProp.;
-	memoryBusWidth = deviceProp.;
-	memoryClockRate = deviceProp.;
-	memPitch = deviceProp.;
-	minor = deviceProp.;
-	multiProcessorCount = deviceProp.;
-	name = deviceProp.;
-	pciBusID = deviceProp.;
-	pciDeviceID = deviceProp.;
-	pciDomainID = deviceProp.;
-	regsPerBlock = deviceProp.;
-	sharedMemPerBlock = deviceProp.;
-	surfaceAlignment = deviceProp.;
-	tccDriver = deviceProp.;
-	textureAlignment = deviceProp.;
-	texturePitchAlignment = deviceProp.;
-	totalConstMem = deviceProp.;
-	totalGlobalMem = deviceProp.;
-	unifiedAddressing = deviceProp.;
-	warpSize = deviceProp.;
+	compute = false;
+	sm_per_multiproc = 0;
+	compute_units = 0;
+
+	// Check if this GPU is not running on Compute Mode prohibited
+    if (properties.computeMode != cudaComputeModeProhibited) {
+        if (properties.major > 0 && properties.major < 9999) {
+            sm_per_multiproc = SMVer2CU(properties.major, properties.minor);
+			compute_units = sm_per_multiproc * properties.multiProcessorCount;
+			compute_perf = (unsigned long long) properties.multiProcessorCount * sm_per_multiproc * properties.clockRate;
+			compute = true;
+        }
+	}
+
+}
+
+bool CUDA_device::operator<(const CUDA_device &other) const {
+
+    bool result = false;
+
+	if(this->properties.major > other.properties.major) // "this" wins (having higher arch).
+		result = true;
+	else if(other.properties.major > this->properties.major) // "other" wins (having higher arch).
+		result = false;
+    else if (this->compute_perf > other.compute_perf) // **For same arch**: "this" wins (having more compute units).
+        result = true;
+    else                                                 // "other" wins (having more or equal compute units).
+        result = false;
+
+    return result;
+
+}
+
+void CUDA_device::Set_Information(unsigned long long _compute_perf, int arch) {
+
+	compute_perf = _compute_perf;
+	properties.major = arch;
 
 }
 
@@ -539,17 +518,49 @@ void CUDA_device::Print() const {
 	std::cout << "    "; Print_N_Times("-", 105);
 
     std::cout
-        << "    name: " << name << std::endl;
+        << "    name: " << properties.name << std::endl
+		<< "        id:                             " << id << std::endl
+		<< "        Compute prohibited:             " << (compute ? "No" : "Yes") << std::endl
+		<< "        Major revision number:          " << properties.major << std::endl
+		<< "        Minor revision number:          " << properties.minor << std::endl
+		<< "        Global memory:                  " << properties.totalGlobalMem << " bytes" << std::endl
+		<< "        CUDA asynchronous engines:      " << properties.asyncEngineCount << std::endl
+		<< "        Number of multiprocessors:      " << properties.multiProcessorCount << std::endl
+		<< "        SMs per multiprocessor:         " << sm_per_multiproc << std::endl
+		<< "        Number of compute units:        " << compute_units << std::endl
+		<< "        Constant memory:                " << properties.totalConstMem << " bytes" << std::endl
+		<< "        Shared memory per block:        " << properties.sharedMemPerBlock << " bytes" << std::endl
+		<< "        Registers available per block:  " << properties.regsPerBlock << std::endl
+		<< "        Warp size:                      " << properties.warpSize << std::endl
+		<< "        Max. threads per block:         " << properties.maxThreadsPerBlock << std::endl
+		<< "        Max. block dimension size:      " << properties.maxThreadsDim[0] << " " << properties.maxThreadsDim[2] << " " << properties.maxThreadsDim[2] << std::endl
+		<< "        Max. grid dimension size:       " << properties.maxGridSize[0] << " " << properties.maxGridSize[2] << " " << properties.maxGridSize[2] << std::endl
+		<< "        Maximum memory pitch:           " << properties.memPitch << " bytes" << std::endl
+		<< "        Texture alignment:              " << properties.textureAlignment << " bytes" << std::endl
+		<< "        Clock rate:                     " << properties.clockRate * 1e-6f << " GHz" << std::endl;
 
 }
 
-CUDA_devices_list::CUDA_devices_list() {
+CUDA_devices_list::CUDA_devices_list() : is_initialized(false), preferred_device(-1) { }
 
-	cudaGetDeviceCount(&count);
+void CUDA_devices_list::Initialize() {
 
-	device_list.resize(4);
+	err = cudaGetDeviceCount(&count);
+	CUDA_Test_Success(err,"cudaGetDeviceCount()");
 
-	std::iota(device_list.begin(), device_list.end(), 0);
+	device_list.reserve(count);
+
+	int i = 0;
+	std::generate_n(std::back_inserter(device_list), count, [i] () mutable { return CUDA_device(i++); });
+
+	std::sort(device_list.begin(), device_list.end());
+
+	preferred_device = device_list.front().Get_ID();
+
+	err = cudaSetDevice(preferred_device);
+	CUDA_Test_Success(err,"cudaSetDevice()");
+
+	is_initialized = true;
 
 }
 
@@ -566,7 +577,7 @@ void CUDA_devices_list::Print() {
         int i = 0;
         for (std::vector<CUDA_device>::const_iterator it = device_list.begin() ; it != device_list.end() ; ++it)
         {
-            //std::cout << "        " << i++ << ".   " << it->Get_Name() << " (id = " << it->Get_ID() << ")\n";
+            std::cout << "        " << i++ << ".   " << it->Get_Name() << " (id = " << it->Get_ID() << ")\n";
         }
         std::cout << "        "; Print_N_Times("*", 101);
     }

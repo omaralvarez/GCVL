@@ -26,6 +26,7 @@
 
 #include "../export.h"
 #include "../gcvlconfig.h"
+#include "cudautils.h"
 
 namespace gcvl { namespace cuda {
 
@@ -36,7 +37,8 @@ namespace gcvl { namespace cuda {
         ~Core();
 
     private:
-		//Etc.
+		CUDA_devices_list _devices;
+		int _device;
 
     };
 

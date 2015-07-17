@@ -81,6 +81,8 @@ Core::Core(std::string platform, bool locking) {
 									0, &err);
     
 }
+
+//TODO Select platform and device
 	
 Core::~Core() { 
 	std::cout << " **** Destroying OpenCL Core ****" << std::endl;
