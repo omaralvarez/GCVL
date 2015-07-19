@@ -2,8 +2,8 @@
  *
  * GPGPU Computer Vision Library (GCVL)
  *
- * Copyright (c) Luis Omar Alvarez Mures 2015 <omar.alvarez@udc.es> 
- * Copyright (c) Emilio Padron Gonzalez 2015 <emilioj@gmail.com> 
+ * Copyright (c) Luis Omar Alvarez Mures 2015 <omar.alvarez@udc.es>
+ * Copyright (c) Emilio Padron Gonzalez 2015 <emilioj@gmail.com>
  *
  * All rights reserved.
  *
@@ -22,33 +22,26 @@
  *
  */
 
-#include "cudacore.h"
-#include "cudautils.h"
-#include "kernels/test.cuh"
+#include "cudaalgorithm.h"
 
+#include <boost/timer/timer.hpp>
 #include <iostream>
-#include <stdio.h> 
-#include <assert.h> 
-#include <cuda_runtime.h> 
 
 using namespace gcvl::cuda;
 
-Core::Core() {
-    
-	std::cout << " **** Initializing CUDA Core ****" << std::endl;
+void Algorithm::compute() {
 
-	_devices.Initialize();
+    std::cout << " **** Starting! ****" << std::endl;
 
-	_devices.Print();
+    prepare();
+    setArgs();
+	boost::timer::cpu_timer timer;
+    launch();
+    postpare();
 
-	_device = _devices.Preferred_CUDA();
+    auto nanoseconds = boost::chrono::nanoseconds(timer.elapsed().user + timer.elapsed().system);
+    auto microseconds = boost::chrono::duration_cast<boost::chrono::microseconds>(nanoseconds);
 
-	runCudaPart();
-    
+    std::cout << " **** Finished in " << microseconds.count()/1000000. << " s.! ****" << std::endl;
+
 }
-	
-Core::~Core() { 
-	std::cout << " **** Destroying CUDA Core ****" << std::endl;
-}
-
-

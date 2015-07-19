@@ -53,7 +53,7 @@ typedef struct
     int cores;
 } sSMtoCores;
 
-sSMtoCores nGpuArchCoresPerSM[] =
+const static sSMtoCores nGpuArchCoresPerSM[] =
 {
     { 0x20, 32 }, // Fermi Generation (SM 2.0) GF100 class
     { 0x21, 48 }, // Fermi Generation (SM 2.1) GF10x class

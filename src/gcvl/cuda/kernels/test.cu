@@ -1,5 +1,5 @@
 // CUDA-C includes
-#include "test.h"
+#include "test.cuh"
 #include "../cudautils.h"
 
 #include <cstdio>

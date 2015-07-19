@@ -40,19 +40,23 @@ if(BUILD_CUDA)
 
 	list(APPEND SOURCE
 		cuda/cudacore.cpp
+		cuda/cudaalgorithm.cpp
+		cuda/cudablockmatching.cpp
 		cuda/cudautils.cpp
 	)
 
 	list(APPEND HEADERS
 		cuda/cudacore.h
+		cuda/cudaalgorithm.h
+		cuda/cudablockmatching.h
 		cuda/cudautils.h
-		cuda/kernels/test.h
+		cuda/kernels/test.cuh
 	)
-	
+
 	SET(CUDA_KERNELS
 		cuda/kernels/test.cu
 	)
-	
+
 	cuda_add_library(gcvl_kernels ${CUDA_KERNELS})
 
 endif(BUILD_CUDA)

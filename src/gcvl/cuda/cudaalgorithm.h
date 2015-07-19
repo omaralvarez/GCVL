@@ -2,8 +2,8 @@
  *
  * GPGPU Computer Vision Library (GCVL)
  *
- * Copyright (c) Luis Omar Alvarez Mures 2015 <omar.alvarez@udc.es> 
- * Copyright (c) Emilio Padron Gonzalez 2015 <emilioj@gmail.com> 
+ * Copyright (c) Luis Omar Alvarez Mures 2015 <omar.alvarez@udc.es>
+ * Copyright (c) Emilio Padron Gonzalez 2015 <emilioj@gmail.com>
  *
  * All rights reserved.
  *
@@ -22,33 +22,28 @@
  *
  */
 
+#pragma once
+
+#include "../export.h"
+#include "../gcvlconfig.h"
 #include "cudacore.h"
-#include "cudautils.h"
-#include "kernels/test.cuh"
 
-#include <iostream>
-#include <stdio.h> 
-#include <assert.h> 
-#include <cuda_runtime.h> 
+namespace gcvl { namespace cuda {
 
-using namespace gcvl::cuda;
+    class GCVL_EXPORT Algorithm {
 
-Core::Core() {
-    
-	std::cout << " **** Initializing CUDA Core ****" << std::endl;
+    public:
+    void compute();
+		virtual void prepare() = 0;
+		virtual void setArgs() = 0;
+		virtual void launch() = 0;
+		virtual void postpare() = 0;
 
-	_devices.Initialize();
+    protected:
+        Core * _core;
 
-	_devices.Print();
+		//Etc.
 
-	_device = _devices.Preferred_CUDA();
+    };
 
-	runCudaPart();
-    
-}
-	
-Core::~Core() { 
-	std::cout << " **** Destroying CUDA Core ****" << std::endl;
-}
-
-
+} }
