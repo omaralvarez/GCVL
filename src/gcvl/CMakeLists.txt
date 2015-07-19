@@ -50,11 +50,11 @@ if(BUILD_CUDA)
 		cuda/cudaalgorithm.h
 		cuda/cudablockmatching.h
 		cuda/cudautils.h
-		cuda/kernels/test.cuh
+		cuda/kernels/blockmatching.cuh
 	)
 
 	SET(CUDA_KERNELS
-		cuda/kernels/test.cu
+		cuda/kernels/blockmatching.cu
 	)
 
 	cuda_add_library(gcvl_kernels ${CUDA_KERNELS})

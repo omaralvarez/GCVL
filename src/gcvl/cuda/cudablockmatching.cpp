@@ -24,13 +24,14 @@
 
 #include "cudablockmatching.h"
 #include "cudautils.h"
+#include "kernels/blockmatching.cuh"
 #include <iostream>
 
 using namespace gcvl::cuda;
 
 BlockMatching::BlockMatching(Core & core, std::string inputLeft, std::string inputRight, std::unique_ptr<unsigned char[]> &output) {
 
-	std::cout << " **** Initializing OpenCL BlockMatching ****" << std::endl;
+	std::cout << " **** Initializing CUDA BlockMatching ****" << std::endl;
 
     _core = &core;
     _dim = 9;
@@ -57,7 +58,7 @@ BlockMatching::BlockMatching(Core & core, std::string inputLeft, std::string inp
 
 BlockMatching::~BlockMatching() {
 
-	std::cout << " **** Destroying OpenCL BlockMatching ****" << std::endl;
+	std::cout << " **** Destroying CUDA BlockMatching ****" << std::endl;
 
     _cuInputLeft.Release_Memory();
     _cuInputRight.Release_Memory();
@@ -67,20 +68,28 @@ BlockMatching::~BlockMatching() {
 
 void BlockMatching::prepare() {
 
-	std::cout << " **** prepare OpenCL BlockMatching ****" << std::endl;
+	std::cout << " **** prepare CUDA BlockMatching ****" << std::endl;
 
 }
 
 void BlockMatching::setArgs() {
 
-	std::cout << " **** setArgs OpenCL BlockMatching ****" << std::endl;
+	std::cout << " **** setArgs CUDA BlockMatching ****" << std::endl;
 
 }
 
 void BlockMatching::launch() {
 
-	std::cout << " **** launch OpenCL BlockMatching ****" << std::endl;
+	std::cout << " **** launch CUDA BlockMatching ****" << std::endl;
 
+	/*for (size_t i = 0; i < 20; i++)
+	{
+		std::cout << (unsigned int)_cuInputLeft.Get_Host_Pointer()[i] << " " << (unsigned int)_output[i] << std::endl;
+	}*/
+
+	launchBM(_cuInputLeft.Get_Device_Array(), _cuInputRight.Get_Device_Array(), _cuOutput.Get_Device_Array(), 
+		     _width, _height, _dim, _radius, _maxDisp);
+	
     /*_kernel.Launch(_core->getQueue());
 
     if (_normalize) {
@@ -91,9 +100,13 @@ void BlockMatching::launch() {
 
 void BlockMatching::postpare() {
 
-	std::cout << " **** postpare OpenCL BlockMatching ****" << std::endl;
+	std::cout << " **** postpare CUDA BlockMatching ****" << std::endl;
 
     _cuOutput.Device_to_Host();
+	/*for (size_t i = 0; i < 20; i++)
+	{
+		std::cout << (unsigned int)_cuInputLeft.Get_Host_Pointer()[i] << " " << (unsigned int)_output[i] << std::endl;
+	}*/
     //_core->waitForQueue();
 
 }

@@ -28,6 +28,8 @@
 
 #include <cuda.h>
 
-void runCudaPart();
+void launchBM(const unsigned char * inputLeft, const unsigned char * inputRight,
+			unsigned char * output, const int width, const int height, const int dim,
+			const int radius, const int maxDisp);
 
 

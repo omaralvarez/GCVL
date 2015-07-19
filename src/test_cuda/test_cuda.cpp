@@ -23,6 +23,7 @@
  */
 
 #include <gcvl/cuda/cudacore.h>
+#include <gcvl/cuda/cudablockmatching.h>
 #include <opencv2/opencv.hpp>
 #include <memory>
 
@@ -38,8 +39,13 @@ int main(int argc, char *argv[]) {
 	std::unique_ptr<unsigned char[]> output;
 
 	gcvl::cuda::Core core;
+	gcvl::cuda::BlockMatching bm(core, argv[1], argv[2], output);
+	bm.setAggDim(dim);
+	bm.setMaxDisp(maxDisp);
+	bm.setNormalize(norm);
+	bm.compute();
 
-  /*cv::Mat out(bmCPU.getHeight(), bmCPU.getWidth(), CV_8UC1, output.get());
+  /*cv::Mat out(bm.getHeight(), bm.getWidth(), CV_8UC1, output.get());
 
   //cv::namedWindow( "Source Image", cv::WINDOW_AUTOSIZE );// Create a window for display.
   //cv::imshow( "Source Image", image );

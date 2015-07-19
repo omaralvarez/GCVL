@@ -42,7 +42,7 @@ int main(int argc, char *argv[]) {
   bm.setNormalize(norm);
   bm.compute();
 
-  /*cv::Mat out(bmCPU.getHeight(), bmCPU.getWidth(), CV_8UC1, output.get());
+  /*cv::Mat out(bm.getHeight(), bm.getWidth(), CV_8UC1, output.get());
 
   //cv::namedWindow( "Source Image", cv::WINDOW_AUTOSIZE );// Create a window for display.
   //cv::imshow( "Source Image", image );

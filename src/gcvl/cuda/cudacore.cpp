@@ -24,7 +24,6 @@
 
 #include "cudacore.h"
 #include "cudautils.h"
-#include "kernels/test.cuh"
 
 #include <iostream>
 #include <stdio.h> 
@@ -39,11 +38,11 @@ Core::Core() {
 
 	_devices.Initialize();
 
-	_devices.Print();
+	//_devices.Print();
 
 	_device = _devices.Preferred_CUDA();
 
-	runCudaPart();
+	//runCudaPart();
     
 }
 	
