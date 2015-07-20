@@ -32,4 +32,6 @@ void launchBM(const unsigned char * inputLeft, const unsigned char * inputRight,
 			unsigned char * output, const int width, const int height, const int dim,
 			const int radius, const int maxDisp);
 
+void launchNormalization(unsigned char * input, unsigned char * output, const int width, const int height, const int maxDisp);
+
 

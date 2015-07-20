@@ -89,12 +89,10 @@ void BlockMatching::launch() {
 
 	launchBM(_cuInputLeft.Get_Device_Array(), _cuInputRight.Get_Device_Array(), _cuOutput.Get_Device_Array(), 
 		     _width, _height, _dim, _radius, _maxDisp);
-	
-    /*_kernel.Launch(_core->getQueue());
 
     if (_normalize) {
-        _normalization.Launch(_core->getQueue());
-    }*/
+		launchNormalization(_cuOutput.Get_Device_Array(), _cuOutput.Get_Device_Array(), _width, _height, _maxDisp);
+    }
 
 }
 

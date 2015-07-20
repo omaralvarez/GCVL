@@ -72,6 +72,15 @@ __global__ void calculateDisparity(const unsigned char * inputLeft, const unsign
 
 }
 
+__global__ void normalizeMap(unsigned char * input, unsigned char *output, const unsigned int width, const int maxDisp) {
+
+	const int x = blockIdx.x; //rows
+	const int y = blockIdx.y; //cols
+
+	output[y * width + x] = (input[y * width + x] / (float)maxDisp) * 255;
+
+}
+
 void launchBM(const unsigned char * inputLeft, const unsigned char * inputRight,
 			unsigned char * output, const int width, const int height, const int dim,
 			const int radius, const int maxDisp) 
@@ -79,9 +88,19 @@ void launchBM(const unsigned char * inputLeft, const unsigned char * inputRight,
 
 	//TODO check errors
 	dim3 grid_size(width, height);
-	calculateDisparity <<<grid_size, 1 >>>(inputLeft, inputRight, output, width, height, dim, radius, maxDisp);
+	calculateDisparity<<<grid_size, 1>>>(inputLeft, inputRight, output, width, height, dim, radius, maxDisp);
 
 }
+
+void launchNormalization(unsigned char * input, unsigned char * output, const int width, const int height, const int maxDisp)
+{
+
+	//TODO check errors
+	dim3 grid_size(width, height);
+	normalizeMap<<<grid_size, 1>>>(input, output, width, maxDisp);
+
+}
+
 
 // Main cuda function
 
