@@ -39,8 +39,8 @@ __global__ void calculateDisparity(const unsigned char * inputLeft, const unsign
 								   const int radius, const int maxDisp)
 {
 
-	const int x = threadIdx.x;
-	const int y = threadIdx.y;
+	const int x = blockIdx.x;
+	const int y = blockIdx.y;
 	const int offsetx = x - radius;
 	const int offsety = y - radius;
 
