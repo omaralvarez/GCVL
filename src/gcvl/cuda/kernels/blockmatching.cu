@@ -28,6 +28,8 @@
 #include <cstdio>
 #include <cuda_runtime.h>
 
+#define CUDA_BLK 8
+
 __global__ void addAry( int * ary1, int * ary2, int * res)
 {
     int indx = threadIdx.x;
@@ -39,8 +41,8 @@ __global__ void calculateDisparity(const unsigned char * inputLeft, const unsign
 								   const int radius, const int maxDisp)
 {
 
-	const int x = blockIdx.x;
-	const int y = blockIdx.y;
+	const int x = blockIdx.x * blockDim.x + threadIdx.x;
+	const int y = blockIdx.y * blockDim.y + threadIdx.y;
 	const int offsetx = x - radius;
 	const int offsety = y - radius;
 
@@ -74,8 +76,8 @@ __global__ void calculateDisparity(const unsigned char * inputLeft, const unsign
 
 __global__ void normalizeMap(unsigned char * input, unsigned char *output, const unsigned int width, const int maxDisp) {
 
-	const int x = blockIdx.x; //rows
-	const int y = blockIdx.y; //cols
+	const int x = blockIdx.x * blockDim.x + threadIdx.x;
+	const int y = blockIdx.y * blockDim.y + threadIdx.y;
 
 	output[y * width + x] = (input[y * width + x] / (float)maxDisp) * 255;
 
@@ -86,18 +88,18 @@ void launchBM(const unsigned char * inputLeft, const unsigned char * inputRight,
 			const int radius, const int maxDisp) 
 {
 
-	//TODO check errors
-	dim3 grid_size(width, height);
-	calculateDisparity<<<grid_size, 1>>>(inputLeft, inputRight, output, width, height, dim, radius, maxDisp);
+	dim3 dimBlock(CUDA_BLK, CUDA_BLK);
+	dim3 gridSize((width + dimBlock.x - 1) / dimBlock.x, (height + dimBlock.y - 1) / dimBlock.y);
+	calculateDisparity<<<gridSize, dimBlock>>>(inputLeft, inputRight, output, width, height, dim, radius, maxDisp);
 
 }
 
 void launchNormalization(unsigned char * input, unsigned char * output, const int width, const int height, const int maxDisp)
 {
 
-	//TODO check errors
-	dim3 grid_size(width, height);
-	normalizeMap<<<grid_size, 1>>>(input, output, width, maxDisp);
+	dim3 dimBlock(CUDA_BLK, CUDA_BLK);
+	dim3 gridSize((width + dimBlock.x - 1) / dimBlock.x, (height + dimBlock.y - 1) / dimBlock.y);
+	normalizeMap<<<gridSize, dimBlock>>>(input, output, width, maxDisp);
 
 }
 
