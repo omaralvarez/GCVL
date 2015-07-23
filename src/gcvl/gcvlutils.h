@@ -24,6 +24,8 @@
 
 #pragma once
 
+#define roundUpDiv(a,b) (a + b - 1) / b
+
 void Print_N_Times(const std::string x, const int N, const bool newline = true)
 {
     for (int i = 0 ; i < N ; i++)
