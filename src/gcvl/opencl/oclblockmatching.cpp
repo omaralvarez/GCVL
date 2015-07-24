@@ -36,6 +36,8 @@ const char * kernel =
 const char * normalization =
 #include "kernels/normalization.cl"
 
+#define OPENCL_BLOCK 8
+
 BlockMatching::BlockMatching(Core & core, std::string inputLeft, std::string inputRight, std::unique_ptr<unsigned char[]> &output) {
     
 	std::cout << " **** Initializing OpenCL BlockMatching ****" << std::endl;
@@ -85,11 +87,11 @@ void BlockMatching::prepare() {
 	std::cout << " **** prepare OpenCL BlockMatching ****" << std::endl;
     
     _kernel.Build("calculateDisparity");
-    _kernel.Compute_Work_Size(_width, _height, 1, 1);
+    _kernel.Compute_Work_Size(OpenCL_Kernel::Get_Multiple(_width,OPENCL_BLOCK), OpenCL_Kernel::Get_Multiple(_height,OPENCL_BLOCK), OPENCL_BLOCK, OPENCL_BLOCK);
     
     if(_normalize) {
         _normalization.Build("normalizeMap");
-        _normalization.Compute_Work_Size(_width, _height, 1, 1);
+        _normalization.Compute_Work_Size(OpenCL_Kernel::Get_Multiple(_width,OPENCL_BLOCK), OpenCL_Kernel::Get_Multiple(_height,OPENCL_BLOCK), OPENCL_BLOCK, OPENCL_BLOCK);
     }
     
 }
