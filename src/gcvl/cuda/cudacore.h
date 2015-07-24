@@ -35,6 +35,7 @@ namespace gcvl { namespace cuda {
     public:
         Core();
         ~Core();
+		inline const void printInfo() { _devices.Print(); }
 
     private:
 		CUDA_devices_list _devices;

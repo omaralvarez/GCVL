@@ -38,6 +38,7 @@ int main(int argc, char *argv[]) {
 	std::unique_ptr<unsigned char[]> output;
 
 	gcvl::opencl::Core core;
+	//core.printInfo();
   gcvl::opencl::BlockMatching bm(core, argv[1], argv[2], output);
   bm.setAggDim(dim);
   bm.setMaxDisp(maxDisp);
