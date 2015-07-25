@@ -10,6 +10,8 @@ make
 #include <gcvl/blockmatching.h>
 #include <gcvl/opencl/oclcore.h>
 #include <gcvl/opencl/oclblockmatching.h>
+#include <gcvl/cuda/cudacore.h>
+#include <gcvl/cuda/cudablockmatching.h>
 
 //argv[1] -> path to left image   argv[2] -> path to right image
 int main(int argc, char *argv[]) {
@@ -25,11 +27,18 @@ int main(int argc, char *argv[]) {
   bmCPU.compute();
   
   gcvl::opencl::Core core;
-  gcvl::opencl::BlockMatching bmOCL(&core, argv[1], argv[2], output);
+  gcvl::opencl::BlockMatching bmOCL(core, argv[1], argv[2], output);
   bmOCL.setAggDim(dim);
   bmOCL.setMaxDisp(maxDisp);
   bmOCL.setNormalize(norm);
   bmOCL.compute();
+  
+  gcvl::cuda::Core core;
+  gcvl::cuda::BlockMatching bm(core, argv[1], argv[2], output);
+  bm.setAggDim(dim);
+  bm.setMaxDisp(maxDisp);
+  bm.setNormalize(norm);
+  bm.compute();
   
   return 0;
   
