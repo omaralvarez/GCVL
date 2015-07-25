@@ -1,0 +1,236 @@
+% Opciones empleadas:
+%
+%	a4paper -> indica el tama�o del papel, en este caso A4.
+%	11pt -> tama�o de la fuente 11 puntos.
+%	oneside -> s�lo escribimos en una cara del folio.
+% 
+% Otras opciones interesantes:
+%
+%	twoside -> escribimos a doble cara.
+%	openbib -> para que las referencias bibliogr�ficas tengan un salto de l�nea entre cada campo de la referencia.
+%
+\documentclass[a4paper,11pt,twoside]{book}
+
+% codificaci�n latin1 y s�mbolos del idioma espa�ol (�, acentos, ...)
+\usepackage[english]{babel}
+\usepackage[latin1]{inputenc}
+
+% puede que queramos usar el s�mbolo del euro.
+\usepackage{eurosym}
+
+% El paquete fancybox nos permite crear cajas de diferentes estilos con facilidad.
+% http://www.ctan.org/get/macros/latex/contrib/fancybox/fancybox.pdf
+% http://www.mackichan.com/index.html?techtalk/487.htm~mainFrame
+\usepackage{fancybox}
+\usepackage{multicol}
+\usepackage{amsmath}
+
+% Para incluir subfiguras.
+\usepackage{subfigure}
+
+% Para incluir gr�ficos en JPG => compilar con pdflatex.
+% \usepackage[pdftex]{graphicx}
+\usepackage[pdftex]{graphicx}   % --> LaTex =>PDF con epstodf
+\usepackage{epstopdf}
+
+% Para incluir gr�ficos EPS => compilar con latex.
+%\usepackage[dvips]{graphicx}
+
+% Para escribir en color...
+%
+% ... cuando compilamos con el comando ``latex''
+%\usepackage[dvips,usenames]{color}
+% ... uando compilamos con el comando ``pdflatex''
+\usepackage[pdftex,usenames,dvipsnames]{color}
+
+% Espaciado y ajuste de m�rgenes
+\usepackage{setspace}
+\onehalfspacing
+% \doublespacing
+\setlength{\textwidth}{15cm}
+\setlength{\textheight}{22cm}
+\setlength{\oddsidemargin}{1cm}
+\setlength{\evensidemargin}{1cm}
+%\usepackage[hmargin={4cm,2.5cm},tmargin=4cm,bmargin=4cm]{geometry}
+%Code snippets.
+\usepackage{listings}
+%Landscape figures.
+\usepackage{lscape}
+
+% Paquete fancyhdr -> Para modificar la cabecera y pie de p�ginas.
+% http://tug.ctan.org/tex-archive/macros/latex/contrib/fancyhdr/
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+%\fancyhf[HR]{\thepage}
+%\fancyhf[HL]{\nouppercase\rightmark}
+\fancyhead[LO]{\leftmark}
+\fancyhead[RE]{\rightmark}
+\fancyhead[RO,LE]{\thepage}
+\renewcommand{\chaptermark}[1]{\markboth{\textbf{\thechapter. #1}}{}}
+\renewcommand{\sectionmark}[1]{\markright{\textbf{\thesection. #1}}}
+\renewcommand{\headrulewidth}{0.6pt}
+\setlength{\headheight}{2.5\headheight}
+
+% Package booktabs -> Para mejorar el aspecto de las tablas o cuadros.
+% http://www.ctan.org/tex-archive/macros/latex/contrib/booktabs/
+\usepackage{booktabs}
+
+% Package rotating -> Para poder girar las tablas y dibujarlas a lo largo
+% del folio en vez de a lo ancho.
+\usepackage{rotating}
+
+% Packages multicol y multirow, para manejar tablas de filas y columnas m�ltiples.
+\usepackage{multicol}
+\usepackage{multirow}
+%To center the captions.
+\usepackage[center]{caption}
+
+%Links in biblio.
+\usepackage{url}
+
+\usepackage[pagebackref=true, hypertexnames=true, plainpages=false]{hyperref}
+
+%Bold colors
+\usepackage{color,soul}
+
+%Math caligraphy
+\DeclareMathAlphabet{\mathpzc}{OT1}{pzc}{m}{it}
+
+%\usepackage[T1]{fontenc}
+
+% Personalizamos la separaci�n entre p�rrafos...
+\parskip=6pt
+
+% Personalizamos el identado en la primera l�nea del nuevo p�rrafo...
+\parindent=0pt
+
+% Establecemos el n�mero m�ximo de niveles de profundidad en las secciones.
+\setcounter{secnumdepth}{3}
+
+% T�tulo
+\title{Design and implementation of a HPC solution for stereo matching}
+% Autor
+\author{Luis Omar Alvarez Mures}
+% Fecha
+\date{\today}
+
+
+\begin{document}
+
+	% \maketitle sirve para generar autom�tica una portada predefinida, pero para un proyecto fin de carrera
+	%	de FIC no sirvir�a porque no cumple las normas de presentaci�n. Podemos hacer dos cosas:
+	% 1. Usarla e ignorar las normas (y asumir las consecuencias que pueda tener)
+	% 2. Hacernos una portada en LaTeX que cumpla las normas (menos arriesgado)
+	%
+	
+	%Modify list bullets so it does not use dash for second level
+	\renewcommand{\labelitemi}{$\bullet$}
+	\renewcommand{\labelitemii}{$\circ$}
+	
+	%Change page numbering so backref works
+	\pagenumbering{roman}	
+	
+        \include{pfm_portada}
+        \thispagestyle{empty}
+        \cleardoublepage
+        %\newpage
+	%\thispagestyle{empty}
+	%\mbox{}
+
+	% FRONTMATTER: TOC, LOF, LOT y descripci�n/organizaci�n de la memoria.
+        \frontmatter
+	
+	% Los proyectos de fin de carrera de FIC han de ir acompa�ados de una serie de documentos adicionales, algunos
+	% 	de ellos obligatorios (certificado, resumen, lista de palabras clave) y otros opcionales (dedicatoria
+	%	y agradecimientos).
+	%
+	
+        %\thispagestyle{empty}     % No number page, headings...
+        %\include{tfg_certificado}
+        
+        \thispagestyle{empty}     % No number page, headings...
+	%\include{tfg_desc}
+	
+	\thispagestyle{empty}
+        \cleardoublepage
+	
+	\thispagestyle{empty}     % No number page, headings...
+	%\include{tfg_dedicatoria}
+        
+        \thispagestyle{empty}
+        \cleardoublepage
+        
+        %\newpage
+	%\thispagestyle{empty}
+	%\mbox{}
+	
+	\thispagestyle{empty}
+        %\include{tfg_agradecimientos}
+        
+        \thispagestyle{empty}
+        \cleardoublepage
+        %\newpage
+	%\thispagestyle{empty}
+	%\mbox{}
+	
+	\thispagestyle{empty}
+       % \include{tfg_resumo}
+        
+        \thispagestyle{empty}
+        \cleardoublepage
+	
+	\thispagestyle{empty}
+       % \include{tfg_resumen}
+        
+        \thispagestyle{empty}
+        \cleardoublepage
+        
+        \thispagestyle{empty}     % No number page, headings...
+	%\include{tfg_palabras_clave}
+	
+	\thispagestyle{empty}
+        \cleardoublepage
+	
+        \thispagestyle{empty}     % No number page, headings...
+       % \include{tfg_soft_hard}
+        
+        \thispagestyle{empty}
+        \cleardoublepage
+        
+       % \thispagestyle{empty}     % No number page, headings...
+        
+        %\newpage
+	%\thispagestyle{empty}
+	%\mbox{}
+
+        \tableofcontents
+        \listoffigures
+        \listoftables
+        
+        %\newpage
+	%\thispagestyle{empty}
+	%\mbox{}
+
+	% MAINMATTER: El contenido, cap�tulo a cap�tulo, de la memoria del tfg.
+        \mainmatter
+	
+	\pagenumbering{arabic}	
+	
+	%\include{tfg_frontmatter_intro}
+	%\include{tfg_main_020}
+	%\include{tfg_main_030}
+
+	% INCLUIMOS LOS AP�NDICES...
+        %\appendix
+	%\include{tfg_appendix_010}
+%         \include{tfg_appendix_020}
+
+	%Primero hay que compilar el bibtex para que salga.
+	% INCLUIMOS LA BIBLIOGRAF�A...
+	\nocite{*}	% Se usa para indicar en la bibliograf�a las referencias no citadas.
+	%\bibliography{tfg_biblio}
+	\bibliographystyle{alpha}
+
+\end{document}
+

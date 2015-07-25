@@ -1,0 +1,19 @@
+%
+% Resumen del proyecto de fin de carrera
+%
+
+\section*{Resumen:}
+
+El objetivo de este proyecto es diseñar e implementar un motor de render basado en puntos que utilice ray tracing como método de iluminación global. 
+
+El render basado en puntos tiene múltiples ventajas con respecto al clásico que utiliza mallas de polígonos, sobre todo en el caso en el que los polígonos puedan llegar a ser más pequeños que un pixel. 
+
+En este proyecto se abordará la representación de modelos de puntos, tanto sin técnicas de ray tracing (rasterizado normal), así como mediante ray tracing que será el verdadero objetivo del proyecto.
+
+También es importante señalar que debido a la naturaleza de las nubes de puntos que tienden a ser muy grandes, para la aceleración del proceso de ray tracing se utilizará también un k-d tree. Esto es una estructura de datos de particionado espacial para la organización de las nubes de puntos. Esta estructura permite reducir sustancialmente el tiempo de render, sin ella el proceso de ray tracing sería demasiado costoso y el render llevaría demasiado tiempo.
+
+El render por puntos también tiene algunas desventajas, como por ejemplo la naturaleza adimensional de los mismos. Esto quiere decir que el punto no tiene superficie, volumen o normal. Esto da lugar a problemas a la hora de hacer el render. En este proyecto se exploran diversas soluciones para estos problemas.
+
+Para facilitar al usuario final la utilización del proyecto, así como también hacer más fácil el testing; se programará también un plugin compatible con Blender que permitirá el renderizado de escenas creadas en blender mediante el proyecto y además facilitará el uso del motor gracias a la integración del mismo con la interfaz de Blender.  
+
+

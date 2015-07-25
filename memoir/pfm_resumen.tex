@@ -1,0 +1,21 @@
+%
+% Resumen del proyecto de fin de carrera
+%
+
+\section*{Abstract:}
+
+The objective of this project is designing and implementing a multi-platform point-based rendering visualizer that allows the management and interactive manipulation of big 3D point clouds. These clouds can be obtained using a LIDAR scanner or cheaper alternatives like KINECT. 
+
+These systems can nowadays generate data-sets with huge amounts of point data, position, color, normals, reflectivity, etc. As a consequence, these point clouds will not fit on system RAM and will have to reside in an HDD. Due to this fact, real-time rendering of massive point clouds is a complex task.
+
+The resulting software tool developed in this project, will offer the end user the functionality necessary for working with these types of datasets. Including a complete 3D visualizer, with advanced OpenGL point-rendering capabilities, multiple point cloud support, multiple cameras, multi-resolution capabilities, point cloud transformation and preprocessing, distance measurements, object segmentation, CAD exportation of segmented objects, etc. 
+
+To implement all of these features, we will utilize PCM. PCM is a project in development from the University of A Coruña, that provides a series of low level tools for working with point clouds on commodity hardware. This project will not only extend PCM with the aforementioned functionality and a high level software tool for the end user, but will improve the existing code and some performance aspects of PCM.
+
+Furthermore, the provided tool will take advantage of all the parallel computing capabilities of the target platforms. Using multiple cores on CPUs and GPGPU on the graphics cards. The multi-resolution framework will also help when trying to achieve maximum performance when trying to apply any computation.
+
+In conclusion, the resulting software package should be easily integrated and improve substantially the existing engineering workflows, thanks to the fact that the tool will be multi-platform and open source. Since it was also developed with the advice of some surveyors that are working with laser scanners everyday, there are high hopes of truly having created a versatile and useful tool.
+
+
+
+
