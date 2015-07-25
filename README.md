@@ -2,7 +2,7 @@
 Multi-platform (Windows, Unix and Mac OS) C++/OpenCL/CUDA library with several Computer Vision algorithms.
 ###Building:
 ```bash
-cmake -G "Unix Makefiles" -DBUILD_OPENCL=ON -DBUILD_CUDA=OFF -DBUILD_TESTS=ON .
+cmake -G "Unix Makefiles" -DBUILD_OPENCL=ON -DBUILD_CUDA=ON -DBUILD_TESTS=ON .
 make
 ```
 ###Example:
