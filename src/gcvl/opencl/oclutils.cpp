@@ -1285,10 +1285,25 @@ void OpenCL_Kernel::Compute_Work_Size(size_t _global_x, size_t _global_y, size_t
 
     assert(_global_x % _local_x == 0);
     assert(_global_y % _local_y == 0);
+    
+    size_t max_work_item_sizes[3];
+    clGetDeviceInfo(device_id, CL_DEVICE_MAX_WORK_ITEM_SIZES,           sizeof(max_work_item_sizes),            &max_work_item_sizes,           NULL);
 
+    if(_local_x > max_work_item_sizes[0]) {
+        std::cout << "Warning! Local work item size x=" << _local_x << " not valid! Using x=" << max_work_item_sizes[0] << " the maximum available in device!" << std::endl;
+        _local_x = max_work_item_sizes[0];
+        _global_x = Get_Multiple(_global_x, _local_x);
+    }
+    
+    if(_local_y > max_work_item_sizes[1]){
+        std::cout << "Warning! Local work item size y=" << _local_y << " not valid! Using y=" << max_work_item_sizes[1] << " the maximum available in device!" << std::endl;
+        _local_y = max_work_item_sizes[1];
+        _global_y = Get_Multiple(_global_y, _local_y);
+    }
+    
     global_work_size[0] = _global_x;
     global_work_size[1] = _global_y;
-
+    
     local_work_size[0] = _local_x;
     local_work_size[1] = _local_y;
 
