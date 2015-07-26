@@ -4,17 +4,14 @@
 
 \section*{Abstract:}
 
-The objective of this project is designing and implementing a multi-platform point-based rendering visualizer that allows the management and interactive manipulation of big 3D point clouds. These clouds can be obtained using a LIDAR scanner or cheaper alternatives like KINECT. 
+The objective of this project is designing and implementing a multi-platform HPC Stereo Matching solution. Any technique that is capable of collecting 3D information and creating the illusion of depth in an image, is considered stereoscopic vision or tridimensional (3D) vision. Our vision is stereoscopic by nature, being able to perceive the sensation of depth, distance, etc. This is achieved thanks to the horizontal separation between our eyes, leading to the processing of the differences between the perceived images of the visual system by our brain.
 
-These systems can nowadays generate data-sets with huge amounts of point data, position, color, normals, reflectivity, etc. As a consequence, these point clouds will not fit on system RAM and will have to reside in an HDD. Due to this fact, real-time rendering of massive point clouds is a complex task.
+Artificial systems for stereoscopic vision for the obtaining of 3D information in multiple applications, have been employed for several decades. The main problem that these systems tackle; is the determination of the correspondence between the pixels that come from the same point in the image pairs of the tridimensional scene, or Stereo Matching.
 
-The resulting software tool developed in this project, will offer the end user the functionality necessary for working with these types of datasets. Including a complete 3D visualizer, with advanced OpenGL point-rendering capabilities, multiple point cloud support, multiple cameras, multi-resolution capabilities, point cloud transformation and preprocessing, distance measurements, object segmentation, CAD exportation of segmented objects, etc. 
+After a preliminary phase for the study of the current algorithms for Stereo Matching, a base sequential implementation using \CC will be developed. This multi-paradigm language extends the amply known programming language C with mechanisms that allow the manipulation of objects or the ability for using generic programming. This compromise between efficiency and versatility makes this language vastly used in HPC environments.
 
-To implement all of these features, we will utilize PCM. PCM is a project in development from the University of A Coruña, that provides a series of low level tools for working with point clouds on commodity hardware. This project will not only extend PCM with the aforementioned functionality and a high level software tool for the end user, but will improve the existing code and some performance aspects of PCM.
+For the parallel versions of the code in CPUs we will utilize OpenMP, a multi-process programming API for shared memory platforms. Moreover, for the GPU implementation, GPGPU technologies will be used. CUDA and OpenCL are APIs that allow the creation of applications with data-level and task-level parallelism that can be executed in graphical processors.  
 
-Furthermore, the provided tool will take advantage of all the parallel computing capabilities of the target platforms. Using multiple cores on CPUs and GPGPU on the graphics cards. The multi-resolution framework will also help when trying to achieve maximum performance when trying to apply any computation.
-
-In conclusion, the resulting software package should be easily integrated and improve substantially the existing engineering workflows, thanks to the fact that the tool will be multi-platform and open source. Since it was also developed with the advice of some surveyors that are working with laser scanners everyday, there are high hopes of truly having created a versatile and useful tool.
 
 
 

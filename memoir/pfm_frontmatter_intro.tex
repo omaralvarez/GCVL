@@ -9,18 +9,19 @@
 	Introduction
 }
 
-Computer Graphics is the discipline that deals with creating, managing, analyzing and visualizing graphics using a computer, and it is closely linked to other disciplines such as Image Processing, Computer Vision or Machine Learning, among others. Advances in computer graphics have had an impact on several media types such as, for example, the movies and video games industry, civil engineering, medicine, etc.
+Computer Vision is a field that includes techniques for acquiring, processing, analyzing, and understanding images. This scientific area is not only limited to images but also to high-dimensional data from the real world. It aims to produce numerical or symbolic information in order to perform decisions \cite{computervision}. A common trend in this field, has been duplicating the abilities of human vision by electronically perceiving and interpreting the image. 
 
-In computer graphics, \emph{rendering} is the process of generating a 2D image to be shown in a display. This process takes usually a virtual scene of 3D objects as input, containing data like geometry, lighting, cameras, etc.
-Typically, polygonal modeling has been the approach followed for modeling objects in the scene, approximating their surfaces using polygons. Point-based graphics focuses on points as the fundamental representation of the surfaces instead of polygons (see \figurename~\ref{poly_comp}).
+This image understanding can be seen as the extraction of symbolic information from image data using models constructed with the aid of geometry, physics, statistics, and learning theory \cite{computervisionmodern}. As a scientific discipline, Computer Vision considers the theory behind artificial systems that extract information from images. The image data can have many forms, such as video frames, views from multiple cameras, or multi-dimensional data from a medical scanner. As a technological discipline, Computer Vision seeks to apply its theories and models to the construction of artificial vision systems.
+
+Sub-domains of computer vision include scene reconstruction, event detection, video tracking, object recognition, object pose estimation, learning, indexing, motion estimation, and image restoration (see \figurename~\ref{position_tracking}).
 
 \begin{figure}
 	\centering
-	\includegraphics[scale=0.6]{figures/pol_comp.pdf}
+	\includegraphics[scale=0.6]{figures/position_tracking.png}
 	\caption[Modeling types comparison]{
 		From left to right; mathematical representation of a plane, representation using two polygons (triangles) and a point-based representation.
 	}
-	\label{poly_comp}
+	\label{position_tracking}
 \end{figure}
 
 Nowadays, acquisition technologies such as LIDAR (Laser Imaging
@@ -38,8 +39,8 @@ obtained from a LIDAR scanner are shown in
 
 \begin{figure}
   \centering
-  \includegraphics[width=0.475\textwidth]{figures/campillo1.png} \quad
-  \includegraphics[width=0.475\textwidth]{figures/parcela.png}
+%  \includegraphics[width=0.475\textwidth]{figures/campillo1.png} \quad
+ % \includegraphics[width=0.475\textwidth]{figures/parcela.png}
   \caption{Examples of LIDAR scanning.}\label{lidarexamples}
 \end{figure}
 

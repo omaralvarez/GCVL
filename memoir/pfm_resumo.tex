@@ -5,52 +5,12 @@
 \section*{Resumo:}
 
 O obxectivo deste proxecto é o deseño e implementación dunha
-ferramenta multiplataforma para a visualización de nubes de puntos que
-permita a xestión e manipulación de grandes volumes de datos. Este
-tipo de \emph{datasets} poden ser obtidos a partir dun escáner LIDAR
-ou de alternativas de baixo custo como KINECT.
+ferramenta multiplataforma para Stereo Matching. Consideramos como visión estereoscópica ou visión tridimensional (3D) a calquera técnica capaz de recoller información visual tridimensional e crear ilusión de profundidade nunha imaxe. De maneira natural a nosa visión é estereoscópica, puidendo percibir sensación de profundidade, afastamento, etc. Isto se consegue grazas á separación horizontal dos nosos ollos, procesando o noso cerebro as diferenzas entre as imaxes percibidas polo noso sistema visual.
 
-Este tipo de sistemas capturan un gran volume de información, xerando
-nubes de puntos de gran tamaño con miles de millóns de información
-xeométrica, color, normais, reflectividade, etc. A consecuencia é un
-conxunto de información difícil de manexar de xeito interactivo, ao
-non caber completo na memoria RAM dun ordenador e requerir o traballo
-desde memoria secundaria (clásicamente un disco duro). Isto complica
-a creación de aplicacións en tempo real para a xestión e manexo deste
-conxunto masivo de datos.
+Véñense empregando sistemas artificiais de visión estereoscópica para a obtención de información 3D en diferentes aplicacións dende hai varias décadas. O problema central que abordan estes sistemas é o da determinación da correspondencia entre os píxels que proveñen do mesmo punto dos pares de imaxes da escena tridimensional, ou correspondencia estereoscópica.
 
-A ferramenta software desenvolvida neste proxecto ofrécelle ao usuario
-final todas as funcionalidades necesarias para o traballo con este
-tipo de datos, desde un completo visualizador 3D para render de
-puntos, que inclúe características de visualización avanzada de
-OpenGL, soporte para o traballo con varias nubes de puntos
-simultaneamente, múltiples cámaras diferentes coas que traballar,
-características multiresolución, posibilidade de aplicar
-transformacións e distintos tipos de pre-proceso sobre os datos, medir
-distancias, detección de obxectos na nube de puntos, exportación a CAD
-dos obxectos seleccionados, etc
+Tras unha primeira fase de estudo dos distintos algoritmos existentes, levarase a cabo unha implementación secuencial base empregando a linguaxe de programación \CC. Esta linguaxe multiparadigma estende a ampliamente coñecida liguaxe de programación C con mecanismos que permiten tanto a manipulación de obxectos como a capacidade para a programación xenérica. Este compromiso entre eficiencia e versatilidade fai que esta linguaxe sexa ampliamente utilizada en entornos HPC.
 
-Para a implementación de todas esas funcionalidades partiuse da
-biblioteca software PCM, aínda en desenvolvemento e que xurde tamén
-na Unidersidade da Coruña. Este biblioteca proporciona unha serie de
-ferramentas de baixo nivel para a xestión de nubes de puntos masivas
-en hardware de uso común. Neste proxecto non soamente se fai uso das
-características existentes de PCM, senón que, ademais da propia
-ferramenta de visualización desenvolvida (bautizada como ToVIEW), tamén se extendeu
-ampliamente a biblioteca PCM para poder ofrecer todas as funcionalidades
-necesarias no proxecto, ademais de varias melloras de rendemento na mesma.
+Para as versións paralelas do código en CPU utilizarase OpenMP, unha API de programación multi-proceso en plataformas de memoria compartida. En canto á implementación GPU, levarase a cabo cunhas tecnoloxías GPGPU, CUDA e OpenCL, unhas APIs que permiten crear aplicacións con paralelismo a nivel de datos e tarefas que poden executarse en procesadores gráficos.
 
-No proxecto abordouse ademais o aproveitamento das posibilidades para
-o procesamento paralelo presentes no hardware no que se executa PCM,
-tanto en canto á CPU como ás capacidades GPGPU da tarxeta gráfica.
 
-Por último, o paquete software resultante foi deseñado para ser
-facilmente integrable nos fluxos de traballo habituais nos sectores da
-enxeñería que máis habitualmente empregan escaneos 3D en forma de
-nubes de puntos, como pode ser, por exemplo, a topografía.
-Durante a realización do proxecto traballouse con profesionais da
-topografía habituados a incorporar o uso da tecnolocía LIDAR no seu
-traballo, o que facilitou a creación dunha ferramenta útil e versátil
-para o usuario final.
-No aspecto da fácil integración en entornos profesionais tamén axuda o
-feito de tratarse dun desenvolvemento multiplataforma e \emph{open source}.

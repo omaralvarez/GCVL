@@ -108,6 +108,9 @@
 % Establecemos el n�mero m�ximo de niveles de profundidad en las secciones.
 \setcounter{secnumdepth}{3}
 
+%C++ symbol
+\def\CC{{C\nolinebreak[4]\hspace{-.05em}\raisebox{.4ex}{\tiny\bf ++}}}
+
 % T�tulo
 \title{Design and implementation of a HPC solution for stereo matching}
 % Autor
@@ -146,17 +149,14 @@
 	%	y agradecimientos).
 	%
 	
-        %\thispagestyle{empty}     % No number page, headings...
-        %\include{tfg_certificado}
-        
         \thispagestyle{empty}     % No number page, headings...
-	%\include{tfg_desc}
+	\include{pfm_desc}
 	
 	\thispagestyle{empty}
         \cleardoublepage
 	
 	\thispagestyle{empty}     % No number page, headings...
-	%\include{tfg_dedicatoria}
+	\include{pfm_dedicatoria}
         
         \thispagestyle{empty}
         \cleardoublepage
@@ -166,7 +166,7 @@
 	%\mbox{}
 	
 	\thispagestyle{empty}
-        %\include{tfg_agradecimientos}
+        \include{pfm_agradecimientos}
         
         \thispagestyle{empty}
         \cleardoublepage
@@ -175,25 +175,25 @@
 	%\mbox{}
 	
 	\thispagestyle{empty}
-       % \include{tfg_resumo}
+        \include{pfm_resumo}
         
         \thispagestyle{empty}
         \cleardoublepage
 	
 	\thispagestyle{empty}
-       % \include{tfg_resumen}
+        \include{pfm_resumen}
         
         \thispagestyle{empty}
         \cleardoublepage
         
         \thispagestyle{empty}     % No number page, headings...
-	%\include{tfg_palabras_clave}
+	\include{pfm_palabras_clave}
 	
 	\thispagestyle{empty}
         \cleardoublepage
 	
         \thispagestyle{empty}     % No number page, headings...
-       % \include{tfg_soft_hard}
+        \include{pfm_soft_hard}
         
         \thispagestyle{empty}
         \cleardoublepage
@@ -217,7 +217,7 @@
 	
 	\pagenumbering{arabic}	
 	
-	%\include{tfg_frontmatter_intro}
+	\include{pfm_frontmatter_intro}
 	%\include{tfg_main_020}
 	%\include{tfg_main_030}
 
@@ -229,7 +229,7 @@
 	%Primero hay que compilar el bibtex para que salga.
 	% INCLUIMOS LA BIBLIOGRAF�A...
 	\nocite{*}	% Se usa para indicar en la bibliograf�a las referencias no citadas.
-	%\bibliography{tfg_biblio}
+	\bibliography{pfm_biblio}
 	\bibliographystyle{alpha}
 
 \end{document}
