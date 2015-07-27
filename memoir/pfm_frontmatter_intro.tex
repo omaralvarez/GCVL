@@ -11,72 +11,37 @@
 
 Computer Vision is a field that includes techniques for acquiring, processing, analyzing, and understanding images. This scientific area is not only limited to images but also to high-dimensional data from the real world. It aims to produce numerical or symbolic information in order to perform decisions \cite{computervision}. A common trend in this field, has been duplicating the abilities of human vision by electronically perceiving and interpreting the image. 
 
+\begin{figure}[h]
+	\centering
+	\includegraphics[scale=0.4]{figures/pose_estimation.png}
+	\caption[Pose estimation]{
+		The specific task of determining the pose of an object in an image is referred to as pose estimation.
+	}
+	\label{pose_estimation}
+\end{figure}
+
 This image understanding can be seen as the extraction of symbolic information from image data using models constructed with the aid of geometry, physics, statistics, and learning theory \cite{computervisionmodern}. As a scientific discipline, Computer Vision considers the theory behind artificial systems that extract information from images. The image data can have many forms, such as video frames, views from multiple cameras, or multi-dimensional data from a medical scanner. As a technological discipline, Computer Vision seeks to apply its theories and models to the construction of artificial vision systems.
 
-Sub-domains of computer vision include scene reconstruction, event detection, video tracking, object recognition, object pose estimation, learning, indexing, motion estimation, and image restoration (see \figurename~\ref{position_tracking}).
+Sub-domains of computer vision include scene reconstruction, event detection, video tracking, object recognition, object pose estimation, learning, indexing, motion estimation, and image restoration (see \figurename~\ref{pose_estimation}). Our case study pertains to the field of stereo vision. In this subject, the main objective is the extraction of 3D information from digital images, such as obtained by a CCD camera. By comparing information about a scene from two vantage points, 3D data can be extracted by examination of the relative positions of objects in the two panels (see \figurename~\ref{stereoscopic_vision}).
 
-\begin{figure}
-	\centering
-	\includegraphics[scale=0.6]{figures/position_tracking.png}
-	\caption[Modeling types comparison]{
-		From left to right; mathematical representation of a plane, representation using two polygons (triangles) and a point-based representation.
-	}
-	\label{position_tracking}
-\end{figure}
-
-Nowadays, acquisition technologies such as LIDAR (Laser Imaging
-Detection and Ranging) allow us to obtain high-precision
-georeferenced 3D scans of the real world in an easy and fast way.
-These systems use ultraviolet, visible or near infrared light to image objects. It can target a wide range of materials and even single molecules. A narrow laser beam can map features with very high precision.
-The evolution of this kind of technologies is having a tremendous
-impact in multiple fields in the engineering, and bringing back the
-camp-work to the office has become a standard practice.
-This presents clear advantages compared to the classical work-flow in
-disciplines like topography, that usually need to come back on the
-ground each time a new measurement is required. A couple of images
-obtained from a LIDAR scanner are shown in
-\figurename~\ref{lidarexamples}.
-
-\begin{figure}
+\begin{figure}[h]
   \centering
-%  \includegraphics[width=0.475\textwidth]{figures/campillo1.png} \quad
- % \includegraphics[width=0.475\textwidth]{figures/parcela.png}
-  \caption{Examples of LIDAR scanning.}\label{lidarexamples}
-\end{figure}
-
-These scanning devices generate data-sets with an enormous number of
-samples, with 3D coordinates and additional data such as color,
-reflectivity and so on. These point clouds, as they are usually
-named, are formed by hundreds or thousands of points, resulting in
-Giga or even tera-bytes of information.
-Using point based representations, the polygonal approximation step
-can be skipped and the massive amount of captured data is directly
-used. However, managing these huge data-sets, either for applying some kind of data
-analysis or for visualization, is a computational challenge and an
-open and state-of-the-art problem. This project deals with this question.
-
-This chapter introduces the motivation behind the project and the
-objectives we try to achieve. It shows the structure of this document
-as well.
+  \includegraphics[width=0.475\textwidth]{figures/stereo.pdf} \quad
+  \caption[Stereoscopic vision]{
+  		Basic diagram of a stereo vision setup.
+  	}
+  \label{stereoscopic_vision}
+\end{figure} 
 
 \section[Motivation and context]{
 	Project motivation and context
 }
 
-PCM is a software library developed in the University of A Coruña for the management of huge point datasets obtained by LIDAR in commodity hardware systems. It was started as a MSc Final Project~\cite{Jaspe12} (system structure and basic capabilities) in the Faculty of Computer Science and then continued in a BSc Final Project~\cite{Jaspe13} (improved render and other minor additions).
+One of the key steps in stereo vision techniques, is obtaining the stereo correspondence between two images or Stereo Matching. The correspondence problem refers to the process of ascertaining which parts of one image correspond to which parts of another image. This is not a trivial affair, since differences appear due to movement of the camera, the elapse of time, and/or movement of objects in the photos.
 
-PCM is based on a multi-resolution structure and includes basic memory hierarchy management, making it possible to transfer the point cloud data between secondary memory (HDD) and video memory in the graphics card. Originally, PCM includes a very basic visualizer, quite simple and limited but that has the potential to become the seed for a more advanced point cloud software tool that will allow the user to access all of these features in real-time.
+Current approaches to obtain this information, involve the usage of a single CPU. Our aim with this project is taking advantage of modern hardware to its fullest capacities. This is specially important nowadays, since camera systems keep on improving leading to images with very high resolutions. This complex task involves exploiting the massive parallel power of current multi-core CPUs, GPUs, etc. In addition, our desire is not only the implementation of a Stereo Matching algorithm; but the creation of a \CC framework that will allow the user to implement parallel Computer Vision algorithms with ease.
 
-Although PCM was designed to deal with arbitrary size datasets, it is far from being a mature software and has some problems managing point clouds in the order of billion points. Because of the massive nature of these datasets, achieving real-time manipulation of them is a complex task. It will require the improvement of PCM, with a complete profiling and performance analysis and a careful refactoring. Having a system that is able to manage such a huge amount of data, will let the user take advantage of the full potential of cutting-edge 3D capture devices.
-Of course, the library should exploit the full potential of both modern CPUs and GPUs, automatically using parallel processing to reduce the computation time as much as possible.
-Furthermore, although PCM sketches a framework for applying data
-analysis on the point clouds, this part was barely crafted at
-all. Other constraints of the original proposal are also addressed in
-this work, such as adding read/write operations to allow the
-modification of the datasets, the possibility of working with multiple
-point clouds, etc.
-
-In this project, a complete user-oriented software suite for the visualization, management, analysis and manipulation of massive 3D point clouds will be developed from the original PCM proposal. ToView is the name chosen for this software package. It is a multi-platform (GNU/Linux, Windows and MacOS) free software project and makes use of open source software exclusively. For these reasons the user interface is based on the cross-platform application framework QT, that has native implementations and tools for all the aforementioned platforms. The resulting QT application will let the user access all of the functionality including an advanced and complete 3D visualizer.
+The set of software tools developed in this project has been called \textbf{GCVL} (GPU Computer Vision Library). This library provides several means to implement GPU algorithms in an simpler manner. 
 
 \section[Objectives]{
 	Project objectives
