@@ -26,19 +26,19 @@ int main(int argc, char *argv[]) {
   bmCPU.setNormalize(norm);
   bmCPU.compute();
   
-  gcvl::opencl::Core core;
-  gcvl::opencl::BlockMatching bmOCL(core, argv[1], argv[2], output);
+  gcvl::opencl::Core coreOCL;
+  gcvl::opencl::BlockMatching bmOCL(coreOCL, argv[1], argv[2], output);
   bmOCL.setAggDim(dim);
   bmOCL.setMaxDisp(maxDisp);
   bmOCL.setNormalize(norm);
   bmOCL.compute();
   
-  gcvl::cuda::Core core;
-  gcvl::cuda::BlockMatching bm(core, argv[1], argv[2], output);
-  bm.setAggDim(dim);
-  bm.setMaxDisp(maxDisp);
-  bm.setNormalize(norm);
-  bm.compute();
+  gcvl::cuda::Core coreCUDA;
+  gcvl::cuda::BlockMatching bmCUDA(coreCUDA, argv[1], argv[2], output);
+  bmCUDA.setAggDim(dim);
+  bmCUDA.setMaxDisp(maxDisp);
+  bmCUDA.setNormalize(norm);
+  bmCUDA.compute();
   
   return 0;
   
