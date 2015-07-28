@@ -41,32 +41,23 @@ One of the key steps in stereo vision techniques, is obtaining the stereo corres
 
 Current approaches to obtain this information, involve the usage of a single CPU. Our aim with this project is taking advantage of modern hardware to its fullest capacities. This is specially important nowadays, since camera systems keep on improving leading to images with very high resolutions. This complex task involves exploiting the massive parallel power of current multi-core CPUs, GPUs, etc. In addition, our desire is not only the implementation of a Stereo Matching algorithm; but the creation of a \CC framework that will allow the user to implement parallel Computer Vision algorithms with ease.
 
-The set of software tools developed in this project has been called \textbf{GCVL} (GPU Computer Vision Library). This library provides several means to implement GPU algorithms in an simpler manner. 
+The set of software tools developed in this project has been called \textbf{GCVL} (GPU Computer Vision Library). This library provides several means to implement GPU algorithms in an simpler manner using OpenCL or CUDA. In addition, a sample implementation of a Stereo Matching algorithm called Block Matching will also be provided to showcase the features offered in the framework. This algorithm will have a serial, OpenMP, OpenCL and CUDA implementation that employs the designed software tools.     
 
 \section[Objectives]{
 	Project objectives
 }
 
-The aim of this project is the design and implementation of a point-based multi-platform software tool for the interactive visualization, management, analysis and manipulation of massive 3D point clouds. 
-
-The application will offer the user the necessary tools to work effectively with this type of datasets, including a 3D visualizer with advanced point-rendering techniques using OpenGL, that will allow real time interaction with one or multiple point clouds.
-
-From the interface, the user will be able to:
+The main objectives in this project are:
 
 \begin{itemize}
-\item Select different visualization modes for point-based models: multiple cameras, simple and advanced visualization, multi-resolution, etc.
-\item Combine different point clouds with tools that enable rotation, translation and scaling of the datasets.
-\item Select points in the clouds for working with them.
-\item Apply operations to a part of the cloud or the complete dataset. From simple operations, such as distance measurement and calculation, to plane or other geometric primitives detection.
-\item Export the work done to a standard CAD format, so the tool can be integrated in other work-flows.
-\item Call the pre- and post-processing tools included in the suite: multi-resolution structure computation, filters, etc.
+\item Studying different Stereo Matching techniques.
+\item Design, implementation and documentation of tools to ease GPGPU programming.
+\item Design, implementation and documentation of the chosen algorithm. 
+\item CPU parallelization of the implemented algorithm.
+\item GPU parallelization of the implemented algorithm.
 \end{itemize}
 
-The developed tool will take advantage of the parallel computing possibilities of the platforms. Both using the GPGPU capabilities of the graphics card with OpenCL and the multiple cores of the CPU. 
-
-PCM will be used as the foundation for this work. PCM is a project in development that offers several low level tools for working with point clouds of arbitrary size in commodity hardware, from which a multi-resolution structure with different levels of cache is highlighted. This final degree project will not only extend PCM with the mentioned features, offering a high level software suite for the final user, but will also improve the existing source code, paying special attention to performance aspects.
-
-A series of benchmarks will also be implemented that will allow us to obtain automatically and autonomously performance information about PCM and the visualization tool, with graphs and reports. This tool will make finding bottlenecks and performance issues easier.
+In this project, a fast Stereo Matching algorithm is required. In addition, the algorithm needs to keep all the precision possible, but be suitable for real-time processing of interactive image sequences. Not only this, but also the algorithm needs to be highly parallel so GPUs can be efficiently used. This algorithm will be implemented with the developed toolset for GPGPU computing. Moreover, evidence will be collected of the scalability and performance of the chosen algorithm and its parallel implementations.
 
 \section[Structure]{
 Document structure
@@ -75,65 +66,22 @@ Document structure
 The rest of the document is organized following this structure:
 
 \paragraph*{Chapter 2.}
-Planning and methodology
+Technological Foundations
 
-After this introduction, we start by describing the planning and
-development methodology used in the project. We chose an agile
-software development approach.
+This chapter briefs very basic concepts about Computer Vision needed to understand the rest of the document: How stereo correspondence, stereo matching and our chosen solution work. This chapter will also introduce the reader to basic GPGPU concepts.
 
 \paragraph*{Chapter 3.}
-Computer Graphics basics
+GCVL: GPGPU Computer Vision Library
 
-This chapter briefs the very basic concepts about computer graphics needed to understand the rest of the document: How a virtual camera works and the different types of cameras, what 3D transformations are and how a point is represented in 3D.
+This chapter describes the structure of the library we propose in this work and presents the class diagram of the software package.
  
 \paragraph*{Chapter 4.}
-Structure of a real-time visualizer for point-based datasets
+Performance \& Experimental Results
 
-This chapter describes the structure of the visualizer we propose in this work and presents the class diagram of the software package. Both ToView (the visualization tool) and PCM (the multi-resolution library behind the GUI) are included.
+This chapter presents the obtained performance and experimental results, so that the reader can compare our parallel implementations with the sequential one.
 
 \paragraph*{Chapter 5.}
-Point Cloud Manager
-
-This chapter focussed in describing PCM ant detailing all the work
-invested in the improvement of the original PCM library and tools:
-code refactoring, bug fixes and new functionalities. It includes the
-experimental results of the tests included in the benchmarks we have
-designed to measure the library performance.
-
-\paragraph*{Chapter 6.}
-ToView
-
-This chapter depicts the visualizer designed and implemented from
-scratch in this project to manage and visualize massive point
-clouds. All the included functionalities are described and
-experimental results are also included.
-
-\paragraph*{Chapter 7.}
-Advanced GPU point rendering
-
-This chapter is devoted to the most advanced visualization methods
-included in ToView, a bunch of some of the most state-of-the-art
-point-rendering techniques, and how they are implemented with OpenGL
-in the GPU using GLSL (OpenGL Shading Language).
-
-\paragraph*{Chapter 8.}
-Object detection: RANSAC
-
-This chapter deals with the detection of different shapes and volumes
-in ToView, describing the different approaches that were studied to implement
-this functionality in the project. Specifically, an extensive
-explanation of the RANSAC algorithms used in this project is provided.
-
-\paragraph*{Chapter 9.}
-Preprocessing and filtering
-
-Both PCM and ToView need several pre-processing tasks to take advantage
-of some of the most advances features. All this pre-processing and the
-different filtering techniques applied to the datasets are explored in
-this chapter.
-
-\paragraph*{Chapter 10.}
 Conclusions and future lines of work
 
 Finally, this chapter presents the main conclusions obtained with this
-project and outlines possible extensions to both PCM and ToView.
+project and outlines possible extensions to GCVL.

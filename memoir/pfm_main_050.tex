@@ -1,0 +1,37 @@
+%
+% TÍTULO DEL CAPÍTULO
+%
+\chapter{Conclusions and future lines of work
+	\label{chapter_5}
+}
+
+In this chapter we will briefly take a look at the conclusions reached after finishing this project, and the possible future lines of work that the project can follow.
+
+\section[Conclusions]{Conclusions}
+
+The first conclusion reached, has been that all of the objectives of the project were met:
+
+\begin{itemize}
+\item Studying different Stereo Matching techniques.
+\item Design, implementation and documentation of tools to ease GPGPU programming.
+\item Design, implementation and documentation of the chosen algorithm. 
+\item CPU parallelization of the implemented algorithm.
+\item GPU parallelization of the implemented algorithm.
+\end{itemize}
+
+After finishing and achieving the aforementioned objectives, the other conclusions that have been reached are:
+
+\begin{itemize}
+\item \textbf{GPGPU is not always the answer:} As seen in the results, if the workload is not complex enough to compensate for kernel setup time, GPU computation time will be higher than the time it takes the CPU to process the data. One has to carefully consider if the workload and the chosen algorithms are optimal for GPU parallelization or a lot of time can be wasted.
+\end{itemize} 
+
+\section[Future lines of work]{Future lines of work}
+
+After finalizing the work on this project, several ideas for the expansion of the visualizer come to mind:
+
+\begin{itemize}
+\item \textbf{GPU kernels optimization:} As of know the implemented kernels of the Block Matching algorithm are semi-naive implementations. It would be interesting to further optimize these kernels so they would use local memory and would access the data with more optimal patterns or other types of improvements.
+\item \textbf{Multi-GPU:}
+\item \textbf{MPI tools:}
+\item \textbf{Boost Compute:}
+\end{itemize} 
