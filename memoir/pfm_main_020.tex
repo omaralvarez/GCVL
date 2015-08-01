@@ -67,19 +67,86 @@ Our main interest in this project is \emph{scene reconstruction} from one or mor
 
 \subsection{Stereo Vision}
 
-Computer stereo vision is the extraction of 3D information from digital images, such as obtained by a CCD camera. By comparing information about a scene from two vantage points, 3D information can be extracted by examination of the relative positions of objects in the two panels. This is similar to the biological process Stereopsis.
+Any technique that is capable of collecting 3D information and creating the illusion of depth in an image, is considered stereoscopic vision or tridimensional (3D) vision. Our vision is stereoscopic by nature, being able to perceive the sensation of depth, distance, etc. This is achieved thanks to the horizontal separation between our eyes, leading to the processing of the differences between the perceived images of the visual system by our brain. 
+
+Computer stereo vision is the extraction of 3D information from digital images, such as obtained by a CCD camera. Artificial systems for stereoscopic vision for the obtaining of 3D information in multiple applications, have been employed for several decades. The main problem that these systems tackle; is the determination of the correspondence between the pixels that come from the same point in the image pairs of the tridimensional scene. By comparing information about a scene from two vantage points, 3D data can be extracted by examination of the relative positions of objects in the two panels (see \autoref{stereo_vision}). %Wiki: https://en.wikipedia.org/wiki/Computer_stereo_vision
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[scale=0.3]{figures/stereo_vision.pdf}
+	\caption[Stereo vision]{
+		 Diagram describing relationship of image displacement to depth with stereoscopic images, assuming flat co-planar images. 
+	}
+	\label{stereo_vision}
+\end{figure}
 
 \subsection{Stereo Correspondence}
 
-SC
+Given two or more images of the same 3D scene, taken from different vantage points, the correspondence problem refers to the task of finding a set of points in one image which can be identified as the same points in another image. To achieve this, points or features in one image are matched with the corresponding points or features in another image. The images can be taken from a different point of view, not at the same time, or with objects in general motion relative to the cameras.
+
+From the earliest forays into visual perception, it was known that we depth is perceived based on the differences in appearance between the left and right eye. As a simple test, hold your finger vertically in front of your eyes and close each eye at a time. You will notice that the finger jumps left and right, relative to the background of the image. The same effect is visible in the image pair shown in \autoref{tsukuba_depth}, in which the foreground objects shift left and right with respect to the background.
+
+Stereo Matching is the process of employing two or more images and estimating a 3D model of the scene by finding matching areas of interest in the images and converting their 2D positions into 3D depths. This tackles the question of how to build a better 3D model, e.g., a sparse or dense depth map that assigns relative depths to pixels in the input images (see \autoref{tsukuba_depth}).
+
+\begin{figure}[h]
+  \centering
+  \subfigure[Tsukuba left]{\includegraphics[width=0.29\textwidth]{figures/tsukuba_l.png}} \hfill
+  \subfigure[Tsukuba right]{\includegraphics[width=0.29\textwidth]{figures/tsukuba_r.png}}\hfill
+  \subfigure[Depth map]{\includegraphics[width=0.29\textwidth]{figures/tsukuba_o_d.jpg}}
+  \caption[Stereo reconstruction]{Stereo reconstruction techniques can convert (\textbf{a}-\textbf{b}) a pair of images, into (\textbf{c}) a depth map.}
+  \label{tsukuba_depth}
+\end{figure}
+
+There are two main types of techniques for stereo matching:
+
+\begin{itemize}
+\item \textbf{Sparse} algorithms
+\item \textbf{Dense} algorithms
+\end{itemize}
+
+Early stereo matching techniques were feature-based, i.e., they first extracted a set of potentially matchable image locations, using either interest operators or edge detectors, and then searched for matching locations in other images using a patch-based metric \cite{bolles1993jisct,hsieh1992performance}. This limitations to sparse correspondences were in part due to computational resource limitations, but also were driven by a need to limit the answers produced by algorithms to matches with high confidence.
+
+While sparse matching algorithms are still used on occasion, most stereo matching algorithms today focus on dense correspondence. This came to be since it is required for applications, such as image-based rendering or modeling. This problem is more difficult than sparse correspondence, since inferring depth values in regions with similar textures requires making a certain amount of inferences.
+
+After carefully studying multiple algorithms to achieve our goal, we have chosen Block Matching. This is not one of the algorithms with the highest precision, but we believe it can be highly parallel and fits our requirement of real-time processing of video images.
 
 \subsection{Block Matching}
 
-Block Matching
+The chosen algorithm follows a similar structure to the following publication \cite{scharstein2002taxonomy}. With stereo cameras, objects in the field of view of these will appear at slightly different locations within the two images due to the cameras varying perspectives of the same scene. A standard method for calculating the disparity map is to use Block Matching, essentially, we will be taking a small region of pixels in the right image, and searching for the closest matching region of pixels in the left image.
+
+Correlation based matching typically produces dense depth maps by calculating the disparity at each pixel within a neighborhood. This is achieved by taking a square window of certain size around the pixel of interest in the reference image and finding the homologous pixel within the window in the target image, while moving along the corresponding scanline. The goal is to find the corresponding (correlated) pixel within a certain disparity range $d$ that minimizes the associated error and maximizes the similarity (see \autoref{window_search}).
+
+%TODO source?
+\begin{figure}[h]
+	\centering
+	\subfigure[Left image]{\includegraphics[scale=0.4]{figures/left_wsearch_crop.png}}
+	\subfigure[Right image search]{\includegraphics[scale=0.4]{figures/right_wsearch_crop.png}}
+	\caption[Stereo vision]{
+		 Diagram describing relationship of image displacement to depth with stereoscopic images, assuming flat co-planar images. 
+	}
+	\label{stereo_vision}
+\end{figure}
+
+The structure and pseudo code of the implemented algorithm can be seen in \autoref{BMalgorithm}.
+
+%TODO Finish algorithm
+\begin{algorithm}
+	\caption{Block Matching algorithm}
+	\label{BMalgorithm}
+	\KwIn{left, right, aggregationdim, maxdisparity}
+	\KwOut{depthmap}
+	TODO Pseudo algotrithm
+\end{algorithm}
+
+%TODO Sum of Absolute Differences math
+
+In short, the correspondence process involves the computation of the similarity measure for each disparity value, followed by an aggregation and optimization step. Since these steps consume a lot of processing power but can be computed in parallel, there are significant speed-performance advantages to be had in optimizing the matching algorithm.
 
 \section{GPGPU}
 
-General-purpose Computing on Graphics Processing Units
+General-purpose Computing on Graphics Processing Units.
+
+%TODO Just in case there is no more pages left
 
 \subsection{Architecture}
 

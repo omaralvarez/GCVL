@@ -5,7 +5,7 @@
 	\label{chapter_3}
 }
 
-Intro
+\textbf{GCVL} is a set of software tools and libraries that allow the user to run and implement common Computer Vision algorithms on modern GPUs. It comprises a set of OpenCL and CUDA tools, a Block Matching example algorithm implementation and base classes to implement custom algorithms.
 
 \section{Development Methodology}
 
@@ -53,19 +53,56 @@ As agile development emphasizes on working software as the primary measure of pr
 
 \section{Technology}
 
+%TODO complete
 Tecnologia usada?
 
 \section{Design}
 
-Diagrama clases general en intro
+GCVL is developed following an object oriented approach and using the \CC programming language. For GPGPU programming we have chosen OpenCL and CUDA, because of their inter-operation capabilities with OpenGL. This will allow us to process directly data that already resides in the GPU, without having to do expensive memory transfers. Because of the open nature of OpenCL, the software will be able to run on any graphics card vendor (AMD, NVIDIA or Intel) and the SO that the user prefers (Windows, OSX or Unix). For NVIDIA GPUs we have also developed a CUDA implementation, this way users will be able to squish the maximum amount of performance out of the green team's devices. Design patterns have been used as much as possible. This section briefly depicts the high-level design of GCVL in the form of class diagrams.
+
+\subsection{Class diagram}
+
+The high-level design of the \textbf{GCVL} library is depicted in the class diagram of \autoref{class_diag}. In this design, the \textbf{General Tools} module contains utility classes that contain commonly used functions and configuration parameters. In addition, the \textbf{CPU} module contains tools to implement multi-core CPU algorithms using GCVL, examples, template classes, etc.
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[scale=0.73]{figures/GCVL.pdf}
+	\caption{GCVL class diagram.} \label{class_diag}
+\end{figure}
+
+Furthermore, the \textbf{OpenCL} module contains classes related to the development of OpenCL algorithms (tools, example algorithms, kernels, etc.).
+
+Finally, the \textbf{CUDA} module resembles the aforementioned module, containing tools, algorithm examples, kernels, etc. It possesses all the classes that are needed to implement CUDA programs in a simple manner.
+
+All of the GPU modules present in GCVL can be compiled on demand using CMake options, so if the CUDA framework or the OpenCL libraries are not needed, they can be deactivated and the rest of the library can be used without any kind of issue.
 
 \subsection{General Tools}
 
-Config y demas
+\begin{figure}[h]
+	\centering
+	\includegraphics[scale=0.73]{figures/general_tools.pdf}
+	\caption{General Tools module class diagram.} \label{general_tools}
+\end{figure} 
+
+In the diagram of \autoref{general_tools}, the following classes are the most relevant:
+
+\begin{itemize}
+	\item \textbf{GCVLConfig:} This class contains the configuration parameters present in GCVL. For example, the suppression of warnings, constant definitions, etc. 
+	\item \textbf{GCVLTools:} Class that contains utility functions used in all the modules present in GCVL, be it CPU or GPU modules. 
+\end{itemize}
 
 \subsection{CPU Module}
 
-cpu
+\begin{itemize}
+	\item \textbf{Algorithm:} This base class contains the template for the implementation  of multi-core CPU algorithms in GCVL.
+	\item \textbf{BlockMatching:} This class serves as an example of the implementation of a multi-core CPU algorithm in GCVL. 
+\end{itemize}
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[scale=0.73]{figures/cpu_module.pdf}
+	\caption{CPU module class diagram.} \label{general_tools}
+\end{figure} 
 
 \subsection{OpenCL Module}
 
