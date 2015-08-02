@@ -19,10 +19,13 @@ The first conclusion reached, has been that all of the objectives of the project
 \item GPU parallelization of the implemented algorithm.
 \end{itemize}
 
-After finishing and achieving the aforementioned objectives, the other conclusions that have been reached are:
+After finishing and achieving all the aforementioned objectives, the other conclusions that have been reached are:
 
 \begin{itemize}
 \item \textbf{GPGPU is not always the answer:} As seen in the results, if the workload is not complex enough to compensate for kernel setup time, GPU computation time will be higher than the time it takes the CPU to process the data. One has to carefully consider if the workload and the chosen algorithms are optimal for GPU parallelization or a lot of time can be wasted.
+\item \textbf{GPGPU tools significantly speed up the development process:} Creating multi-platform OpenCL and CUDA algorithms is not a trivial task. Without the help of this library the implementation of the algorithms would be error prone and slower.
+\item \textbf{GPGPU device selection is complex:} The automatic selection of the best GPU computing device, is not an easy task. Improvements in architecture, clock speed, etc. can render devices with more compute units obsolete; making it difficult to automatically guess the best device. This is specially complex in OpenCL, because of the variety of devices present in the ecosystem.
+\item \textbf{GPGPU improves performance substantially:} In Computer Vision tasks GPU computing fits really well. In a wide variety of algorithms, the workloads are highly parallel; allowing us to squeeze the maximum amount of processing power out of GPUs.
 \end{itemize} 
 
 \section[Future lines of work]{Future lines of work}
@@ -31,8 +34,10 @@ After finalizing the work on this project, several ideas for the expansion of th
 
 \begin{itemize}
 \item \textbf{GPU kernels optimization:} As of know the implemented kernels of the Block Matching algorithm are semi-naive implementations. It would be interesting to further optimize these kernels so they would use local memory and would access the data with more optimal patterns or other types of improvements.
-\item \textbf{Multi-GPU:}
-\item \textbf{MPI tools:}
-\item \textbf{Boost Compute:}
-%Multiple disparity measures
+\item \textbf{Multi-GPU:} As of now, the GPU algorithms and tools are designed to work on a single GPU device. The next step could be the adaptation of the algorithms to work on multiple GPUs. This would increment the performance gap even further against CPUs.
+\item \textbf{MPI tools:} Since this is a GPU computing library, we have not delved into the usage of MPI to parallelize the algorithms. But in HPC, the usage of supercomputers sometimes requires MPI implementations. The creation of helper tools and their integration in multi-platform systems could be an interesting step forward.
+\item \textbf{Boost Compute:} The usage of this library for the OpenCL module, could provide STL-like common algorithms, common containers and iterators (for example, vectors, etc.). 
+\item \textbf{Thrust:} As in the proposed OpenCL module aforementioned improvement, in CUDA we could use Thrust to achieve a similar result.
+\item \textbf{Optimization:} Since as of now the implemented kernels are semi-naive approaches, a careful optimization process of the CUDA and OpenCL kernels should be performed to widen the performance gap even further.
+\item \textbf{Block Matching:} To improve the block matching algorithm, new correlation based similarity measures should be implemented. Several algorithm improvements could also be made to improve CPU and GPU computing times.
 \end{itemize} 

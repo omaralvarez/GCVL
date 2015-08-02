@@ -93,6 +93,9 @@ In the diagram of \autoref{general_tools}, the following classes are the most re
 
 \subsection{CPU Module}
 
+This is a GPGPU oriented computation library, but it also provides code for multi-core CPUs. The
+relevant classes are shown in the class diagram \autoref{cpu_module}:
+
 \begin{itemize}
 	\item \textbf{Algorithm:} This base class contains the template for the implementation  of multi-core CPU algorithms in GCVL.
 	\item \textbf{BlockMatching:} This class serves as an example of the implementation of a multi-core CPU algorithm in GCVL. 
@@ -101,15 +104,51 @@ In the diagram of \autoref{general_tools}, the following classes are the most re
 \begin{figure}[h]
 	\centering
 	\includegraphics[scale=0.73]{figures/cpu_module.pdf}
-	\caption{CPU module class diagram.} \label{general_tools}
+	\caption{CPU module class diagram.} \label{cpu_module}
 \end{figure} 
 
 \subsection{OpenCL Module}
 
-opencl
+\begin{figure}[h]
+	\centering
+	\includegraphics[scale=0.73]{figures/opencl_module.pdf}
+	\caption{OpenCL module class diagram.} \label{opencl_module}
+\end{figure} 
+
+Since this is a GPU computing library, the first related module is the OpenCL module. In it, classes, algorithms, kernels that belong to the OpenCL implementation are packed together for convenience in the \textbf{opencl} name space. The most significant classes related to the management of the OpenCL algorithms are shown in the class diagram of \autoref{opencl_module}:
+
+\begin{itemize}
+	\item \textbf{Algorithm:} This base class contains the template for the implementation  of OpenCL algorithms in GCVL.
+	\item \textbf{BlockMatching:} This class serves as an example of the implementation of a OpenCL algorithm in GCVL.
+	\item \textbf{Core:} Class in charge of the creation of OpenCL platforms, selection of the best GPU, creation of queues, etc.  
+	\item \textbf{OpenCL\_platform:} Helper class that aids in the creation of a certain computing platform. AMD, NVIDIA, Intel, etc.
+	\item \textbf{OpenCL\_platforms\_list:} Class that holds a list with all the available platforms in the system.
+	\item \textbf{OpenCL\_device:} Utility class that aids in the creation of compute devices.
+	\item \textbf{OpenCL\_devices\_list:} Class that holds a list of all the compute devices available in a platform and tries to guess the best one.
+	\item \textbf{OpenCL\_Kernel:} Wrapper class for the creation of kernels in OpenCL.
+	\item \textbf{OpenCL\_Array:} Helper class for OpenCL device array creation.
+	\item \textbf{OpenCL\_Data:} Utility class for the creation of OpenCL device data.
+\end{itemize}
 
 \subsection{CUDA Module}
 
-cuda
+\begin{figure}[h]
+	\centering
+	\includegraphics[scale=0.73]{figures/cuda_module.pdf}
+	\caption{CUDA module class diagram.} \label{cuda_module}
+\end{figure} 
 
+The second GPU computing module gives the user the choice of using CUDA to implement GPU related algorithms using the \textbf{cuda} name space. The most relevant classes explained here are present in the class diagram in \autoref{cuda_module}:
 
+\begin{itemize}
+	\item \textbf{Algorithm:} This base class contains the template for the implementation  of CUDA algorithms in GCVL.
+	\item \textbf{BlockMatching:} This class serves as an example of the implementation of a CUDA algorithm in GCVL. 
+	\item \textbf{Core:} Class in charge of the creation of the CUDA environment, selection of the best GPU, creation device arrays, etc. 
+	\item \textbf{CUDA\_device:} Utility class that aids in the instantiation of compute devices.
+	\item \textbf{CUDA\_devices\_list:} Class that holds a list of all the compute devices available in the system. In addition, it tries to guess the best one depending on architecture, compute units and clock speed.
+	\item \textbf{CUDA\_Array:} Helper class for OpenCL device array creation.
+\end{itemize}
+
+\section{Usage}
+
+Examples???
