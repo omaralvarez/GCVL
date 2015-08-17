@@ -124,7 +124,7 @@ Correlation based matching typically produces dense depth maps by calculating th
 	\caption[Stereo vision]{
 		 Diagram describing relationship of image displacement to depth with stereoscopic images, assuming flat co-planar images. 
 	}
-	\label{stereo_vision}
+	\label{window_search}
 \end{figure}
 
 The structure and pseudo code of the implemented algorithm can be seen in \autoref{BMalgorithm}.
@@ -144,12 +144,66 @@ In short, the correspondence process involves the computation of the similarity 
 
 \section{GPGPU}
 
-General-purpose Computing on Graphics Processing Units.
-
-%TODO Just in case there is no more pages left
+\textit{General-purpose computing on graphics processing units} or GPGPU, is the use of a graphics processing unit (GPU), which typically handles computation only for computer graphics workloads, to perform calculations in applications traditionally handled by the central processing unit (CPU) \cite{fung2002mediated}. One can parallelize tasks even further using multiple graphics cards in one computer, or large numbers of graphics chips \cite{fung2004using}.
 
 \subsection{Architecture}
 
+Essentially, a GPGPU pipeline swaps data between one or more GPUs and CPUs and analyzes it as if it were in image or other graphic form. Because video cards can operate on 3D geometry and graphical data at speeds way faster than a traditional CPU, migrating data into graphical form and then using the GPU to process it and analyze it, can result in profound speed gains.
+
+In a traditional \textbf{CPU architecture}, the CPU is able to access a large, general-purpose memory bank, called Random Access Memory (RAM) as is visually seen in \autoref{cpu_arch}.
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[scale=0.7]{figures/cpu_arch.pdf}
+	\caption[CPU Architecture]{
+	 Diagram describing a simplified CPU architecture. 
+	}
+	\label{cpu_arch}
+\end{figure}
+
+Nowadays, the CPU often contains more than one core, making CPUs capable of more than one task at a time.  This makes modern CPUs much faster than their single core, scalar predecessors.
+
+In contrast, a \textbf{GPGPU architecture} uses \textit{Shared-Memory Multiprocessors} (SMP), these are a are a set of processors that all have their own local memory. These memory banks are shared within a thread group, but not between more than one of these groups.  However, each compute unit also has access to a global memory bank, which is shared between all processors.
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[scale=0.6]{figures/gpu_arch.pdf}
+	\caption[GPU Architecture]{
+	 Diagram showing a simplified SMP architecture. 
+	}
+	\label{gpu_arch}
+\end{figure}
+
+This is the parallel architecture that NVIDIA and AMD both use in their GPUs. Likewise, it is also the model enforced in the OpenCL and CUDA specification.
+
 \subsection{OpenCL}
 
+\textit{Open Computing Language} (OpenCL) is a framework for writing programs that make use of heterogeneous platforms consisting of CPUs, GPUs, digital signal processors (DSPs), field-programmable gate arrays (FPGAs) and other processors. OpenCL provides parallel computing using task-based and data-based parallelism. In addition, it is also an open standard maintained by the non-profit technology consortium Khronos Group \footnote{https://www.khronos.org/}.
+
+OpenCL interprets a computing system as a number of heterogeneous compute devices, which might be CPUs or accelerators such as graphics processing units, attached to a host processor (a CPU). It defines a C-like language for writing programs, called kernels, that are later executed on the compute devices. A single compute device typically consists of several compute units, which in turn comprise multiple \textit{processing elements} (PEs). 
+
+A single kernel execution may run on all or many of the PEs in parallel. How a compute device is subdivided into compute units and PEs depends on vendor criteria; a compute unit can be thought of as a CPU core, but the notion of core is hard to define across all the types of devices supported by OpenCL and the number of compute units may not correspond to the number of cores that the vendor can advertise.
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[scale=0.7]{figures/opencl_arch.pdf}
+	\caption[OpenCL Architecture]{
+	 Diagram showing the simplified OpenCL architecture. 
+	}
+	\label{opencl_arch}
+\end{figure}
+
+In addition to its this kernel programming language, OpenCL defines an \textit{application programming interface} (API) that allows normal programs running on the host to launch kernels on the compute devices and manage device memory, which is (at least conceptually) separate from host memory. Programs in the OpenCL language are intended to be compiled at run-time, so that applications that use OpenCL are portable between implementations for various host devices (see \autoref{opencl_arch}).
+
+OpenCL defines a four-level memory hierarchy for the compute device:
+
+\begin{itemize}
+\item \textbf{Global memory:} Shared by all processing elements, but has high access latency.
+\item \textbf{Read-only memory:} Smaller, low latency, writable by the host CPU but not the compute devices.
+\item \textbf{Local memory:} Shared by a group of processing elements.
+\item \textbf{Private memory:} Per-element private memory (registers).
+\end{itemize}
+
 \subsection{CUDA}
+
+\textit{Compute Unified Device Architecture} (CUDA)
