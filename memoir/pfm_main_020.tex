@@ -110,9 +110,40 @@ While sparse matching algorithms are still used on occasion, most stereo matchin
 
 After carefully studying multiple algorithms to achieve our goal, we have chosen Block Matching. This is not one of the algorithms with the highest precision, but we believe it can be highly parallel and fits our requirement of real-time processing of video images.
 
+\begin{algorithm}[h]
+	\DontPrintSemicolon
+	\caption{Block Matching algorithm}
+	\label{BMalgorithm}
+	\KwIn{$left$, $right$, $aggregationdim$, $maxdisparity$}
+	\KwOut{$depthmap$}
+	\BlankLine
+	$radius \leftarrow aggregationdim/2$\;
+	\For{$x\leftarrow 0$ \KwTo $width$}{
+		\For{$y\leftarrow 0$ \KwTo $height$}{
+			$offsetx \leftarrow x - radius$\;
+			$offsety \leftarrow y - radius$\;
+			$sum \leftarrow 0$\;
+			$bestsum \leftarrow -1$\;
+			\For{$d\leftarrow 0$ \KwTo $maxdisparity$}{
+				\For{$i\leftarrow offsetx$ \KwTo $aggregationdim + offsetx$}{	
+					\For{$j\leftarrow offsety$ \KwTo $aggregationdim + offsety$}{
+						$sum \leftarrow sum + \left | left[i * width + j] - left[i * width + j - d] \right |$\;
+					}
+				}
+				\If{$sum < bestsum$}{
+					$bestsum \leftarrow sum$\;
+					$bestd \leftarrow d$\;
+				}
+				$sum \leftarrow 0$\;			
+			}
+			$depthmap[y * width + x] \leftarrow bestd$\;
+		}
+	}
+\end{algorithm}
+
 \subsection{Block Matching}
 
-The chosen algorithm follows a similar structure to the following publication \cite{scharstein2002taxonomy}. With stereo cameras, objects in the field of view of these will appear at slightly different locations within the two images due to the cameras varying perspectives of the same scene. A standard method for calculating the disparity map is to use Block Matching, essentially, we will be taking a small region of pixels in the right image, and searching for the closest matching region of pixels in the left image.
+The chosen algorithm follows a similar structure to the following publication \cite{scharstein2002taxonomy}. With stereo cameras, objects in the field of view of these will appear at slightly different locations within the two images due to the cameras varying perspectives of the same scene. A standard method for calculating the disparity map is to use Block Matching, essentially, we will be taking a small region of pixels in the right image, and searching for the closest matching region of pixels in the left image. The structure and pseudo code of the implemented algorithm can be seen in \autoref{BMalgorithm}.
 
 Correlation based matching typically produces dense depth maps by calculating the disparity at each pixel within a neighborhood. This is achieved by taking a square window of certain size around the pixel of interest in the reference image and finding the homologous pixel within the window in the target image, while moving along the corresponding scanline. The goal is to find the corresponding (correlated) pixel within a certain disparity range $d$ that minimizes the associated error and maximizes the similarity (see \autoref{window_search}).
 
@@ -127,18 +158,15 @@ Correlation based matching typically produces dense depth maps by calculating th
 	\label{window_search}
 \end{figure}
 
-The structure and pseudo code of the implemented algorithm can be seen in \autoref{BMalgorithm}.
+The most relevant part in this algorithm, is the comparison of the pixel windows between the left and right images. In our implementation we have implemented two approaches. The first, uses the following equation to calculate the \textit{Sum of Absolute Differences} (SAD) between pixels:
 
-%TODO Finish algorithm
-\begin{algorithm}
-	\caption{Block Matching algorithm}
-	\label{BMalgorithm}
-	\KwIn{left, right, aggregationdim, maxdisparity}
-	\KwOut{depthmap}
-	TODO Pseudo algotrithm
-\end{algorithm}
+\begin{equation}\sum_{i,j\in W} \left | I_{l}(i,j) - I_{r}(i,j) \right |\end{equation}
 
-%TODO Sum of Absolute Differences math
+Being $W$ the aggregation window dimension, $I_{l}$ the left image and $I_{r}$ the right image. The second uses a \textit{Sum of Squared Differences} (SSD) to achieve the same objective as we can observe in the next equation:
+
+\begin{equation}\sum_{i,j\in W}  (I_{l}(i,j) - I_{r}(i,j))^2\end{equation}
+
+Being $W$ the search window dimension, $I_{l}$ the left image and $I_{r}$ the right image. One of these calculations is repeated for pixel windows in the right image at a distance $d\in[0,disparity_{max}]$.
 
 In short, the correspondence process involves the computation of the similarity measure for each disparity value, followed by an aggregation and optimization step. Since these steps consume a lot of processing power but can be computed in parallel, there are significant speed-performance advantages to be had in optimizing the matching algorithm.
 
@@ -206,4 +234,27 @@ OpenCL defines a four-level memory hierarchy for the compute device:
 
 \subsection{CUDA}
 
-\textit{Compute Unified Device Architecture} (CUDA)
+\textit{Compute Unified Device Architecture} (CUDA) is a parallel computing platform and application programming interface (API) model created by NVIDIA. It allows software developers to use CUDA-enabled GPUs for general purpose processing. The CUDA platform is a software layer that gives direct access to the virtual instruction set and parallel computational elements of GPUs.
+
+In contrast with OpenCL, this is a proprietary framework and is not compatible with such a varied array of devices, CUDA is only compatible with NVIDIA GPUs. It is compatible with programming languages such as C, \CC and Fortran. This makes it easier for specialists in parallel programming to utilize GPU resources, as opposed to previous API solutions like Direct3D and OpenGL, which required advanced skills in graphics programming.
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[scale=0.7]{figures/cuda_arch.pdf}
+	\caption[CUDA Architecture]{
+	 Diagram showing the simplified CUDA architecture. 
+	}
+	\label{CUDA_arch}
+\end{figure}
+
+Another difference between OpenCL and CUDA is how applications are compiled. In OpenCL kernels are compiled ad-hoc with the OpenCL framework, while in CUDA we will use a custom copiler called NVCC to compile the complete application or the parts that contain CUDA code. The CUDA architecture is built around a scalable array of multiprocessors, each one of them having several scalar processors, one multi-threading unit, and a shared memory chip. The multiprocessors are able to create, manage, and execute parallel threads, with a small overhead. The threads are grouped in blocks, which are executed in a single multiprocessor, and the blocks are grouped into grids. When a CUDA program calls a grid to be executed in the GPU, each one of the blocks in the grid is numbered and distributed to an available multiprocessor. When a multiprocessor receives a block to execute, it splits the threads in warps, a set of 32 consecutive threads. Each warp executes a single instruction at a time, so the best efficiency is achieved when the 32 threads in the warp executes the same instruction. Each time that a block finishes its execution, a new block is assigned to the available multiprocessor. 
+
+CUDA defines a similar memory hierarchy for compute devices:
+
+\begin{itemize}
+\item \textbf{Global memory:} Shared by all processing elements, but has high access latency.
+\item \textbf{Read-only memory:} Smaller, low latency, writable by the host CPU but not the compute devices.
+\item \textbf{Shared memory:} Shared by a block of threads.
+\item \textbf{Local memory:} Per-thread local memory.
+\item \textbf{Register memory:} Per-thread registers.
+\end{itemize}
