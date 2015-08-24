@@ -51,11 +51,6 @@ Most agile methods encourage a routine that includes daily face-to-face communic
 
 As agile development emphasizes on working software as the primary measure of progress and has a clear preference in face-to-face communication this results in less written documentation than other methods. This does not mean that documentation should be disregarded, but that less emphasis is made on documentation because is not needed as much.
 
-\section{Technology}
-
-%TODO complete
-Tecnologia usada?
-
 \section{Design}
 
 GCVL is developed following an object oriented approach and using the \CC programming language. For GPGPU programming we have chosen OpenCL and CUDA, because of their inter-operation capabilities with OpenGL. This will allow us to process directly data that already resides in the GPU, without having to do expensive memory transfers. Because of the open nature of OpenCL, the software will be able to run on any graphics card vendor (AMD, NVIDIA or Intel) and the SO that the user prefers (Windows, OSX or Unix). For NVIDIA GPUs we have also developed a CUDA implementation, this way users will be able to squish the maximum amount of performance out of the green team's devices. Design patterns have been used as much as possible. This section briefly depicts the high-level design of GCVL in the form of class diagrams.
@@ -144,11 +139,78 @@ The second GPU computing module gives the user the choice of using CUDA to imple
 	\item \textbf{Algorithm:} This base class contains the template for the implementation  of CUDA algorithms in GCVL.
 	\item \textbf{BlockMatching:} This class serves as an example of the implementation of a CUDA algorithm in GCVL. 
 	\item \textbf{Core:} Class in charge of the creation of the CUDA environment, selection of the best GPU, creation device arrays, etc. 
-	\item \textbf{CUDA\_device:} Utility class that aids in the instantiation of compute devices.
-	\item \textbf{CUDA\_devices\_list:} Class that holds a list of all the compute devices available in the system. In addition, it tries to guess the best one depending on architecture, compute units and clock speed.
-	\item \textbf{CUDA\_Array:} Helper class for OpenCL device array creation.
+	\item \textbf{Device:} Utility class that aids in the instantiation of compute devices.
+	\item \textbf{DevicesList:} Class that holds a list of all the compute devices available in the system. In addition, it tries to guess the best one depending on architecture, compute units and clock speed.
+	\item \textbf{Array:} Helper class for CUDA device array creation.
 \end{itemize}
+
+\section{Technology}
+
+%TODO complete
+Tecnologia usada?
 
 \section{Usage}
 
-Examples???
+Once the design concepts behind GCVL have been explained, the only task left is to know how the modules are used. We will first see how to run the CPU module algorithms, next we will see how the OpenCL module works and last but not least we will see how the CUDA module can be utilized to run the CUDA algorithms.
+
+\subsection{CPU Module}
+
+The CPU module usage is pretty straightforward, one only needs to include the corresponding algorithm class; in our example it will be the BlockMatching algorithm (see \autoref{cpu_bm_example}). In this example, the two paths of the input images and the output image pointer are passed to the BlockMatching class, next the BlockMatching settings are set and the computation is started. The result will be available to the user in the output pointer.
+
+\lstset{language=C++,frame=shadowbox,rulesepcolor=\color[gray]{0.8},lineskip=10pt, 
+		keywordstyle=\color{VioletRed}\bfseries,
+		emph={Core,BlockMatching}, emphstyle=\color{Emerald}\bfseries, basicstyle=\footnotesize,
+		emph={[2]setAggDim,setMaxDisp,setNormalize,compute}, emphstyle={[2]\color{PineGreen}}}
+\begin{lstlisting}[float,caption={How to use the BlockMatching class.},captionpos=b,label={cpu_bm_example}]
+	#include <gcvl/blockmatching.h>
+	int main(int argc, char *argv[]) {
+		int dim = 5, maxDisp = 16;
+		bool norm = true;
+		std::unique_ptr<unsigned char[]> output; 
+		gcvl::BlockMatching bm(argv[1], argv[2], output);
+		bm.setAggDim(dim);
+		bm.setMaxDisp(maxDisp);
+		bm.setNormalize(norm);
+		bm.compute();
+	}
+\end{lstlisting}
+
+\subsection{OpenCL Module}
+
+The OpenCL module inner workings are a little more complex, but its usage is still really simple. The first step is to include the corresponding algorithm class and Core class; in our example it will be the BlockMatching algorithm (see \autoref{ocl_bm_example}). In this case, the core, the two paths of the input images and the output image pointer are passed to the BlockMatching class. Next, the BlockMatching settings are set and the computation is started. The result will be available to the user in the output pointer.
+
+\begin{lstlisting}[float,caption={How to use the OpenCL BlockMatching class.},captionpos=b,label={ocl_bm_example}]
+	#include <gcvl/opencl/oclcore.h>
+	#include <gcvl/opencl/oclblockmatching.h>
+	int main(int argc, char *argv[]) {
+		int dim = 5, maxDisp = 16;
+		bool norm = true;
+		std::unique_ptr<unsigned char[]> output;	 
+		gcvl::opencl::Core core;
+		gcvl::opencl::BlockMatching bm(core, argv[1], argv[2], output);
+		bm.setAggDim(dim);
+		bm.setMaxDisp(maxDisp);
+		bm.setNormalize(norm);
+		bm.compute();
+	}
+\end{lstlisting}
+
+\subsection{CUDA Module}
+
+The CUDA module is used in a similar manner to the OpenCL module, but using a different namespace. The first step is to include the corresponding algorithm class and Core class; in our example it will be the BlockMatching algorithm (see \autoref{cuda_bm_example}). In this case, the core, the two paths of the input images and the output image pointer are passed to the BlockMatching class. Next, the BlockMatching settings are set and the computation is started. The result will be available to the user in the output pointer.
+
+\begin{lstlisting}[float,caption={How to use the CUDA BlockMatching class.},captionpos=b,label={cuda_bm_example}]
+	#include <gcvl/cuda/cudacore.h>
+	#include <gcvl/cuda/cudablockmatching.h>
+	int main(int argc, char *argv[]) {
+		int dim = 5, maxDisp = 16;
+		bool norm = true;
+		std::unique_ptr<unsigned char[]> output;	 
+		gcvl::cuda::Core core;
+		gcvl::cuda::BlockMatching bm(core, argv[1], argv[2], output);
+		bm.setAggDim(dim);
+		bm.setMaxDisp(maxDisp);
+		bm.setNormalize(norm);
+		bm.compute();
+	}
+\end{lstlisting}
