@@ -146,12 +146,29 @@ The second GPU computing module gives the user the choice of using CUDA to imple
 
 \section{Technology}
 
-%TODO complete
-Tecnologia usada?
+As mentioned before, GCVL uses the \CC programming language. In order to create a true multi-platform framework, we have also employed the CMake \cite{cmake} build system. The compilers in which the code has been tested are the following:
+
+\begin{itemize}
+	\item \textbf{GCC 4.9:} The \textit{GNU Compiler Collection} (GCC) is a compiler system created by the GNU Project supporting various programming languages.
+	\item \textbf{Clang 6.1:} This is a compiler front end for C, \CC and other programming languages. It uses LLVM as its back end. 
+	\item \textbf{Visual \CC 12.0:} This compiler features tools for developing and debugging C++ code on Microsoft Windows platforms. 
+\end{itemize}
+
+For GPGPU programming we have chosen \textbf{OpenCL} and \textbf{CUDA}, because of their inter-operation capabilities with OpenGL. In addition these are the two most used GPGPU frameworks, being OpenCL the leading open source GPGPU framework and CUDA the leading proprietary framework.
+
+In order to keep code versions organized and backed up, \textbf{Git} \cite{gitrev} has been used as a version control system. This  is a distributed revision control system with an emphasis on speed, data integrity, and support for distributed, non-linear work-flows.
+
+Since this is an open source project, we have also used \textbf{GitHub} \cite{github}, a web-based Git repository hosting service. It offers all of the distributed revision control and source code management functionality of Git as well as adding its own features. It provides access control and several collaboration features such as bug tracking, feature requests, task management, and wikis for every project. It is the ideal tool for open source collaboration.
+
+In order to quickly pinpoint issues in the multiple target platforms, we will use the continuous integration tool \textbf{Travis CI}, an open-source hosted and distributed continuous integration service used to build and test projects hosted in GitHub. 
+
+In addition, we have used \textbf{Doxygen} to document the code for maintainability, which is a tool for writing software reference documentation. It is written within the code, and is thus relatively easy to keep up to date and understand. 
+
+%TODO OpenCV, Boost?
 
 \section{Usage}
 
-Once the design concepts behind GCVL have been explained, the only task left is to know how the modules are used. We will first see how to run the CPU module algorithms, next we will see how the OpenCL module works and last but not least we will see how the CUDA module can be utilized to run the CUDA algorithms.
+Once the design concepts behind GCVL and its technology have been explained, the only task left is to know how the modules are used. We will first see how to run the CPU module algorithms, next we will see how the OpenCL tools and algorithms work and last but not least we will see how the CUDA module can be utilized to run the CUDA algorithms.
 
 \subsection{CPU Module}
 
