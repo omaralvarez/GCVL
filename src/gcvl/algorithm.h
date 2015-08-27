@@ -35,7 +35,7 @@ namespace gcvl {
     class GCVL_EXPORT Algorithm {
 
     public:
-        void compute();
+        double compute();
 		virtual void prepare() = 0;
 		virtual void setArgs() = 0;
 		virtual void launch() = 0;

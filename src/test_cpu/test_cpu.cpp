@@ -25,6 +25,15 @@
 #include <gcvl/blockmatching.h>
 #include <opencv2/opencv.hpp>
 
+//#define BENCHMARK
+
+#ifdef BENCHMARK
+#define AGG_DIM_START 5
+#define AGG_DIM_END 14
+#define MAX_DISP_START 16
+#define MAX_DISP_END 255
+#endif
+
 int main(int argc, char *argv[]) {
 
     if (argc != 3) {
@@ -37,10 +46,30 @@ int main(int argc, char *argv[]) {
 	std::unique_ptr<unsigned char[]> output;
 
   gcvl::BlockMatching bm(argv[1], argv[2], output);
-  bm.setAggDim(dim);
-  bm.setMaxDisp(maxDisp);
-  bm.setNormalize(norm);
-  bm.compute();
+
+#ifdef BENCHMARK
+	FILE *outfile;
+	outfile = fopen("timing_omp.txt", "w");  // using absolute path name of file
+	if (outfile == NULL) {
+		printf("Unable to open file\n");
+	}
+	for (int i = AGG_DIM_START; i < AGG_DIM_END; i+=2) {
+		for (int j = MAX_DISP_START; j < MAX_DISP_END; j*=2) {
+
+			bm.setAggDim(i);
+			bm.setMaxDisp(j);
+			bm.setNormalize(false);
+			double time = bm.compute();
+			fprintf(outfile, "%d,%d,%f\n", i, j, time);
+		}
+	}
+	fclose(outfile);
+#else
+	bm.setAggDim(dim);
+	bm.setMaxDisp(maxDisp);
+	bm.setNormalize(norm);
+	bm.compute();
+#endif
 
   /*cv::Mat out(bm.getHeight(), bm.getWidth(), CV_8UC1, output.get());
 

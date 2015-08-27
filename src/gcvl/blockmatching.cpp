@@ -69,8 +69,9 @@ void BlockMatching::launch() {
     
 	std::cout << " **** launch BlockMatching ****" << std::endl;
     
-    for (unsigned int x = 0; x < _width; ++x) {
-        for (unsigned int y = 0; y < _height; ++y) {
+	#pragma omp parallel for
+    for (int x = 0; x < _width; ++x) {
+        for (int y = 0; y < _height; ++y) {
             
             const int offsetx = x - _radius;
             const int offsety = y - _radius;
@@ -111,8 +112,9 @@ void BlockMatching::postpare() {
 	std::cout << " **** postpare BlockMatching ****" << std::endl;
     
     if(_normalize)
-        for (unsigned int x = 0; x < _width; ++x)
-            for (unsigned int y = 0; y < _height; ++y)
+		#pragma omp parallel for
+        for (int x = 0; x < _width; ++x)
+            for (int y = 0; y < _height; ++y)
                 _output[y * _width + x] = (_output[y * _width + x]/(float)_maxDisp)*255;
 
 }

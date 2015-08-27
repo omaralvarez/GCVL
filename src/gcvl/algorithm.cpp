@@ -29,7 +29,7 @@
 
 using namespace gcvl;
 
-void Algorithm::compute() {
+double Algorithm::compute() {
     
     std::cout << " **** Starting! ****" << std::endl;
     
@@ -44,6 +44,8 @@ void Algorithm::compute() {
     auto microseconds = boost::chrono::duration_cast<boost::chrono::microseconds>(nanoseconds);
     
     std::cout << " **** Finished in " << microseconds.count()/1000000. << " s.! ****" << std::endl;
+
+	return microseconds.count()/1000000.;
     
 }
 
