@@ -67,12 +67,12 @@ def plot3D():
     ax = fig.add_subplot(1, 1, 1, projection='3d')
     p = ax.plot_surface(X,Y,Z, rstride=1, cstride=1, cmap=cm.coolwarm, linewidth=0)
     fig.colorbar(p, shrink=0.5, aspect=5)
-    ax.set_title('CUDA Performance')
+    ax.set_title('OpenCL Performance')
     ax.set_xlabel('Aggregation Dimension (px)')
     ax.set_ylabel('Maximum Disparity (px)')
     ax.set_zlabel('Time (s)')
 
-    plt.savefig(os.path.join('bow_perf_cuda_3d_1.pdf'))
+    plt.savefig(os.path.join('bow_perf_ocl_3d_2.pdf'))
 
 #*****Compute*****
 plot3D()

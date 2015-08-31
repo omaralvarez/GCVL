@@ -46,9 +46,11 @@ The operating system used to run the tests was Windows 7 x64, with the VC{}\verb
 \begin{figure}[h]
 	\centering
 	\subfigure[Computer 1]{\includegraphics[width=0.49\textwidth]{figures/tsu_perf_cpu_3d_1.pdf}} \hfill
-	\subfigure[Computer 2]{\includegraphics[width=0.49\textwidth]{figures/tsu_perf_cpu_3d_1.pdf}} \hfill
+	\subfigure[Computer 2]{\includegraphics[width=0.49\textwidth]{figures/tsu_perf_cpu_3d_2.pdf}} \hfill
 	\caption{CPU performance results for the Tsukuba dataset.} \label{perf_cpu_3d}
 \end{figure} 
+
+The first test performed can be seen in \autoref{perf_cpu_3d}. In it we have used the Tsukuba dataset to test CPU performance with multiple window sizes and maximum disparities. As we can see, the diferences in small images when using a CPU with more cores are negligible; in fact, probably because of cache issues the CPU with more cores fares worse. As we can see, the performance achieved for the more demanding settings are not suitable for real-time applications even with low resolutions like these.
 
 \begin{figure}[h]
 	\centering
@@ -57,33 +59,61 @@ The operating system used to run the tests was Windows 7 x64, with the VC{}\verb
 	\caption{CPU performance results for the Bowling dataset.} \label{perf_cpu_3d_bow}
 \end{figure} 
 
+Next, in \autoref{perf_cpu_3d_bow}, we have tested the Bowling dataset for the same range of window sizes and maximum disparities. These dataset possesses a higher resolution and we start to see how the faster machine obtains better times than the slower one. But, since we have increased resolution substantially, the timings obtained with this dataset are even less suitable for real-time use cases.
+
 \begin{figure}[h]
 	\centering
 	\subfigure[Computer 1]{\includegraphics[width=0.49\textwidth]{figures/tsu_perf_ocl_3d_1.pdf}} \hfill
-	\subfigure[Computer 2]{\includegraphics[width=0.49\textwidth]{figures/tsu_perf_ocl_3d_1.pdf}} \hfill
+	\subfigure[Computer 2]{\includegraphics[width=0.49\textwidth]{figures/tsu_perf_ocl_3d_2.pdf}} \hfill
 	\caption{OpenCL performance results for the Tsukuba dataset.} \label{perf_ocl_3d}
 \end{figure} 
+
+Since CPU approaches do not seem like they are going to allow real-time processing of the chosen resolutions, we proceed in \autoref{perf_ocl_3d} to test our OpenCL implementation with the Tsukuba dataset employing the same settings. We instantly see that this implementation improves computation times substantially. With this dataset, even the low end graphics card is able to compute the disparity map in times suitable for real-time applications. \textbf{Computer 2} that has a more powerful graphics processor obtains even better results, achieving further performance gains.
 
 \begin{figure}[h]
 	\centering
 	\subfigure[Computer 1]{\includegraphics[width=0.49\textwidth]{figures/bow_perf_ocl_3d_1.pdf}} \hfill
-	\subfigure[Computer 2]{\includegraphics[width=0.49\textwidth]{figures/bow_perf_ocl_3d_1.pdf}} \hfill
+	\subfigure[Computer 2]{\includegraphics[width=0.49\textwidth]{figures/bow_perf_ocl_3d_2.pdf}} \hfill
 	\caption{OpenCL performance results for the Bowling dataset.} \label{perf_ocl_3d_bow}
 \end{figure} 
+
+Next, in \autoref{perf_ocl_3d_bow}, we have performed the same test on the Bowling dataset. This dataset requires a lot more processing power, that is why although the execution times have improved substantially, \textbf{Computer 1} is not obtaining the performance numbers necessary for real-time processing. In contrast, \textbf{Computer 2} does achieve results capable of processing several frames of video per second.
 
 \begin{figure}[h]
 	\centering
 	\subfigure[Computer 1]{\includegraphics[width=0.49\textwidth]{figures/tsu_perf_cuda_3d_1.pdf}} \hfill
-	\subfigure[Computer 2]{\includegraphics[width=0.49\textwidth]{figures/tsu_perf_cuda_3d_1.pdf}} \hfill
+	\subfigure[Computer 2]{\includegraphics[width=0.49\textwidth]{figures/tsu_perf_cuda_3d_2.pdf}} \hfill
 	\caption{CUDA performance results for the Tsukuba dataset.} \label{perf_cuda_3d}
 \end{figure} 
+
+Once we have seen how the OpenCL implementation performs, the only task left is to test the CUDA module. The first test performed can be seen in \autoref{perf_cuda_3d}, in it we have tested the CUDA implementation with the Tsukuba dataset. The results obtained resemble closely the OpenCL results, in some cases winning and losing by small margins.
 
 \begin{figure}[h]
 	\centering
 	\subfigure[Computer 1]{\includegraphics[width=0.49\textwidth]{figures/bow_perf_cuda_3d_1.pdf}} \hfill
-	\subfigure[Computer 2]{\includegraphics[width=0.49\textwidth]{figures/bow_perf_cuda_3d_1.pdf}} \hfill
+	\subfigure[Computer 2]{\includegraphics[width=0.49\textwidth]{figures/bow_perf_cuda_3d_2.pdf}} \hfill
 	\caption{CUDA performance results for the Bowling dataset.} \label{perf_cuda_3d_bow}
 \end{figure} 
+
+The next test performed analyzes the CUDA code with the Bowling dataset (see \autoref{perf_cuda_3d_bow}). Again, the results obtained are quite close to the OpenCL implementation obtaining better or worse results depending on the settings used but with small differences. 
+
+\begin{figure}[h]
+	\centering
+	\subfigure[Computer 1]{\includegraphics[width=0.49\textwidth]{figures/ocl_cuda_times_1.pdf}} \hfill
+	\subfigure[Computer 2]{\includegraphics[width=0.49\textwidth]{figures/ocl_cuda_times_2.pdf}} \hfill
+	\caption{OpenCL vs. CUDA in the Bowling dataset.} \label{ocl_vs_cuda}
+\end{figure} 
+
+Since execution times for the CUDA and OpenCL implementations are so close, in \autoref{ocl_vs_cuda} we have compared the execution times obtained in both test machines for the most demanding dataset. As mentioned before both implementations are really close in terms of performance.
+
+\begin{figure}[h]
+	\centering
+	\subfigure[Computer 1]{\includegraphics[width=0.49\textwidth]{figures/speedup_1.pdf}} \hfill
+	\subfigure[Computer 2]{\includegraphics[width=0.49\textwidth]{figures/speedup_2.pdf}} \hfill
+	\caption{Speedup obtained in the Bowling dataset.} \label{speedup}
+\end{figure} 
+
+The last analysis performed using GCVL compares the speedups obtained with the GPU against the CPU implementation of the algorithm. The CPU execution times used to calculate the speedup are from the high end CPU in \textbf{Computer 2}. The speedups obtained with both graphics cards are respectable, but the ones obtained with the \textbf{Computer 2} are specially remarkable, with an average speedup of 77x.
 
 \section{Experimental Results}
 
