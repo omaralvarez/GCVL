@@ -2,8 +2,8 @@
  *
  * GPGPU Computer Vision Library (GCVL)
  *
- * Copyright (c) Luis Omar Alvarez Mures 2015 <omar.alvarez@udc.es> 
- * Copyright (c) Emilio Padron Gonzalez 2015 <emilioj@gmail.com> 
+ * Copyright (c) Luis Omar Alvarez Mures 2015 <omar.alvarez@udc.es>
+ * Copyright (c) Emilio Padron Gonzalez 2015 <emilioj@gmail.com>
  *
  * All rights reserved.
  *
@@ -29,24 +29,27 @@
 
 using namespace gcvl;
 
+//! Performs all the necessary steps to execute the algorithm.
+/*!
+	\return Computation time.
+  \sa prepare(), setArgs(), launch() and postpare()
+*/
 double Algorithm::compute() {
-    
+
     std::cout << " **** Starting! ****" << std::endl;
-    
+
     boost::timer::cpu_timer timer;
-    
+
     prepare();
     setArgs();
     launch();
     postpare();
-    
+
     auto nanoseconds = boost::chrono::nanoseconds(timer.elapsed().user + timer.elapsed().system);
     auto microseconds = boost::chrono::duration_cast<boost::chrono::microseconds>(nanoseconds);
-    
+
     std::cout << " **** Finished in " << microseconds.count()/1000000. << " s.! ****" << std::endl;
 
 	return microseconds.count()/1000000.;
-    
+
 }
-
-

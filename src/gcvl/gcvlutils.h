@@ -2,8 +2,8 @@
  *
  * GPGPU Computer Vision Library (GCVL)
  *
- * Copyright (c) Luis Omar Alvarez Mures 2015 <omar.alvarez@udc.es> 
- * Copyright (c) Emilio Padron Gonzalez 2015 <emilioj@gmail.com> 
+ * Copyright (c) Luis Omar Alvarez Mures 2015 <omar.alvarez@udc.es>
+ * Copyright (c) Emilio Padron Gonzalez 2015 <emilioj@gmail.com>
  *
  * All rights reserved.
  *
@@ -24,8 +24,21 @@
 
 #pragma once
 
+//! Macro that obtains unsigned integer division rounded up.
+/*!
+  \param a numerator.
+  \param b denomitator.
+  \return result.
+*/
 #define roundUpDiv(a,b) (a + b - 1) / b
 
+//! Function that prints a character a certain number of times.
+/*!
+  \param x sentence that needs to be repeated.
+  \param N times that it will be repeated.
+  \param newline value that determines if the newline character should be placed at the end.
+  \return repeated string.
+*/
 static void Print_N_Times(const std::string x, const int N, const bool newline = true)
 {
     for (int i = 0 ; i < N ; i++)

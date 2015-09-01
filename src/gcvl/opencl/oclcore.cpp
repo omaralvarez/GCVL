@@ -2,8 +2,8 @@
  *
  * GPGPU Computer Vision Library (GCVL)
  *
- * Copyright (c) Luis Omar Alvarez Mures 2015 <omar.alvarez@udc.es> 
- * Copyright (c) Emilio Padron Gonzalez 2015 <emilioj@gmail.com> 
+ * Copyright (c) Luis Omar Alvarez Mures 2015 <omar.alvarez@udc.es>
+ * Copyright (c) Emilio Padron Gonzalez 2015 <emilioj@gmail.com>
  *
  * All rights reserved.
  *
@@ -28,8 +28,9 @@
 
 using namespace gcvl::opencl;
 
+//! Default constructor.
 Core::Core() {
-    
+
 	std::cout << " **** Initializing OpenCL Core ****" << std::endl;
 
     _platforms.Initialize("-1");
@@ -41,7 +42,7 @@ Core::Core() {
 	_context = _platforms[_platform].Preferred_OpenCL_Device_Context();
 
 	_device = _platforms[_platform].Preferred_OpenCL_Device();
-    
+
     // Lock the best device available on the platform. Devices are
     // ordered by number of max compute units (CL_DEVICE_MAX_COMPUTE_UNITS).
     // GPUs normally have at least a couple dozen compute units. On
@@ -49,20 +50,26 @@ Core::Core() {
     // The locking is done by creating the file /tmp/gpu_usage.txt
     // where the platform and device is saved.
     _platforms[_platform].Lock_Best_Device();
-    
+
     // Print All information possible on the platforms and their devices.
     //_platforms.Print();
-    
+
     // Create a command queue on "platform"'s preferred device.
     cl_int err;
 	_queue = clCreateCommandQueue(	_context,  // OpenCL context
 									_device,          // OpenCL device id
 									0, &err);
-    
+
 }
 
+//! Class constructor.
+/*!
+  \param platform desired platform in which to create the context, nvidia, amd, intel or apple.
+  \param inputLeft path to the left input image.
+  \sa ~Core()
+*/
 Core::Core(std::string platform, bool locking) {
-    
+
 	std::cout << " **** Initializing OpenCL Core ****" << std::endl;
 
     _platforms.Initialize(platform, locking);
@@ -72,20 +79,21 @@ Core::Core(std::string platform, bool locking) {
 	_context = _platforms[_platform].Preferred_OpenCL_Device_Context();
 
 	_device = _platforms[_platform].Preferred_OpenCL_Device();
-    
+
     _platforms[_platform].Lock_Best_Device();
 
     cl_int err;
 	_queue = clCreateCommandQueue(	_context,  // OpenCL context
 									_device,          // OpenCL device id
 									0, &err);
-    
+
 }
 
 //TODO Select platform and device
-	
-Core::~Core() { 
+//! Class destructor.
+/*!
+  \sa Core()
+*/
+Core::~Core() {
 	std::cout << " **** Destroying OpenCL Core ****" << std::endl;
 }
-
-

@@ -2,8 +2,8 @@
  *
  * GPGPU Computer Vision Library (GCVL)
  *
- * Copyright (c) Luis Omar Alvarez Mures 2015 <omar.alvarez@udc.es> 
- * Copyright (c) Emilio Padron Gonzalez 2015 <emilioj@gmail.com> 
+ * Copyright (c) Luis Omar Alvarez Mures 2015 <omar.alvarez@udc.es>
+ * Copyright (c) Emilio Padron Gonzalez 2015 <emilioj@gmail.com>
  *
  * All rights reserved.
  *
@@ -38,10 +38,18 @@ const char * normalization =
 
 #define OPENCL_BLOCK 8
 
+//! Class constructor.
+/*!
+  \param core OpenCL core instance in which the user wants to run the Block Matching algorithm.
+  \param inputLeft path to the left input image.
+	\param inputRight path to the right input image.
+	\param output pointer to the Block Matching resulting disparity map.
+  \sa ~BlockMatching()
+*/
 BlockMatching::BlockMatching(Core & core, std::string inputLeft, std::string inputRight, std::unique_ptr<unsigned char[]> &output) {
-    
+
 	std::cout << " **** Initializing OpenCL BlockMatching ****" << std::endl;
-    
+
     _core = &core;
     _kernel.Initialize(kernel, _core->getContext(), _core->getDevice());
     _normalization.Initialize(normalization, _core->getContext(), _core->getDevice());
@@ -54,9 +62,9 @@ BlockMatching::BlockMatching(Core & core, std::string inputLeft, std::string inp
     _clMaxDisp.Initialize(_maxDisp);
     _inputLeft = cv::imread(inputLeft, CV_LOAD_IMAGE_GRAYSCALE);
     _inputRight = cv::imread(inputRight, CV_LOAD_IMAGE_GRAYSCALE);
-    
+
     std::cout << "File: " << inputLeft << " Image size: " << _inputLeft.rows << "x" << _inputLeft.cols << std::endl;
-    
+
     _width = _inputLeft.cols;
     _clWidth.Initialize(_inputLeft.cols);
     _height = _inputLeft.rows;
@@ -69,37 +77,43 @@ BlockMatching::BlockMatching(Core & core, std::string inputLeft, std::string inp
     _clInputRight.Initialize(_width*_height, sizeof(unsigned char), _inputRight.data, _core->getContext(), CL_MEM_READ_ONLY, _core->getPlatform(), _core->getQueue(), _core->getDevice(), false);
     _clInputRight.Host_to_Device();
     _clOutput.Initialize(_width*_height, sizeof(unsigned char), _output, _core->getContext(), CL_MEM_WRITE_ONLY, _core->getPlatform(), _core->getQueue(), _core->getDevice(), false);
-    
+
 }
-	
+
+//! Class destructor.
+/*!
+  \sa BlockMatching()
+*/
 BlockMatching::~BlockMatching() {
-    
+
 	std::cout << " **** Destroying OpenCL BlockMatching ****" << std::endl;
-    
+
     _clInputLeft.Release_Memory();
     _clInputRight.Release_Memory();
     _clOutput.Release_Memory();
-    
+
 }
 
+//! Function that performs pre-processing steps, like building kernels and computing OpenCL work sizes.
 void BlockMatching::prepare() {
-    
+
 	std::cout << " **** prepare OpenCL BlockMatching ****" << std::endl;
-    
+
     _kernel.Build("calculateDisparity");
     _kernel.Compute_Work_Size(OpenCL_Kernel::Get_Multiple(_width,OPENCL_BLOCK), OpenCL_Kernel::Get_Multiple(_height,OPENCL_BLOCK), OPENCL_BLOCK, OPENCL_BLOCK);
-    
+
     if(_normalize) {
         _normalization.Build("normalizeMap");
         _normalization.Compute_Work_Size(OpenCL_Kernel::Get_Multiple(_width,OPENCL_BLOCK), OpenCL_Kernel::Get_Multiple(_height,OPENCL_BLOCK), OPENCL_BLOCK, OPENCL_BLOCK);
     }
-    
+
 }
 
+//! Function that sets OpenCL kernel arguments.
 void BlockMatching::setArgs() {
-    
+
 	std::cout << " **** setArgs OpenCL BlockMatching ****" << std::endl;
-    
+
     cl_kernel kernel = _kernel.Get_Kernel();
     _clInputLeft.Set_as_Kernel_Argument(kernel, 0);
     _clInputRight.Set_as_Kernel_Argument(kernel, 1);
@@ -109,7 +123,7 @@ void BlockMatching::setArgs() {
     _clDim.Set_as_Kernel_Argument(kernel, 5);
     _clRadius.Set_as_Kernel_Argument(kernel, 6);
     _clMaxDisp.Set_as_Kernel_Argument(kernel, 7);
-    
+
     if (_normalize) {
         cl_kernel normalization = _normalization.Get_Kernel();
         _clOutput.Set_as_Kernel_Argument(normalization, 0);
@@ -117,28 +131,28 @@ void BlockMatching::setArgs() {
         _clWidth.Set_as_Kernel_Argument(normalization, 2);
         _clMaxDisp.Set_as_Kernel_Argument(normalization, 3);
     }
-    
+
 }
 
+//! Launch the OpenCL kernels.
 void BlockMatching::launch() {
-    
+
 	std::cout << " **** launch OpenCL BlockMatching ****" << std::endl;
-    
+
     _kernel.Launch(_core->getQueue());
-    
+
     if (_normalize) {
         _normalization.Launch(_core->getQueue());
     }
-    
+
 }
 
+//! Function that waits for the kernels to finish processing.
 void BlockMatching::postpare() {
-    
+
 	std::cout << " **** postpare OpenCL BlockMatching ****" << std::endl;
-    
+
     _clOutput.Device_to_Host();
     _core->waitForQueue();
 
 }
-
-

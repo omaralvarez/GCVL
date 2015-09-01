@@ -2,8 +2,8 @@
  *
  * GPGPU Computer Vision Library (GCVL)
  *
- * Copyright (c) Luis Omar Alvarez Mures 2015 <omar.alvarez@udc.es> 
- * Copyright (c) Emilio Padron Gonzalez 2015 <emilioj@gmail.com> 
+ * Copyright (c) Luis Omar Alvarez Mures 2015 <omar.alvarez@udc.es>
+ * Copyright (c) Emilio Padron Gonzalez 2015 <emilioj@gmail.com>
  *
  * All rights reserved.
  *
@@ -38,16 +38,18 @@ namespace gcvl { namespace opencl {
 
     public:
         double compute();
-		virtual void prepare() = 0;
-		virtual void setArgs() = 0;
-		virtual void launch() = 0;
-		virtual void postpare() = 0;
+        //! Function that performs pre-processing steps.
+        virtual void prepare() = 0;
+        //! Function that sets the kernel arguments.
+        virtual void setArgs() = 0;
+        //! Launch the algorithm.
+        virtual void launch() = 0;
+        //! Function that performs post-processing steps.
+        virtual void postpare() = 0;
 
     protected:
         OpenCL_Kernel _kernel;
         Core * _core;
-        
-		//Etc.
 
     };
 

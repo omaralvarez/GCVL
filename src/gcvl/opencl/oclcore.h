@@ -2,8 +2,8 @@
  *
  * GPGPU Computer Vision Library (GCVL)
  *
- * Copyright (c) Luis Omar Alvarez Mures 2015 <omar.alvarez@udc.es> 
- * Copyright (c) Emilio Padron Gonzalez 2015 <emilioj@gmail.com> 
+ * Copyright (c) Luis Omar Alvarez Mures 2015 <omar.alvarez@udc.es>
+ * Copyright (c) Emilio Padron Gonzalez 2015 <emilioj@gmail.com>
  *
  * All rights reserved.
  *
@@ -35,14 +35,31 @@ namespace gcvl { namespace opencl {
     public:
         Core();
 		Core(std::string platform, bool locking);
-        ~Core();
-        inline const std::string& getPlatform() { return _platform; }
+    ~Core();
+    //! Obtains the associated platform.
+		/*!
+      \return platform string.
+    */
+    inline const std::string& getPlatform() { return _platform; }
+    //! Obtains the associated context.
+		/*!
+      \return OpenCL context.
+    */
 		inline const cl_context& getContext() { return _context; }
-        inline const cl_device_id& getDevice() { return _device; }
+    //! Obtains the associated device id.
+    /*!
+      \return OpenCL device id.
+    */
+    inline const cl_device_id& getDevice() { return _device; }
+    //! Obtains the associated command queue.
+    /*!
+      \return OpenCL command queue.
+    */
 		inline const cl_command_queue& getQueue() { return _queue; }
-        inline const void waitForQueue() { clFinish(_queue); }
+    //! Function that waits for the command queue to finish all tasks.
+    inline const void waitForQueue() { clFinish(_queue); }
+    //! Function that prints information about the available platforms.
 		inline const void printInfo() { _platforms.Print(); }
-        void init();
 
     private:
         OpenCL_platforms_list _platforms;
@@ -50,7 +67,6 @@ namespace gcvl { namespace opencl {
 		cl_context _context;
 		cl_device_id _device;
 		cl_command_queue _queue;
-		//Etc.
 
     };
 

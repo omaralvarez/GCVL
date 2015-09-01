@@ -151,11 +151,11 @@ std::string Get_Lock_Filename(const int device_id, const int platform_id_offset,
 {
 #ifdef _MSC_VER
     boost::filesystem::path tempPath = boost::filesystem::temp_directory_path();
-	std::string f = complete(tempPath).string()+"OpenCL_"; 
+	std::string f = complete(tempPath).string()+"OpenCL_";
 #else
     std::string f = "/tmp/OpenCL_";
 #endif
-	
+
     char t[4096];
     sprintf(t, "Platform%d_Device%d__%s_%s", platform_id_offset, device_id, platform_name.c_str(), device_name.c_str()); //generate string filename
     unsigned int len = (unsigned int) strlen(t);
@@ -221,7 +221,7 @@ int Lock_File(const char *path, const bool quiet)
         // Try to acquire lock
 		boost::interprocess::file_lock flock(path);
 		err = !flock.try_lock();
-		
+
         // If it succeeds, exist the loop
         if (!err)
             break;
@@ -357,7 +357,7 @@ char *read_opencl_kernel(const std::string filename, int *length)
     return (char*)buffer;
 }
 
-// *****************************************************************************
+//! Default constructor.
 OpenCL_platform::OpenCL_platform()
 {
     id      = NULL;
@@ -369,7 +369,14 @@ OpenCL_platform::OpenCL_platform()
     id_offset  = 0;
 }
 
-// *****************************************************************************
+//! Function that initializes all the platform parameters.
+/*!
+  \param _key platform key.
+  \param _id_offset platform id offset value.
+  \param _id platform id.
+  \param _platform_list pointer to the platform list.
+  \param preferred_platform preferred platform name.
+*/
 void OpenCL_platform::Initialize(const std::string _key, int _id_offset, cl_platform_id _id,
                                  OpenCL_platforms_list *_platform_list,
                                  const std::string preferred_platform)
@@ -407,7 +414,7 @@ void OpenCL_platform::Initialize(const std::string _key, int _id_offset, cl_plat
     devices_list.Initialize(*this, preferred_platform);
 }
 
-// *****************************************************************************
+//! Function that prints the preferred device info.
 void OpenCL_platform::Print_Preferred() const
 {
     Print_N_Times("-", 109);
@@ -417,7 +424,8 @@ void OpenCL_platform::Print_Preferred() const
                                                         << devices_list.preferred_device->Get_ID()   << ")\n";
     Print_N_Times("-", 109);
 }
-// *****************************************************************************
+
+//! Function that tries to lock the best device available in the platform for use.
 void OpenCL_platform::Lock_Best_Device()
 {
     if (Preferred_OpenCL().Is_Lockable())
@@ -426,7 +434,7 @@ void OpenCL_platform::Lock_Best_Device()
     }
 }
 
-// *****************************************************************************
+//! Function that prints information about the platform.
 void OpenCL_platform::Print() const
 {
     std_cout
@@ -1285,7 +1293,7 @@ void OpenCL_Kernel::Compute_Work_Size(size_t _global_x, size_t _global_y, size_t
 
     assert(_global_x % _local_x == 0);
     assert(_global_y % _local_y == 0);
-    
+
     size_t max_work_item_sizes[3];
     clGetDeviceInfo(device_id, CL_DEVICE_MAX_WORK_ITEM_SIZES,           sizeof(max_work_item_sizes),            &max_work_item_sizes,           NULL);
 
@@ -1294,16 +1302,16 @@ void OpenCL_Kernel::Compute_Work_Size(size_t _global_x, size_t _global_y, size_t
         _local_x = max_work_item_sizes[0];
         _global_x = Get_Multiple(_global_x, _local_x);
     }
-    
+
     if(_local_y > max_work_item_sizes[1]){
         std::cout << "Warning! Local work item size y=" << _local_y << " not valid! Using y=" << max_work_item_sizes[1] << " the maximum available in device!" << std::endl;
         _local_y = max_work_item_sizes[1];
         _global_y = Get_Multiple(_global_y, _local_y);
     }
-    
+
     global_work_size[0] = _global_x;
     global_work_size[1] = _global_y;
-    
+
     local_work_size[0] = _local_x;
     local_work_size[1] = _local_y;
 
