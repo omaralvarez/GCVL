@@ -299,15 +299,47 @@ class OpenCL_device
         OpenCL_device();
         ~OpenCL_device();
         void Destructor();
-
+        //! Obtains the parent platform.
+        /*!
+          \return parent platform.
+        */
         const OpenCL_platform *         Get_Parent_Platform()       { return parent_platform;   }
+        //! Obtains the device name.
+        /*!
+          \return device name.
+        */
         std::string                     Get_Name() const            { return name;              }
+        //! Obtains the number of compute units of the device.
+        /*!
+          \return compute units available.
+        */
         cl_uint                         Get_Compute_Units() const   { return max_compute_units; }
+        //! Obtains the device id.
+        /*!
+          \return device id.
+        */
         int                             Get_ID() const              { return device_id;         }
+        //! Obtains the OpenCL device id.
+        /*!
+          \return OpenCL device id.
+        */
         cl_device_id &                  Get_Device()                { return device;            }
+        //! Obtains the OpenCL context of the device.
+        /*!
+          \return OpenCL device context.
+        */
         cl_context &                    Get_Context()               { return context;           }
+        //! Lets the user know if the device is in use.
+        /*!
+          \return device usage.
+        */
         bool                            Is_In_Use()                 { return device_is_in_use;  }
+        //! Checks if device is lockable.
+        /*!
+          \return device locking flag.
+        */
         bool                            Is_Lockable()               { return is_lockable;       }
+        //! Sets device locking capabilities.
         void                            Set_Lockable(const bool _is_lockable) { is_lockable = _is_lockable; }
 
         void                            Set_Information(const int _id, cl_device_id _device, const int platform_id_offset,
@@ -370,14 +402,46 @@ class OpenCL_platform
 
         void                            Initialize(std::string _key, int id_offset, cl_platform_id _id,
                                                    OpenCL_platforms_list *_platform_list, const std::string preferred_platform);
+        //! Obtains the preferred OpenCL device.
+        /*!
+          \return preferred OpenCL device.
+        */
         OpenCL_device &                 Preferred_OpenCL()                   { return devices_list.Preferred_OpenCL(); }
+        //! Obtains the preferred OpenCL device id.
+        /*!
+          \return preferred OpenCL device id.
+        */
         cl_device_id &                  Preferred_OpenCL_Device()            { return devices_list.Preferred_OpenCL_Device(); }
+        //! Obtains the preferred OpenCL device context.
+        /*!
+          \return preferred OpenCL device context.
+        */
         cl_context &                    Preferred_OpenCL_Device_Context()    { return devices_list.Preferred_OpenCL_Device_Context(); }
+        //! Obtains the parent OpenCL platform list.
+        /*!
+          \return parent OpenCL platform list.
+        */
         OpenCL_platforms_list *         Platform_List() const               { return platform_list; }
         void                            Print_Preferred() const;
+        //! Obtains the platform key.
+        /*!
+          \return platform key.
+        */
         std::string                     Key() const                         { return key; }
+        //! Obtains the platform name.
+        /*!
+          \return platform name.
+        */
         std::string   const             Name() const                        { return name; }
+        //! Obtains the platform id.
+        /*!
+          \return platform id.
+        */
         cl_platform_id                  Id() const                          { return id; }
+        //! Obtains the platform id offset.
+        /*!
+          \return platform id offset.
+        */
         int                             Id_Offset() const                   { return id_offset; }
         void                            Lock_Best_Device();
         void                            Print() const;
@@ -394,7 +458,15 @@ class OpenCL_platforms_list
         void                            Initialize(const std::string &_preferred_platform, const bool _use_locking = true);
         void                            Print() const;
         void                            Print_Preferred() const;
+        //! Obtains the active platform.
+        /*!
+          \return preferred platform.
+        */
         std::string                     Get_Running_Platform()              { return preferred_platform; }
+        //! Function that obtains locking status.
+        /*!
+          \return locking status.
+        */
         bool                            Use_Locking() const                 { return use_locking; }
 
         OpenCL_platform & operator[](const std::string key);

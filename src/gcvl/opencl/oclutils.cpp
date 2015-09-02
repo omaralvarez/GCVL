@@ -454,7 +454,11 @@ void OpenCL_platform::Print() const
     devices_list.Print();
 }
 
-// *****************************************************************************
+//! Function that initializes a platform list.
+/*!
+  \param _preferred_platform preferred platform name amd, nvdia, intel, apple or -1 to select the first in the list.
+  \param _use_locking choose if device locking will be used.
+*/
 void OpenCL_platforms_list::Initialize(const std::string &_preferred_platform, const bool _use_locking)
 {
     preferred_platform = _preferred_platform;
@@ -565,7 +569,7 @@ void OpenCL_platforms_list::Initialize(const std::string &_preferred_platform, c
     platforms[preferred_platform].devices_list.Set_Preferred_OpenCL();
 }
 
-// *****************************************************************************
+//! Function that prints information about all platforms in the list.
 void OpenCL_platforms_list::Print() const
 {
     std_cout << "OpenCL: Available platforms:\n";
@@ -578,7 +582,7 @@ void OpenCL_platforms_list::Print() const
     Print_Preferred();
 }
 
-// *****************************************************************************
+//! Function that prints information about preferred platform and the device that will be used.
 void OpenCL_platforms_list::Print_Preferred() const
 {
     std::map<std::string,OpenCL_platform>::const_iterator it;
@@ -593,7 +597,10 @@ void OpenCL_platforms_list::Print_Preferred() const
     it->second.Print_Preferred();
 }
 
-// *****************************************************************************
+//! Overload array operator for accesing platforms in the list.
+/*!
+  \param key platform name.
+*/
 OpenCL_platform & OpenCL_platforms_list::operator[](const std::string key)
 {
     std::map<std::string,OpenCL_platform>::iterator it;
@@ -622,13 +629,16 @@ OpenCL_platform & OpenCL_platforms_list::operator[](const std::string key)
     return it->second;
 }
 
-// *****************************************************************************
+//! Function that sets the preferred device in the preferred platform.
+/*!
+  \param _preferred_device id of the preferred device.
+*/
 void OpenCL_platforms_list::Set_Preferred_OpenCL(const int _preferred_device)
 {
     platforms[preferred_platform].devices_list.Set_Preferred_OpenCL(_preferred_device);
 }
 
-// *****************************************************************************
+//! Default constructor.
 OpenCL_device::OpenCL_device()
 {
     object_is_initialized       = false;
@@ -644,13 +654,19 @@ OpenCL_device::OpenCL_device()
     file_locked                 = false;
 }
 
-// *****************************************************************************
+//! Class destructor.
+/*!
+  \sa Destructor()
+*/
 OpenCL_device::~OpenCL_device()
 {
     Destructor();
 }
 
-// *****************************************************************************
+//! Function in charge of releasing context and unlocking devices.
+/*!
+  \sa ~OpenCL_device()
+*/
 void OpenCL_device::Destructor()
 {
     if (context)
@@ -659,7 +675,15 @@ void OpenCL_device::Destructor()
     Unlock();
 }
 
-// *****************************************************************************
+//! Function that sets the device information parameters.
+/*!
+  \param _id id of the device.
+  \param _device OpenCL device id.
+  \param platform_id_offset platform id offset.
+  \param platform_name platform name.
+  \param _device_is_gpu flag that clarifies if the device is a GPU or CPU.
+  \param _parent_platform associated platform to the device.
+*/
 void OpenCL_device::Set_Information(const int _id, cl_device_id _device,
                                     const int platform_id_offset,
                                     const std::string &platform_name,
@@ -815,7 +839,10 @@ void OpenCL_device::Set_Information(const int _id, cl_device_id _device,
     }
 }
 
-// *****************************************************************************
+//! Set a context on the OpenCL device.
+/*!
+  \return OpenCL error code or success.
+*/
 cl_int OpenCL_device::Set_Context()
 {
     cl_int err = CL_SUCCESS+1;
@@ -852,7 +879,7 @@ cl_int OpenCL_device::Set_Context()
     return err;
 }
 
-// *****************************************************************************
+//! Prints information about the device.
 void OpenCL_device::Print() const
 {
     std_cout << "    "; Print_N_Times("-", 105);
@@ -946,7 +973,7 @@ void OpenCL_device::Print() const
     std_cout << "        Available memory (constant): " << Bytes_in_String(max_constant_buffer_size) << "\n";
 }
 
-// *****************************************************************************
+//! Locks the device for use.
 void OpenCL_device::Lock()
 {
 
@@ -960,7 +987,7 @@ void OpenCL_device::Lock()
     file_locked = true; // File is now locked
 }
 
-// *****************************************************************************
+//! Unlocks the device.
 void OpenCL_device::Unlock()
 {
     if (file_locked == true)
@@ -972,7 +999,10 @@ void OpenCL_device::Unlock()
     }
 }
 
-// *****************************************************************************
+//! Comparation operator overloaded for device list sorting.
+/*!
+  \return true if the device is not in use and has a higher number of compute units.
+*/
 bool OpenCL_device::operator<(const OpenCL_device &other) const
 {
     // Start by checking if ones not in use. When this is the case give it priority.
