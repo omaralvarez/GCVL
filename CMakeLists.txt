@@ -4,7 +4,7 @@ project(GCVL)
 option(BUILD_OPENCL "Build OpenCL module" ON)
 option(BUILD_CUDA "Build CUDA module" OFF)
 option(BUILD_TESTS "Build tests" ON)
-option(COVERALLS "Turn on coveralls support" OFF)
+option(COVERALLS "Coveralls support" OFF)
 
 # Set a default build type for single-configuration
 # CMake generators if no build type is set.
@@ -58,7 +58,7 @@ IF(CMAKE_COMPILER_IS_GNUCXX)
 	set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "-O2 -g")
 	set(CMAKE_CXX_FLAGS_RELEASE "-O2")
 	set(CMAKE_CXX_FLAGS_DEBUG  "-O0 -g")
-  if(CMAKE_BUILD_TYPE MATCHES DEBUG AND COVERALLS)
+  if(CMAKE_BUILD_TYPE STREQUAL "Debug" AND COVERALLS)
     message("Trying to obtain code coverage data")
     set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} --coverage") # enabling coverage
   endif()
