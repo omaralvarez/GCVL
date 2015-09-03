@@ -1,4 +1,4 @@
-# GPU Computer Vision Library [![Build Status](https://travis-ci.org/omaralvarez/GCVL.svg?branch=master)](https://travis-ci.org/omaralvarez/GCVL)
+# GPU Computer Vision Library [![Build Status](https://travis-ci.org/omaralvarez/GCVL.svg?branch=master)](https://travis-ci.org/omaralvarez/GCVL) [![Coverage Status](https://coveralls.io/repos/omaralvarez/GCVL/badge.svg?branch=master&service=github)](https://coveralls.io/github/omaralvarez/GCVL?branch=master)
 Multi-platform (Windows, Unix and Mac OS) C++/OpenCL/CUDA library with several Computer Vision algorithms.
 ###Building:
 ```bash
