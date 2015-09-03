@@ -15,17 +15,21 @@ before_install:
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then gem install coveralls-lcov; fi
 
 script:
-  - cmake -G "Unix Makefiles" -DBUILD_OPENCL=ON -DBUILD_CUDA=OFF -DBUILD_TESTS=ON .
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
+      cmake -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Debug -DCOVERALLS=ON -DBUILD_OPENCL=ON -DBUILD_CUDA=OFF -DBUILD_TESTS=ON .;
+    else
+      cmake -G "Unix Makefiles" -DBUILD_OPENCL=ON -DBUILD_CUDA=OFF -DBUILD_TESTS=ON .;
+    fi
   - make
   - ./bin/test_cpu data/tsukuba_l.png data/tsukuba_r.png
   - ./bin/test_opencl data/tsukuba_l.png data/tsukuba_r.png
 
 after_success:
   - cd ${TRAVIS_BUILD_DIR}
-  - lcov --directory . --capture --output-file coverage.info # capture coverage info
-  - lcov --remove coverage.info 'tests/*' '/usr/*' --output-file coverage.info # filter out system and test
-  - lcov --list coverage.info # debug before upload
-  - coveralls-lcov --repo-token ${COVERALLS_TOKEN} coverage.info # uploads to coveralls
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then lcov --directory . --capture --output-file coverage.info; fi # capture coverage info
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then lcov --remove coverage.info 'tests/*' '/usr/*' --output-file coverage.info; fi # filter out system and test
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then lcov --list coverage.info; fi # debug before upload
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then coveralls-lcov --repo-token ${COVERALLS_TOKEN} coverage.info; fi # uploads to coveralls
 
 branches:
   only:
