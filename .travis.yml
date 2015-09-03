@@ -29,7 +29,7 @@ after_success:
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then lcov --directory . --capture --output-file coverage.info; fi # capture coverage info
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then lcov --remove coverage.info 'tests/*' '/usr/*' --output-file coverage.info; fi # filter out system and test
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then lcov --list coverage.info; fi # debug before upload
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then coveralls-lcov --repo-token=${COVERALLS_TOKEN} coverage.info; fi # uploads to coveralls
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then coveralls-lcov coverage.info; fi # uploads to coveralls
 
 branches:
   only:
