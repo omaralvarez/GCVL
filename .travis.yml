@@ -9,7 +9,7 @@ before_install:
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
       sudo apt-get update && sudo apt-get install -y fglrx opencl-headers boost1.55 libopencv-dev;
     else
-      brew update && brew tap homebrew/science && brew install boost opencv;
+      brew update && brew tap homebrew/science && brew install opencv;
     fi
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo ln /dev/null /dev/raw1394; fi
 
