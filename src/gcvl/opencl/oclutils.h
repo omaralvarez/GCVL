@@ -189,19 +189,6 @@ std::string Integer_in_String_Binary(Integer n)
 
     return integer_in_binary;
 }
-
-// **************************************************************
-template <class Pointer>
-void free_me(Pointer &p)
-{
-    if (p != NULL)
-    {
-        // Free memory
-        free(p);
-    }
-    p = NULL;
-}
-
 };
 
 // *****************************************************************************
@@ -374,8 +361,20 @@ class OpenCL_devices_list
 
         void                            Set_Preferred_OpenCL(const int _preferred_device = -1);
         OpenCL_device &                 Preferred_OpenCL();
+        //! Obtains the preferred OpenCL device of the list.
+        /*!
+          \return preferred OpenCL device id.
+        */
         cl_device_id &                  Preferred_OpenCL_Device()         { return Preferred_OpenCL().Get_Device(); }
+        //! Obtains the preferred OpenCL device context.
+        /*!
+          \return preferred OpenCL device contex.
+        */
         cl_context &                    Preferred_OpenCL_Device_Context() { return Preferred_OpenCL().Get_Context(); }
+        //! Obtains the type of the devices present on list.
+        /*!
+          \return corresponding type key.
+        */
         int                             nb_devices()                     { return nb_cpu + nb_gpu; }
         void                            Print() const;
         void                            Initialize(const OpenCL_platform &_platform,
@@ -525,10 +524,8 @@ class OpenCL_Kernel
         cl_int err;
         cl_event event;
 
-        // Load an OpenCL program from a file
         void Load_Program_From_File();
 
-        // Build runtime executable from a program
         void Build_Executable(const bool verbose = true);
 };
 
@@ -581,46 +578,6 @@ public:
     inline T *      Get_Host_Pointer() { return  host_array;   }
     void Set_as_Kernel_Argument(cl_kernel &kernel, const int order);
 };
-
-// *****************************************************************************
-namespace OpenCL_SHA512
-{
-    // Following code comes from http://tools.ietf.org/html/rfc4634.
-    /*
-    * These definitions are potentially faster equivalents for the ones
-    * used in FIPS-180-2, section 4.1.3.
-    *   ((x & y) ^ (~x & z)) becomes
-    *   ((x & (y ^ z)) ^ z)
-    */
-    #define SHA_Ch(x,y,z)        (((x) & (y)) ^ ((~(x)) & (z)))
-
-
-    /*
-    *   ((x & y) ^ (x & z) ^ (y & z)) becomes
-    *   ((x & (y | z)) | (y & z))
-    */
-    #define SHA_Maj(x,y,z)       (((x) & (y)) ^ ((x) & (z)) ^ ((y) & (z)))
-
-    /* Define the SHA shift, rotate left and rotate right macro */
-    #define SHA512_SHR(bits,word)  (((uint64_t)(word)) >> (bits))
-    #define SHA512_ROTR(bits,word) ((((uint64_t)(word)) >> (bits)) | (((uint64_t)(word)) << (64-(bits))))
-
-    /* Define the SHA SIGMA and sigma macros */
-    #define SHA512_SIGMA0(word)     (SHA512_ROTR(28,word) ^ SHA512_ROTR(34,word) ^ SHA512_ROTR(39,word))
-    #define SHA512_SIGMA1(word)     (SHA512_ROTR(14,word) ^ SHA512_ROTR(18,word) ^ SHA512_ROTR(41,word))
-    #define SHA512_sigma0(word)     (SHA512_ROTR( 1,word) ^ SHA512_ROTR( 8,word) ^ SHA512_SHR( 7,word))
-    #define SHA512_sigma1(word)     (SHA512_ROTR(19,word) ^ SHA512_ROTR(61,word) ^ SHA512_SHR( 6,word))
-
-    void Prepare_Array_for_Checksuming(void **array, const uint64_t sizeof_element,
-                                       uint64_t &array_size_bit);
-    void Calculate_Checksum(const void *_message, uint64_t length, uint8_t *_message_digest);
-    void Print_Checksum(const uint8_t checksum[64]);
-    std::string Checksum_to_String(const uint8_t checksum[64]);
-    std::string String_Hexadecimal(const void *array, uint64_t size_bits);
-    std::string String_Binary(const void *array, uint64_t size_bits);
-
-    void Validation();
-}
 
 // *****************************************************************************
 template <class T>
