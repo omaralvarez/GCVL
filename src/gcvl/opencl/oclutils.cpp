@@ -101,37 +101,6 @@ int Lock_File(const char *path, const bool quiet = false);
 void Unlock_File(int f, const bool quiet = false);
 void Wait(const double duration_sec);
 
-void * calloc_and_check(uint64_t nb, size_t s, std::string msg = "");
-
-// **************************************************************
-void * calloc_and_check(uint64_t nb, size_t s, std::string msg)
-{
-    void *p = NULL;
-    const uint64_t nb_s = nb * s;
-    p = calloc(nb, s);
-    if (p == NULL)
-    {
-        std_cout << "ERROR!!!\n";
-        std_cout << "    Allocation of ";
-        std_cout << nb << " x " << s << " bytes = " << nb_s << " bytes\n";
-        std_cout << "                                               (";
-        std_cout
-            << nb_s * B_to_KiB << " KiB, "
-            << nb_s * B_to_KiB << " MiB, "
-            << nb_s * B_to_GiB << " GiB)\n"
-            << "    FAILED!!!\n";
-        if (msg != "")
-        {
-            std_cout << "Comment: " << msg << std::endl;
-        }
-        std_cout << "Aborting.\n" << std::flush;
-        abort();
-    }
-
-    return p;
-}
-
-
 // *****************************************************************************
 inline std::string Bytes_in_String(const uint64_t bytes)
 {
@@ -1663,69 +1632,6 @@ void OpenCL_Array<T>::Initialize(int _N, const size_t _sizeof_element,
     memset(host_checksum,   0, 64);
     memset(device_checksum, 0, 64);
 
-#ifdef OpenCLSHA512Checksum
-    if (_checksum_array)
-    {
-        array_is_padded = true;
-
-        void * array = (void *) _host_array;
-        uint64_t new_array_size_bits = new_array_size_bytes*CHAR_BIT;
-        OpenCL_SHA512::Prepare_Array_for_Checksuming(&array, sizeof_element, new_array_size_bits);
-        new_array_size_bytes = new_array_size_bits / CHAR_BIT;
-        _host_array = (T *)array;
-        host_array  = (T *)array;
-
-        std::string kernel_source = reinterpret_cast<const char*>(kernel_SHA512_Checksum);
-        kernel_checksum.Initialize(kernel_source, context, device);
-
-
-        kernel_checksum.Append_Compiler_Option("-DYDEBUG");
-        // Include debugging symbols in kernel compilation
-#ifndef MACOSX
-        if (platform != OPENCL_PLATFORMS_NVIDIA)
-        {
-            kernel_checksum.Append_Compiler_Option("-g");
-        }
-#endif // #ifndef MACOSX
-
-        if      (platform == OPENCL_PLATFORMS_AMD)
-        {
-            kernel_checksum.Append_Compiler_Option("-DOPENCL_AMD");
-        }
-        else if (platform == OPENCL_PLATFORMS_INTEL)
-        {
-            kernel_checksum.Append_Compiler_Option("-DOPENCL_INTEL");
-        }
-        else if (platform == OPENCL_PLATFORMS_NVIDIA)
-        {
-            kernel_checksum.Append_Compiler_Option("-DOPENCL_NVIDIA");
-            // Verbose compilation? Does not do much... And it may break kernel compilation
-            // with invalid kernel name error.
-            kernel_checksum.Append_Compiler_Option("-cl-nv-verbose");
-        }
-        else if (platform == OPENCL_PLATFORMS_APPLE)
-        {
-            kernel_checksum.Append_Compiler_Option("-DOPENCL_APPLE");
-        }
-
-        kernel_checksum.Build("SHA512_Checksum");
-        kernel_checksum.Compute_Work_Size(1, 1, 1, 1);
-
-        // Allocate memory on device
-        device_array      = clCreateBuffer(context, flags,           new_array_size_bytes, NULL, &err); OpenCL_Test_Success(err, "clCreateBuffer()");
-        //cl_array_size_bit = clCreateBuffer(context, CL_MEM_READ_ONLY, sizeof(int),         NULL, &err); OpenCL_Test_Success(err, "clCreateBuffer()");
-        cl_sha512sum      = clCreateBuffer(context, CL_MEM_READ_WRITE, buff_size_checksum, NULL, &err); OpenCL_Test_Success(err, "clCreateBuffer()");
-
-        // Set kernel arguments
-        err  = clSetKernelArg(kernel_checksum.Get_Kernel(), 0, sizeof(cl_mem), (void *) &device_array);
-        //err |= clSetKernelArg(kernel_checksum.Get_Kernel(), 1, sizeof(cl_mem), (void *) &cl_array_size_bit);
-        err |= clSetKernelArg(kernel_checksum.Get_Kernel(), 1, sizeof(int),    (void *) &new_array_size_bits);
-        err |= clSetKernelArg(kernel_checksum.Get_Kernel(), 2, sizeof(cl_mem), (void *) &cl_sha512sum);
-        OpenCL_Test_Success(err, "clSetKernelArg()");
-
-    }
-    else
-#endif // #ifdef OpenCLSHA512Checksum
     {
         // Allocate memory on the device
         device_array = clCreateBuffer(context, flags, new_array_size_bytes, NULL, &err);
@@ -1734,9 +1640,6 @@ void OpenCL_Array<T>::Initialize(int _N, const size_t _sizeof_element,
 
     // Transfer data from host to device (cpu to gpu)
     //Host_to_Device();
-
-    if (_checksum_array)
-        Validate_Data();
 
     //err = clFinish(command_queue);
     //OpenCL_Test_Success(err, "clFinish");
@@ -1756,59 +1659,6 @@ void OpenCL_Array<T>::Release_Memory()
 {
     if (device_array)
         clReleaseMemObject(device_array);
-}
-
-// *****************************************************************************
-template <class T>
-void OpenCL_Array<T>::Validate_Data()
-{
-#ifdef OpenCLSHA512Checksum
-    /*
-    std_cout << "Array in binary:\n" << OpenCL_SHA512::String_Binary(host_array, new_array_size_bytes*CHAR_BIT) << "\n";
-    std_cout << "Array in hexa:\n"   << OpenCL_SHA512::String_Hexadecimal(host_array, new_array_size_bytes*CHAR_BIT) << "\n";
-    */
-
-    // Wait for queue to finish
-    err = clFinish(command_queue);
-    OpenCL_Test_Success(err, "clFinish()");
-
-    // Calculate checksum of host memory
-    OpenCL_SHA512::Calculate_Checksum(host_array, new_array_size_bytes*CHAR_BIT, host_checksum);
-
-    // Calculate checksum of device memory
-    kernel_checksum.Launch(command_queue);
-    // Wait for kernel to finish
-    err = clFinish(command_queue);
-    OpenCL_Test_Success(err, "clFinish()");
-
-    // Transfer back checksum
-    err = clEnqueueReadBuffer(command_queue, cl_sha512sum, CL_FALSE, 0, buff_size_checksum, device_checksum, 0, NULL, NULL);
-    OpenCL_Test_Success(err, "clEnqueueReadBuffer");
-    err = clFinish(command_queue);
-    OpenCL_Test_Success(err, "clFinish()");
-
-    /*
-    std_cout << "Host_Checksum()   = " << Host_Checksum() << "\n";
-    std_cout << "Device_Checksum() = " << Device_Checksum() << "\n";
-    */
-
-    if (Host_Checksum() != Device_Checksum())
-    {
-        std_cout << "ERROR: Checksums don't match!\n";
-        std_cout << "Host_Checksum()   = " << Host_Checksum() << "\n";
-        std_cout << "Device_Checksum() = " << Device_Checksum() << "\n";
-        std_cout << "Array in hexa:\n"   << OpenCL_SHA512::String_Hexadecimal(host_array, new_array_size_bytes*CHAR_BIT) << "\n";
-    }
-//     else
-//     {
-//         std_cout << "Checksums do match.\n";
-//         std_cout << "Host_Checksum()   = " << Host_Checksum() << "\n";
-//         std_cout << "Device_Checksum() = " << Device_Checksum() << "\n";
-//         std_cout << "Array in hexa:\n"   << OpenCL_SHA512::String_Hexadecimal(host_array, new_array_size_bytes*CHAR_BIT) << "\n";
-//     }
-    assert(Host_Checksum() == Device_Checksum());
-
-#endif // #ifdef OpenCLSHA512Checksum
 }
 
 // *****************************************************************************
