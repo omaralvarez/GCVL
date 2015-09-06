@@ -518,7 +518,15 @@ public:
     std::string Device_Checksum();
     void Validate_Data();
 
+    //! Obtains the device array OpenCL memory pointer.
+    /*!
+      \return OpenCL memory pointer.
+    */
     inline cl_mem * Get_Device_Array() { return &device_array; }
+    //! Obtains the host array memory pointer.
+    /*!
+      \return memory pointer.
+    */
     inline T *      Get_Host_Pointer() { return  host_array;   }
     void Set_as_Kernel_Argument(cl_kernel &kernel, const int order);
 };

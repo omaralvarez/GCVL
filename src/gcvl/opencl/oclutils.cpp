@@ -1593,7 +1593,7 @@ std::string OpenCL_Error_to_String(cl_int error)
     return (index >= 0 && index < errorCount) ? errorString[index] : "Unspecified Error";
 }
 
-// *****************************************************************************
+//! Default constructor.
 template <class T>
 OpenCL_Array<T>::OpenCL_Array()
 {
@@ -1608,7 +1608,17 @@ OpenCL_Array<T>::OpenCL_Array()
     command_queue               = NULL;
 }
 
-// *****************************************************************************
+//! Inititalizes the array object.
+/*!
+  \param _N number of elements in the array.
+  \param _sizeof_element byte size of the elements of the array.
+  \param _context OpenCL context in which the array will be allocated.
+  \param flags OpenCL flags of the device array.
+  \param _platform platform name.
+  \param _command_queue OpenCL command queue in which the array will be allocated.
+  \param _device OpenCL device id in which the array will be allocated.
+*/
+//TODO Remove checksum.
 template <class T>
 void OpenCL_Array<T>::Initialize(int _N, const size_t _sizeof_element,
                                  T *&_host_array,
@@ -1645,7 +1655,11 @@ void OpenCL_Array<T>::Initialize(int _N, const size_t _sizeof_element,
     //OpenCL_Test_Success(err, "clFinish");
 }
 
-// *****************************************************************************
+//! Sets the device array as a certain kernel argument.
+/*!
+  \param kernel OpenCL kernel in which the array will be set as an argument.
+  \param order number that denotes the position of the argument.
+*/
 template <class T>
 void OpenCL_Array<T>::Set_as_Kernel_Argument(cl_kernel &kernel, const int order)
 {
@@ -1653,7 +1667,7 @@ void OpenCL_Array<T>::Set_as_Kernel_Argument(cl_kernel &kernel, const int order)
     OpenCL_Test_Success(err, "clSetKernelArg()");
 }
 
-// *****************************************************************************
+//! Releases device memory allocated.
 template <class T>
 void OpenCL_Array<T>::Release_Memory()
 {
@@ -1661,7 +1675,7 @@ void OpenCL_Array<T>::Release_Memory()
         clReleaseMemObject(device_array);
 }
 
-// *****************************************************************************
+//! Copies data from host array to device array.
 template <class T>
 void OpenCL_Array<T>::Host_to_Device()
 {
@@ -1677,7 +1691,7 @@ void OpenCL_Array<T>::Host_to_Device()
     OpenCL_Test_Success(err, "clEnqueueWriteBuffer()");
 }
 
-// *****************************************************************************
+//! Copies data from device array to host array.
 template <class T>
 void OpenCL_Array<T>::Device_to_Host()
 {
@@ -1694,15 +1708,25 @@ void OpenCL_Array<T>::Device_to_Host()
     OpenCL_Test_Success(err, "clEnqueueReadBuffer()");
 }
 
+//! Default constructor.
 template <class T>
 OpenCL_Data<T>::OpenCL_Data() {}
 
+//! Inititalizes the data object.
+/*!
+  \param _data contents of the data element.
+*/
 template <class T>
 void OpenCL_Data<T>::Initialize(T _data)
 {
     data = _data;
 }
 
+//! Sets the desired data as a certain kernel argument.
+/*!
+  \param kernel OpenCL kernel in which the array will be set as an argument.
+  \param order number that denotes the position of the argument.
+*/
 template <class T>
 void OpenCL_Data<T>::Set_as_Kernel_Argument(cl_kernel &kernel, const int order)
 {
