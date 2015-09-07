@@ -34,15 +34,17 @@ namespace gcvl { namespace cuda {
 
     public:
     double compute();
-		virtual void prepare() = 0;
-		virtual void setArgs() = 0;
-		virtual void launch() = 0;
+    //! Function that performs pre-processing steps.
+    virtual void prepare() = 0;
+    //! Function that sets the kernel arguments.
+    virtual void setArgs() = 0;
+    //! Launch the algorithm.
+    virtual void launch() = 0;
+    //! Function that performs post-processing steps.
 		virtual void postpare() = 0;
 
     protected:
         Core * _core;
-
-		//Etc.
 
     };
 

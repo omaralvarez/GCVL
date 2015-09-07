@@ -29,6 +29,11 @@
 
 using namespace gcvl::cuda;
 
+//! Performs all the necessary steps to execute the algorithm.
+/*!
+	\return Computation time.
+  \sa prepare(), setArgs(), launch() and postpare()
+*/
 double Algorithm::compute() {
 
     std::cout << " **** Starting! ****" << std::endl;

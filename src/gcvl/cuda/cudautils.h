@@ -66,6 +66,12 @@ const static sSMtoCores nGpuArchCoresPerSM[] =
     {   -1, -1 }
 };
 
+//! Obtains the estimated number of cores per SM.
+/*!
+  \param major major architecture version number.
+  \param minor minor architecture version number.
+  \return number of compute units per SM.
+*/
 inline int SMVer2CU(int major, int minor) {
 
 	int index = 0;
@@ -106,7 +112,15 @@ public:
 	bool operator<(const CUDA_device &b) const;
 	void Set_Information(unsigned long long _compute_perf, int arch);
 	void Print() const;
+  //! Obtains the GPU device name.
+  /*!
+    \return device name.
+  */
 	inline std::string Get_Name() const { return properties.name; }
+  //! Obtains the device id.
+  /*!
+    \return device id.
+  */
 	inline int Get_ID() const { return id; }
 };
 
@@ -122,7 +136,15 @@ public:
 	CUDA_devices_list();
 	//~CUDA_devices_list();
 	void Initialize();
+  //! Sets the preferred CUDA device.
+  /*!
+    \param _preferred_device device id that is going to be used, -1 if we want GCVL to guess which is the best device available.
+  */
 	inline void Set_Preferred_CUDA(const int _preferred_device = -1) { preferred_device = _preferred_device; }
+  //! Obtains the preferred CUDA device id.
+  /*!
+    \return device id.
+  */
 	inline int Preferred_CUDA() { return preferred_device; }
 	void Print();
 };
@@ -136,7 +158,7 @@ private:
     size_t new_array_size_bytes;      // Size (bytes) of new padded array
     T * host_array;                  // Pointer to start of host array
 	T * device_array;				// Pointer to device array
-	cudaError_t err; 
+	cudaError_t err;
 
 public:
     CUDA_Array();
@@ -146,7 +168,15 @@ public:
     void Device_to_Host();
     //void Validate_Data();
 
+    //! Obtains the device array CUDA memory pointer.
+    /*!
+      \return CUDA device memory pointer.
+    */
     inline T * Get_Device_Array() { return device_array; }
-    inline T * Get_Host_Pointer() { return  host_array;   }
-    //void Set_as_Kernel_Argument(cl_kernel &kernel, const int order);
+    //! Obtains the host array memory pointer.
+    /*!
+      \return memory pointer.
+    */
+    inline T * Get_Host_Pointer() { return  host_array; }
+
 };

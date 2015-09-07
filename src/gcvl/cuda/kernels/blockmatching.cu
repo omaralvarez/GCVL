@@ -31,12 +31,17 @@
 
 #define CUDA_BLK 8
 
-__global__ void addAry( int * ary1, int * ary2, int * res)
-{
-    int indx = threadIdx.x;
-    res[ indx ] = ary1[ indx ] + ary2[ indx ];
-}
-
+//! Calculates a disparity map from two stereoscopic images.
+/*!
+  \param inputLeft left input image data.
+  \param inputRight right input image data.
+  \param output output disparity map.
+  \param width width of the images.
+  \param height height of the images.
+  \param dim aggregation window dimension.
+  \param radius radius of the aggregation window.
+  \param maxdisp maximum disparity.
+*/
 __global__ void calculateDisparity(const unsigned char * inputLeft, const unsigned char * inputRight,
 								   unsigned char * output, const int width, const int height, const int dim,
 								   const int radius, const int maxDisp)
@@ -75,6 +80,13 @@ __global__ void calculateDisparity(const unsigned char * inputLeft, const unsign
 
 }
 
+//! Normalizes a disparity map.
+/*!
+  \param input input disparity map data.
+  \param output output disparity map.
+  \param width width of the images.
+  \param maxdisp maximum disparity.
+*/
 __global__ void normalizeMap(unsigned char * input, unsigned char *output, const unsigned int width, const int maxDisp) {
 
 	const int x = blockIdx.x * blockDim.x + threadIdx.x;
@@ -84,6 +96,17 @@ __global__ void normalizeMap(unsigned char * input, unsigned char *output, const
 
 }
 
+//! Launches the disparity map computation kernels for two stereoscopic images.
+/*!
+  \param inputLeft left input image data.
+  \param inputRight right input image data.
+  \param output output disparity map.
+  \param width width of the images.
+  \param height height of the images.
+  \param dim aggregation window dimension.
+  \param radius radius of the aggregation window.
+  \param maxdisp maximum disparity.
+*/
 void launchBM(const unsigned char * inputLeft, const unsigned char * inputRight,
 			unsigned char * output, const int width, const int height, const int dim,
 			const int radius, const int maxDisp)
@@ -95,6 +118,14 @@ void launchBM(const unsigned char * inputLeft, const unsigned char * inputRight,
 
 }
 
+//! Launches the normalization kernels.
+/*!
+  \param input input disparity map data.
+  \param output output disparity map.
+  \param width width of the images.
+  \param height height of the images.
+  \param maxdisp maximum disparity.
+*/
 void launchNormalization(unsigned char * input, unsigned char * output, const int width, const int height, const int maxDisp)
 {
 

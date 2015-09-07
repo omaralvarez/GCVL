@@ -40,10 +40,30 @@ namespace gcvl { namespace cuda {
     public:
         BlockMatching(Core & core, std::string inputLeft, std::string inputRight, std::unique_ptr<unsigned char[]> &output);
         ~BlockMatching();
+        //! Sets the aggregation window dimension.
+        /*!
+          \param val aggregation window dimension in pixels.
+        */
         inline void setAggDim(const int val) { val % 2 == 0 ? _dim = val + 1 : _dim = val; _radius = _dim / 2; }
+        //! Sets the maximum disparity.
+        /*!
+          \param val maximum disparity in pixels.
+        */
         inline void setMaxDisp(const int val) { val > 255 ? _maxDisp = 255 : _maxDisp = val; }
+        //! Activates or deactivates disparity map normalization.
+        /*!
+          \param val normalization usage.
+        */
         inline void setNormalize(const bool val) { _normalize = val; }
+        //! Obtains image width.
+        /*!
+          \return image width in pixels.
+        */
         inline unsigned int getWidth() { return _width; }
+        //! Obtains image height.
+        /*!
+          \return image height in pixels.
+        */
         inline unsigned int getHeight() { return _height; }
 		void prepare();
 		void setArgs();

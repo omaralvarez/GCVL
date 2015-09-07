@@ -970,6 +970,7 @@ void OpenCL_device::Unlock()
 
 //! Comparation operator overloaded for device list sorting.
 /*!
+  \param other other device object for comparison.
   \return true if the device is not in use and has a higher number of compute units.
 */
 bool OpenCL_device::operator<(const OpenCL_device &other) const
@@ -1675,7 +1676,7 @@ void OpenCL_Array<T>::Release_Memory()
         clReleaseMemObject(device_array);
 }
 
-//! Copies data from host array to device array.
+//! Copies data from the host array to the device array.
 template <class T>
 void OpenCL_Array<T>::Host_to_Device()
 {
@@ -1691,7 +1692,7 @@ void OpenCL_Array<T>::Host_to_Device()
     OpenCL_Test_Success(err, "clEnqueueWriteBuffer()");
 }
 
-//! Copies data from device array to host array.
+//! Copies data from the device array to the host array.
 template <class T>
 void OpenCL_Array<T>::Device_to_Host()
 {

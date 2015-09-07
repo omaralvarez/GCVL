@@ -527,7 +527,7 @@ public:
     /*!
       \return memory pointer.
     */
-    inline T *      Get_Host_Pointer() { return  host_array;   }
+    inline T *      Get_Host_Pointer() { return  host_array; }
     void Set_as_Kernel_Argument(cl_kernel &kernel, const int order);
 };
 

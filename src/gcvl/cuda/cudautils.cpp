@@ -29,6 +29,11 @@
 #include <algorithm>
 
 #ifdef __DRIVER_TYPES_H__
+//! Obtains the error string associated to a CUDA error id.
+/*!
+  \param error CUDA error id.
+  \return CUDA error string.
+*/
 static const std::string CUDA_Error_to_String(cudaError_t error)
 {
     switch (error)
@@ -283,7 +288,11 @@ static const std::string CUDA_Error_to_String(cudaError_t error)
 #endif
 
 #ifdef __cuda_cuda_h__
-// CUDA Driver API errors
+//! Obtains the error string associated to a CUDA error id.
+/*!
+  \param error CUDA error id.
+  \return CUDA error string.
+*/
 static const std::string CUDA_Error_to_String(CUresult error)
 {
     switch (error)
@@ -467,6 +476,10 @@ static const std::string CUDA_Error_to_String(CUresult error)
 }
 #endif
 
+//! Creates a CUDA device object and calculates estimated performance.
+/*!
+  \param _id CUDA device id.
+*/
 CUDA_device::CUDA_device(int _id) : id(_id) {
 
 	//TODO Check errors
@@ -489,6 +502,11 @@ CUDA_device::CUDA_device(int _id) : id(_id) {
 
 }
 
+//! Comparation operator overloaded for device list sorting.
+/*!
+  \param other other device object for comparison.
+  \return true if the device has a higher architecture version and more compute units.
+*/
 bool CUDA_device::operator<(const CUDA_device &other) const {
 
     bool result = false;
@@ -506,6 +524,11 @@ bool CUDA_device::operator<(const CUDA_device &other) const {
 
 }
 
+//! Sets the information associated to a certain CUDA device.
+/*!
+  \param _compute_perf estimated compute performance.
+  \param arch major architecture version number.
+*/
 void CUDA_device::Set_Information(unsigned long long _compute_perf, int arch) {
 
 	compute_perf = _compute_perf;
@@ -513,6 +536,7 @@ void CUDA_device::Set_Information(unsigned long long _compute_perf, int arch) {
 
 }
 
+//! Prints information associated to a certain CUDA device.
 void CUDA_device::Print() const {
 
 	std::cout << "    "; Print_N_Times("-", 105);
@@ -541,8 +565,10 @@ void CUDA_device::Print() const {
 
 }
 
+//! Default constructor.
 CUDA_devices_list::CUDA_devices_list() : is_initialized(false), preferred_device(-1) { }
 
+//! Inititalizes the CUDA device list, obtaining all the compute devices present in the system and tries to guess which one is the best.
 void CUDA_devices_list::Initialize() {
 
 	err = cudaGetDeviceCount(&count);
@@ -564,6 +590,7 @@ void CUDA_devices_list::Initialize() {
 
 }
 
+//! Prints information related to the CUDA devices present in the system.
 void CUDA_devices_list::Print() {
 
 	if (!device_list.size()) {
@@ -583,8 +610,8 @@ void CUDA_devices_list::Print() {
     }
 
 }
-//CUDA_de::CUDA_Array()
 
+//! Default constructor.
 template <class T>
 CUDA_Array<T>::CUDA_Array()
 {
@@ -595,6 +622,11 @@ CUDA_Array<T>::CUDA_Array()
 	device_array                = NULL;
 }
 
+//! Inititalizes a CUDA device array.
+/*!
+  \param _N number of elements in the array.
+  \param _host_array pointer to the host array.
+*/
 template <class T>
 void CUDA_Array<T>::Initialize(int _N, T *&_host_array)
 {
@@ -610,6 +642,7 @@ void CUDA_Array<T>::Initialize(int _N, T *&_host_array)
 
 }
 
+//! Releases memory associated to a CUDA device array.
 template <class T>
 void CUDA_Array<T>::Release_Memory()
 {
@@ -617,6 +650,7 @@ void CUDA_Array<T>::Release_Memory()
         cudaFree(device_array);
 }
 
+//! Copies data from the host array to the device array.
 template <class T>
 void CUDA_Array<T>::Host_to_Device()
 {
@@ -624,7 +658,7 @@ void CUDA_Array<T>::Host_to_Device()
 	CUDA_Test_Success(err,"cudaMemcpy()");
 }
 
-// *****************************************************************************
+//! Copies data from the device array to the host array.
 template <class T>
 void CUDA_Array<T>::Device_to_Host()
 {

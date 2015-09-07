@@ -29,6 +29,14 @@
 
 using namespace gcvl::cuda;
 
+//! Class constructor.
+/*!
+  \param core OpenCL core instance in which the user wants to run the Block Matching algorithm.
+  \param inputLeft path to the left input image.
+	\param inputRight path to the right input image.
+	\param output pointer to the Block Matching resulting disparity map.
+  \sa ~BlockMatching()
+*/
 BlockMatching::BlockMatching(Core & core, std::string inputLeft, std::string inputRight, std::unique_ptr<unsigned char[]> &output) {
 
 	std::cout << " **** Initializing CUDA BlockMatching ****" << std::endl;
@@ -56,6 +64,10 @@ BlockMatching::BlockMatching(Core & core, std::string inputLeft, std::string inp
 
 }
 
+//! Class destructor.
+/*!
+  \sa BlockMatching()
+*/
 BlockMatching::~BlockMatching() {
 
 	std::cout << " **** Destroying CUDA BlockMatching ****" << std::endl;
@@ -66,18 +78,22 @@ BlockMatching::~BlockMatching() {
 
 }
 
+//! Function that performs pre-processing steps.
 void BlockMatching::prepare() {
 
 	std::cout << " **** prepare CUDA BlockMatching ****" << std::endl;
 
 }
 
+//TODO Remove, in CUDA not needed.
+//! Function that sets arguments.
 void BlockMatching::setArgs() {
 
 	std::cout << " **** setArgs CUDA BlockMatching ****" << std::endl;
 
 }
 
+//! Launch the CUDA kernels.
 void BlockMatching::launch() {
 
 	std::cout << " **** launch CUDA BlockMatching ****" << std::endl;
@@ -87,7 +103,7 @@ void BlockMatching::launch() {
 		std::cout << (unsigned int)_cuInputLeft.Get_Host_Pointer()[i] << " " << (unsigned int)_output[i] << std::endl;
 	}*/
 
-	launchBM(_cuInputLeft.Get_Device_Array(), _cuInputRight.Get_Device_Array(), _cuOutput.Get_Device_Array(), 
+	launchBM(_cuInputLeft.Get_Device_Array(), _cuInputRight.Get_Device_Array(), _cuOutput.Get_Device_Array(),
 		     _width, _height, _dim, _radius, _maxDisp);
 
     if (_normalize) {
@@ -96,6 +112,7 @@ void BlockMatching::launch() {
 
 }
 
+//! Function that waits for the kernels to finish processing.
 void BlockMatching::postpare() {
 
 	std::cout << " **** postpare CUDA BlockMatching ****" << std::endl;

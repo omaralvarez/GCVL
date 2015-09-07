@@ -2,8 +2,8 @@
  *
  * GPGPU Computer Vision Library (GCVL)
  *
- * Copyright (c) Luis Omar Alvarez Mures 2015 <omar.alvarez@udc.es> 
- * Copyright (c) Emilio Padron Gonzalez 2015 <emilioj@gmail.com> 
+ * Copyright (c) Luis Omar Alvarez Mures 2015 <omar.alvarez@udc.es>
+ * Copyright (c) Emilio Padron Gonzalez 2015 <emilioj@gmail.com>
  *
  * All rights reserved.
  *
@@ -35,6 +35,7 @@ namespace gcvl { namespace cuda {
     public:
         Core();
         ~Core();
+    //! Function that prints information about the available platforms.
 		inline const void printInfo() { _devices.Print(); }
 
     private:
