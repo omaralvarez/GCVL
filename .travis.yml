@@ -7,7 +7,7 @@ compiler:
 before_install:
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo add-apt-repository --yes ppa:boost-latest/ppa; fi
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
-      sudo apt-get update && sudo apt-get install -y fglrx opencl-headers boost1.55 libopencv-dev lcov;
+      sudo apt-get update && sudo apt-get install -y fglrx opencl-headers boost1.55 libopencv-dev lcov doxygen;
     else
       brew update && brew tap homebrew/science && brew install opencv;
     fi
@@ -26,10 +26,11 @@ script:
 
 after_success:
   - cd ${TRAVIS_BUILD_DIR}
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then lcov --directory . --capture --output-file coverage.info; fi # capture coverage info
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then lcov --remove coverage.info 'tests/*' '/usr/*' --output-file coverage.info; fi # filter out system and test
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then lcov --list coverage.info; fi # debug before upload
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then coveralls-lcov coverage.info; fi # uploads to coveralls
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ] && ["$CXX" == "g++"]]; then lcov --directory . --capture --output-file coverage.info; fi # capture coverage info
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ] && ["$CXX" == "g++"]]; then lcov --remove coverage.info 'tests/*' '/usr/*' --output-file coverage.info; fi # filter out system and test
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ] && ["$CXX" == "g++"]]; then lcov --list coverage.info; fi # debug before upload
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ] && ["$CXX" == "g++"]]; then coveralls-lcov coverage.info; fi # uploads to coveralls
+  #- if [[ "$TRAVIS_OS_NAME" == "linux" ] && ["$CXX" == "g++"]]; ./config/publish-doxygen #upload documentation to gh-pages
 
 branches:
   only:
