@@ -5,6 +5,9 @@ compiler:
   - clang
 
 before_install:
+  - openssl aes-256-cbc -K $encrypted_0a6446eb3ae3_key -iv $encrypted_0a6446eb3ae3_key -in tools/travisci_rsa.enc -out tools/travisci_rsa -d
+  - chmod 0600 tools/travisci_rsa
+  - cp tools/travisci_rsa ~/.ssh/id_rsa 
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo add-apt-repository --yes ppa:boost-latest/ppa; fi
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
       sudo apt-get update && sudo apt-get install -y fglrx opencl-headers boost1.55 libopencv-dev lcov doxygen;
@@ -30,7 +33,7 @@ after_success:
   - if [[ "$TRAVIS_OS_NAME" == "linux" ] && ["$CXX" == "g++"]]; then lcov --remove coverage.info 'tests/*' '/usr/*' --output-file coverage.info; fi # filter out system and test
   - if [[ "$TRAVIS_OS_NAME" == "linux" ] && ["$CXX" == "g++"]]; then lcov --list coverage.info; fi # debug before upload
   - if [[ "$TRAVIS_OS_NAME" == "linux" ] && ["$CXX" == "g++"]]; then coveralls-lcov coverage.info; fi # uploads to coveralls
-  #- if [[ "$TRAVIS_OS_NAME" == "linux" ] && ["$CXX" == "g++"]]; ./config/publish-doxygen #upload documentation to gh-pages
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ] && ["$CXX" == "g++"]]; ./tools/push-doxygen; fi #upload documentation to gh-pages
 
 branches:
   only:
