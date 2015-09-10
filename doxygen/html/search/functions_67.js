@@ -1,0 +1,25 @@
+var searchData=
+[
+  ['gcvlconfig',['GCVLConfig',['../class_g_c_v_l_config.html#a6b24297730d0394c498bfe090b717194',1,'GCVLConfig']]],
+  ['get_5fcompute_5funits',['Get_Compute_Units',['../class_open_c_l__device.html#abeae9e91528898893bda5b23a5e25716',1,'OpenCL_device']]],
+  ['get_5fcontext',['Get_Context',['../class_open_c_l__device.html#a02fee0781b7f468a47fc29c689de6331',1,'OpenCL_device']]],
+  ['get_5fdevice',['Get_Device',['../class_open_c_l__device.html#a47b249878acbaa7e9f50edc3399cff48',1,'OpenCL_device']]],
+  ['get_5fdevice_5farray',['Get_Device_Array',['../class_c_u_d_a___array.html#a3768a6041da9c931018179271aa8476c',1,'CUDA_Array::Get_Device_Array()'],['../class_open_c_l___array.html#ac11c0ff120cc4a39edd6cb83072c5f12',1,'OpenCL_Array::Get_Device_Array()']]],
+  ['get_5fdimension',['Get_Dimension',['../class_open_c_l___kernel.html#ad6d0d2bc2c261bb0e69e6564d40b64f7',1,'OpenCL_Kernel']]],
+  ['get_5fglobal_5fwork_5fsize',['Get_Global_Work_Size',['../class_open_c_l___kernel.html#af29ab3ec404e534a748e68dc392676b7',1,'OpenCL_Kernel']]],
+  ['get_5fhost_5fpointer',['Get_Host_Pointer',['../class_c_u_d_a___array.html#a649bf3e7fac19f238cb2d030d1176075',1,'CUDA_Array::Get_Host_Pointer()'],['../class_open_c_l___array.html#a5fde47eab5f8f9ccf5efd3bbdcefbddf',1,'OpenCL_Array::Get_Host_Pointer()']]],
+  ['get_5fid',['Get_ID',['../class_c_u_d_a__device.html#a0b6d53bf71d94ca98becd466095aa30c',1,'CUDA_device::Get_ID()'],['../class_open_c_l__device.html#a121568611eb13cc0ef48213dca0e635d',1,'OpenCL_device::Get_ID()']]],
+  ['get_5fkernel',['Get_Kernel',['../class_open_c_l___kernel.html#ac51e3bcb8df14c213b9596e497b6b44c',1,'OpenCL_Kernel']]],
+  ['get_5flocal_5fwork_5fsize',['Get_Local_Work_Size',['../class_open_c_l___kernel.html#a8f17636d266677b2e3aee77199136946',1,'OpenCL_Kernel']]],
+  ['get_5flock_5ffilename',['Get_Lock_Filename',['../oclutils_8cpp.html#ab93beedd580a01328125c0b562bd0f5c',1,'oclutils.cpp']]],
+  ['get_5fmultiple',['Get_Multiple',['../class_open_c_l___kernel.html#a882b62c06f1346b9f595b4d9b7b0f2e7',1,'OpenCL_Kernel']]],
+  ['get_5fname',['Get_Name',['../class_c_u_d_a__device.html#aaeabe7362444a9a1511041ca58fa028c',1,'CUDA_device::Get_Name()'],['../class_open_c_l__device.html#a724d1ea4a1e3bac2273bf52508c98a26',1,'OpenCL_device::Get_Name()']]],
+  ['get_5fparent_5fplatform',['Get_Parent_Platform',['../class_open_c_l__device.html#a3ca023adb9f0833fb9d9bef7615c65ed',1,'OpenCL_device']]],
+  ['get_5frunning_5fplatform',['Get_Running_Platform',['../class_open_c_l__platforms__list.html#a79c5dbe8dca0dabafc40d3227983ed3f',1,'OpenCL_platforms_list']]],
+  ['getcontext',['getContext',['../classgcvl_1_1opencl_1_1_core.html#a8635f947a45b884984fa58a0728e32f4',1,'gcvl::opencl::Core']]],
+  ['getdevice',['getDevice',['../classgcvl_1_1opencl_1_1_core.html#a69687a1358c404244b5f1a7c4b1020c0',1,'gcvl::opencl::Core']]],
+  ['getheight',['getHeight',['../classgcvl_1_1_block_matching.html#a2bc900a08a025ede0c83594164a09a0f',1,'gcvl::BlockMatching::getHeight()'],['../classgcvl_1_1cuda_1_1_block_matching.html#a73ff5b84e8a399f4037e4db7f2cf71f9',1,'gcvl::cuda::BlockMatching::getHeight()'],['../classgcvl_1_1opencl_1_1_block_matching.html#a7cee519bd143db277c37b67dafdda58f',1,'gcvl::opencl::BlockMatching::getHeight()']]],
+  ['getplatform',['getPlatform',['../classgcvl_1_1opencl_1_1_core.html#aef8219fc6ccbc01fe434193b440c3bf1',1,'gcvl::opencl::Core']]],
+  ['getqueue',['getQueue',['../classgcvl_1_1opencl_1_1_core.html#ae3ef2c17563acc0086bad84fbbd4cdca',1,'gcvl::opencl::Core']]],
+  ['getwidth',['getWidth',['../classgcvl_1_1_block_matching.html#a979aa9dacff64688f9e52d1f870501d0',1,'gcvl::BlockMatching::getWidth()'],['../classgcvl_1_1cuda_1_1_block_matching.html#a794bd3afc2c3bdb390ca2fd5406e3d6e',1,'gcvl::cuda::BlockMatching::getWidth()'],['../classgcvl_1_1opencl_1_1_block_matching.html#ac0a4225d683affafde7f7ce59bae5d4f',1,'gcvl::opencl::BlockMatching::getWidth()']]]
+];
