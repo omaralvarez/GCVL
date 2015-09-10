@@ -1,7 +1,7 @@
 #!/bin/bash
 
 REPO_PATH=git@github.com:omaralvarez/GCVL.git
-HTML_PATH=doc/html
+HTML_PATH=../doc/html
 CLONE_PATH=gh-pages
 COMMIT_USER="travis-ci"
 COMMIT_EMAIL="travis@travis-ci.org"
