@@ -29,7 +29,7 @@ after_success:
   - if [[ "$TRAVIS_OS_NAME" == "linux" && "$CXX" == "g++" ]]; then lcov --remove coverage.info 'tests/*' '/usr/*' --output-file coverage.info; fi
   - if [[ "$TRAVIS_OS_NAME" == "linux" && "$CXX" == "g++" ]]; then lcov --list coverage.info; fi
   - if [[ "$TRAVIS_OS_NAME" == "linux" && "$CXX" == "g++" ]]; then coveralls-lcov coverage.info; fi
-  - if [[ "$TRAVIS_OS_NAME" == "linux" && "$CXX" == "g++" ]]; then ./tools/push-doxygen; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" && "$CXX" == "g++" ]]; then ./tools/push-doxygen.sh; fi
 branches:
   only:
     - master
