@@ -30,7 +30,7 @@ After finishing and achieving all the aforementioned objectives, the other concl
 
 \section[Future lines of work]{Future lines of work}
 
-After finalizing the work on this project, several ideas for the expansion of the visualizer come to mind:
+After finalizing the work on this project, several ideas for the expansion of the library come to mind:
 
 \begin{itemize}
 \item \textbf{GPU kernels optimization:} As of know the implemented kernels of the Block Matching algorithm are semi-naive implementations. It would be interesting to further optimize these kernels so they would use local memory and would access the data with more optimal patterns or other types of improvements.
@@ -38,7 +38,6 @@ After finalizing the work on this project, several ideas for the expansion of th
 \item \textbf{MPI tools:} Since this is a GPU computing library, we have not delved into the usage of MPI to parallelize the algorithms. But in HPC, the usage of supercomputers sometimes requires MPI implementations. The creation of helper tools and their integration in multi-platform systems could be an interesting step forward.
 \item \textbf{Boost Compute:} The usage of this library for the OpenCL module, could provide STL-like common algorithms, common containers and iterators (for example, vectors, etc.). 
 \item \textbf{Thrust:} As in the proposed OpenCL module aforementioned improvement, in CUDA we could use Thrust to achieve a similar result.
-\item \textbf{Optimization:} Since as of now the implemented kernels are semi-naive approaches, a careful optimization process of the CUDA and OpenCL kernels should be performed to widen the performance gap even further.
+\item \textbf{Optimization of the algorithm:} The improvement of the algorithm in terms of performance using message passing techniques, could also yield improvements for the CPU and GPU implementations.
 \item \textbf{Block Matching:} To improve the block matching algorithm, new correlation based similarity measures should be implemented. Several algorithm improvements could also be made to improve CPU and GPU computing times.
 \end{itemize} 
-%TODO Optimizacion repetido, hablar de optimizar algoritmo en el segundo
