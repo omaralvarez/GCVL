@@ -1,11 +1,11 @@
 # GPU Computer Vision Library [![Build Status](https://travis-ci.org/omaralvarez/GCVL.svg?branch=master)](https://travis-ci.org/omaralvarez/GCVL) [![Coverage Status](https://coveralls.io/repos/omaralvarez/GCVL/badge.svg?branch=master&service=github)](https://coveralls.io/github/omaralvarez/GCVL?branch=master)
 Multi-platform (Windows, Unix and Mac OS) C++/OpenCL/CUDA library with several Computer Vision algorithms.
-###Building:
+### Building:
 ```bash
 cmake -G "Unix Makefiles" -DBUILD_OPENCL=ON -DBUILD_CUDA=ON -DBUILD_TESTS=ON .
 make
 ```
-###Example:
+### Example:
 ```cpp
 #include <gcvl/blockmatching.h>
 #include <gcvl/opencl/oclcore.h>
@@ -45,6 +45,6 @@ int main(int argc, char *argv[]) {
 }
 ```
 
-###Documentation:
+### Documentation:
 
 Doxygen documentation is available for GCVL [here](http://omaralvarez.github.io/GCVL/doxygen/).
